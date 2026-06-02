@@ -1,0 +1,78 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/afinados_web/components/layouts.ex:37
+#: lib/afinados_web/components/layouts.ex:48
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:147
+#, elixir-autogen, elixir-format
+msgid "Clip"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:126
+#, elixir-autogen, elixir-format
+msgid "Free fuel-passage area curve"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:166
+#, elixir-autogen, elixir-format
+msgid "Free-area curve"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:168
+#, elixir-autogen, elixir-format
+msgid "Maximum free area"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:135
+#, elixir-autogen, elixir-format
+msgid "Needle"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:141
+#, elixir-autogen, elixir-format
+msgid "Needle jet"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:224
+#, elixir-autogen, elixir-format
+msgid "Pick a needle and a needle jet to see the curve."
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:130
+#, elixir-autogen, elixir-format
+msgid "Setup"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:154
+#, elixir-autogen, elixir-format
+msgid "Shim (hundredths of mm)"
+msgstr ""
+
+#: lib/afinados_web/components/layouts.ex:43
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:160
+#, elixir-autogen, elixir-format
+msgid "Venturi (mm)"
+msgstr ""
+
+#: lib/afinados_web/components/layouts.ex:32
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""

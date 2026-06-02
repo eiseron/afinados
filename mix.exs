@@ -10,6 +10,23 @@ defmodule Afinados.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      test_coverage: [
+        summary: [threshold: 90],
+        ignore_modules: [
+          Afinados.Application,
+          Afinados.Mailer,
+          Afinados.Repo,
+          AfinadosWeb,
+          AfinadosWeb.Endpoint,
+          AfinadosWeb.Gettext,
+          AfinadosWeb.Router,
+          AfinadosWeb.Telemetry,
+          AfinadosWeb.CoreComponents,
+          AfinadosWeb.Layouts,
+          AfinadosWeb.ErrorHTML,
+          AfinadosWeb.ErrorJSON
+        ]
+      ],
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       listeners: [Phoenix.CodeReloader]
     ]
@@ -82,7 +99,15 @@ defmodule Afinados.MixProject do
       "assets.setup": ["esbuild.install --if-missing"],
       "assets.build": ["compile", "esbuild afinados"],
       "assets.deploy": ["esbuild afinados --minify", "phx.digest"],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        "compile --warnings-as-errors",
+        "deps.unlock --unused",
+        "format",
+        "deps.audit",
+        "sobelow --exit",
+        "credo --strict",
+        "test --cover"
+      ]
     ]
   end
 end

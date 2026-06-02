@@ -1,0 +1,229 @@
+defmodule AfinadosWeb.SetupLive do
+  @moduledoc "Builds a carburetor setup from the catalog and renders its free-area curve as server-side SVG."
+
+  use AfinadosWeb, :live_view
+
+  alias Afinados.Carburetion
+  alias Afinados.Carburetion.{Catalog, Clip, FuelMap, Setup, Shim, Venturi}
+
+  @vb_w 360
+  @vb_h 220
+  @pad_left 44
+  @pad_right 12
+  @pad_top 12
+  @pad_bottom 28
+  @plot_w @vb_w - @pad_left - @pad_right
+  @plot_h @vb_h - @pad_top - @pad_bottom
+  @x0 @pad_left
+  @x1 @pad_left + @plot_w
+  @y_bottom @pad_top + @plot_h
+  @y_top @pad_top
+
+  @impl true
+  def mount(_params, _session, socket) do
+    needles = Catalog.list_needles()
+    needle_jets = Catalog.list_needle_jets()
+
+    socket =
+      socket
+      |> assign(needles: needles, needle_jets: needle_jets)
+      |> recompute(default_params(needles, needle_jets))
+
+    {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("change", %{"setup" => params}, socket) do
+    {:noreply, recompute(socket, params)}
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <main class="setup">
+      <h1>{gettext("Free fuel-passage area curve")}</h1>
+
+      <.form for={@form} phx-change="change">
+        <fieldset>
+          <legend>{gettext("Setup")}</legend>
+
+          <.input
+            field={@form[:part_number]}
+            type="select"
+            label={gettext("Needle")}
+            options={Enum.map(@needles, &{&1.part_number, &1.part_number})}
+          />
+          <.input
+            field={@form[:needle_jet_code]}
+            type="select"
+            label={gettext("Needle jet")}
+            options={Enum.map(@needle_jets, &{&1.code, &1.code})}
+          />
+          <.input
+            field={@form[:clip_position]}
+            type="number"
+            label={gettext("Clip")}
+            min="1"
+            max={clip_max(@needles, @params["part_number"])}
+          />
+          <.input
+            field={@form[:shim_hundredths]}
+            type="number"
+            label={gettext("Shim (hundredths of mm)")}
+            min="0"
+          />
+          <.input
+            field={@form[:venturi_mm]}
+            type="number"
+            label={gettext("Venturi (mm)")}
+            min="1"
+          />
+        </fieldset>
+      </.form>
+
+      <section :if={@chart} aria-label={gettext("Free-area curve")}>
+        <p>
+          {gettext("Maximum free area")}:
+          <strong id="max-area">{format_area(@chart.max_area)}</strong>
+          mm²
+        </p>
+
+        <svg viewBox={"0 0 #{@chart.vb_w} #{@chart.vb_h}"} width="100%" role="img" class="curve">
+          <line
+            :for={tick <- @chart.x_ticks}
+            x1={tick.x}
+            y1={@chart.y_top}
+            x2={tick.x}
+            y2={@chart.y_bottom}
+            stroke="#e5e7eb"
+            stroke-width="1"
+          />
+          <text
+            :for={tick <- @chart.x_ticks}
+            x={tick.x}
+            y={@chart.y_bottom + 16}
+            text-anchor="middle"
+            font-size="9"
+            fill="#6b7280"
+          >
+            {tick.label}
+          </text>
+          <text
+            :for={tick <- @chart.y_ticks}
+            x={@chart.x0 - 6}
+            y={tick.y + 3}
+            text-anchor="end"
+            font-size="9"
+            fill="#6b7280"
+          >
+            {tick.label}
+          </text>
+
+          <line
+            x1={@chart.x0}
+            y1={@chart.y_top}
+            x2={@chart.x0}
+            y2={@chart.y_bottom}
+            stroke="#9ca3af"
+            stroke-width="1"
+          />
+          <line
+            x1={@chart.x0}
+            y1={@chart.y_bottom}
+            x2={@chart.x1}
+            y2={@chart.y_bottom}
+            stroke="#9ca3af"
+            stroke-width="1"
+          />
+
+          <polyline points={@chart.polyline} fill="none" stroke="#2563eb" stroke-width="2" />
+        </svg>
+      </section>
+
+      <p :if={!@chart}>{gettext("Pick a needle and a needle jet to see the curve.")}</p>
+    </main>
+    """
+  end
+
+  defp default_params([], _needle_jets), do: %{}
+
+  defp default_params([needle | _], needle_jets) do
+    %{
+      "part_number" => needle.part_number,
+      "needle_jet_code" => first_code(needle_jets),
+      "clip_position" => "3",
+      "shim_hundredths" => "0",
+      "venturi_mm" => "34"
+    }
+  end
+
+  defp first_code([]), do: ""
+  defp first_code([%{code: code} | _]), do: code
+
+  defp recompute(socket, params) do
+    fuel_map = fuel_map_for(params)
+
+    socket
+    |> assign(params: params, form: to_form(params, as: :setup))
+    |> assign(fuel_map: fuel_map, chart: fuel_map && build_chart(fuel_map))
+  end
+
+  defp fuel_map_for(params) do
+    with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),
+         {:ok, needle_jet} <- Catalog.fetch_needle_jet(params["needle_jet_code"]) do
+      %Setup{
+        needle: needle,
+        needle_jet: needle_jet,
+        clip: %Clip{position: parse_int(params["clip_position"], 1)},
+        shim: %Shim{hundredths: parse_int(params["shim_hundredths"], 0)},
+        venturi: %Venturi{mm: parse_int(params["venturi_mm"], 1) * 1.0}
+      }
+      |> Carburetion.build_fuel_map()
+    else
+      :error -> nil
+    end
+  end
+
+  defp parse_int(value, default) do
+    case Integer.parse(to_string(value)) do
+      {int, _rest} when int >= 0 -> int
+      _ -> default
+    end
+  end
+
+  defp build_chart(%FuelMap{points: points}) do
+    areas = Enum.map(points, & &1.free_area)
+    max_area = Enum.max(areas)
+    y_max = if max_area <= 0.0, do: 1.0, else: max_area * 1.1
+
+    polyline =
+      Enum.map_join(points, " ", fn point ->
+        "#{round1(scale_x(point.position))},#{round1(scale_y(point.free_area, y_max))}"
+      end)
+
+    %{
+      vb_w: @vb_w,
+      vb_h: @vb_h,
+      x0: @x0,
+      x1: @x1,
+      y_top: @y_top,
+      y_bottom: @y_bottom,
+      polyline: polyline,
+      max_area: max_area,
+      x_ticks: Enum.map([0, 25, 50, 75, 100], &%{x: round1(scale_x(&1)), label: "#{&1}%"}),
+      y_ticks: [%{y: @y_bottom, label: "0"}, %{y: @y_top, label: format_area(y_max)}]
+    }
+  end
+
+  defp scale_x(position), do: @x0 + position / 100 * @plot_w
+  defp scale_y(area, y_max), do: @y_bottom - area / y_max * @plot_h
+  defp round1(value), do: Float.round(value * 1.0, 1)
+  defp format_area(value), do: :erlang.float_to_binary(value * 1.0, decimals: 2)
+
+  defp clip_max(needles, part_number) do
+    case Enum.find(needles, &(&1.part_number == part_number)) do
+      nil -> 5
+      needle -> needle.num_clips
+    end
+  end
+end

@@ -16,6 +16,8 @@ defmodule AfinadosWeb.Router do
 
   scope "/", AfinadosWeb do
     pipe_through(:browser)
+
+    live("/", SetupLive)
   end
 
   if Application.compile_env(:afinados, :dev_routes) do

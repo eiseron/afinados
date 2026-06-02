@@ -1,0 +1,78 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/afinados_web/components/layouts.ex:37
+#: lib/afinados_web/components/layouts.ex:48
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Tentando reconectar"
+
+#: lib/afinados_web/live/setup_live.ex:147
+#, elixir-autogen, elixir-format
+msgid "Clip"
+msgstr "Clip"
+
+#: lib/afinados_web/live/setup_live.ex:126
+#, elixir-autogen, elixir-format
+msgid "Free fuel-passage area curve"
+msgstr "Curva de área livre de passagem"
+
+#: lib/afinados_web/live/setup_live.ex:166
+#, elixir-autogen, elixir-format
+msgid "Free-area curve"
+msgstr "Curva de área livre"
+
+#: lib/afinados_web/live/setup_live.ex:168
+#, elixir-autogen, elixir-format
+msgid "Maximum free area"
+msgstr "Área livre máxima"
+
+#: lib/afinados_web/live/setup_live.ex:135
+#, elixir-autogen, elixir-format
+msgid "Needle"
+msgstr "Agulha"
+
+#: lib/afinados_web/live/setup_live.ex:141
+#, elixir-autogen, elixir-format
+msgid "Needle jet"
+msgstr "Difusor"
+
+#: lib/afinados_web/live/setup_live.ex:224
+#, elixir-autogen, elixir-format
+msgid "Pick a needle and a needle jet to see the curve."
+msgstr "Escolha uma agulha e um difusor para ver a curva."
+
+#: lib/afinados_web/live/setup_live.ex:130
+#, elixir-autogen, elixir-format
+msgid "Setup"
+msgstr "Acerto"
+
+#: lib/afinados_web/live/setup_live.ex:154
+#, elixir-autogen, elixir-format
+msgid "Shim (hundredths of mm)"
+msgstr "Calço (centésimos de mm)"
+
+#: lib/afinados_web/components/layouts.ex:43
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Algo deu errado!"
+
+#: lib/afinados_web/live/setup_live.ex:160
+#, elixir-autogen, elixir-format
+msgid "Venturi (mm)"
+msgstr "Venturi (mm)"
+
+#: lib/afinados_web/components/layouts.ex:32
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Sem conexão com a internet"

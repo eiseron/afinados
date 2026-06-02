@@ -4,6 +4,8 @@ config :afinados,
   ecto_repos: [Afinados.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :gettext, :default_locale, "pt_BR"
+
 config :afinados, AfinadosWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
