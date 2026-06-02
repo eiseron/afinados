@@ -8,6 +8,7 @@ defmodule AfinadosWeb.Router do
     plug(:put_root_layout, html: {AfinadosWeb.Layouts, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers, %{"content-security-policy" => "default-src 'self'"})
+    plug(AfinadosWeb.GuestToken)
   end
 
   pipeline :api do

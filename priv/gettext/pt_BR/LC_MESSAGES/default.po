@@ -17,47 +17,47 @@ msgstr ""
 msgid "Attempting to reconnect"
 msgstr "Tentando reconectar"
 
-#: lib/afinados_web/live/setup_live.ex:147
+#: lib/afinados_web/live/setup_live.ex:88
 #, elixir-autogen, elixir-format
 msgid "Clip"
 msgstr "Clip"
 
-#: lib/afinados_web/live/setup_live.ex:126
+#: lib/afinados_web/live/setup_live.ex:67
 #, elixir-autogen, elixir-format
 msgid "Free fuel-passage area curve"
 msgstr "Curva de área livre de passagem"
 
-#: lib/afinados_web/live/setup_live.ex:166
+#: lib/afinados_web/live/setup_live.ex:104
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
 msgstr "Curva de área livre"
 
-#: lib/afinados_web/live/setup_live.ex:168
+#: lib/afinados_web/live/setup_live.ex:106
 #, elixir-autogen, elixir-format
 msgid "Maximum free area"
 msgstr "Área livre máxima"
 
-#: lib/afinados_web/live/setup_live.ex:135
+#: lib/afinados_web/live/setup_live.ex:76
 #, elixir-autogen, elixir-format
 msgid "Needle"
 msgstr "Agulha"
 
-#: lib/afinados_web/live/setup_live.ex:141
+#: lib/afinados_web/live/setup_live.ex:82
 #, elixir-autogen, elixir-format
 msgid "Needle jet"
 msgstr "Difusor"
 
-#: lib/afinados_web/live/setup_live.ex:224
+#: lib/afinados_web/live/setup_live.ex:163
 #, elixir-autogen, elixir-format
 msgid "Pick a needle and a needle jet to see the curve."
 msgstr "Escolha uma agulha e um difusor para ver a curva."
 
-#: lib/afinados_web/live/setup_live.ex:130
+#: lib/afinados_web/live/setup_live.ex:71
 #, elixir-autogen, elixir-format
 msgid "Setup"
 msgstr "Acerto"
 
-#: lib/afinados_web/live/setup_live.ex:154
+#: lib/afinados_web/live/setup_live.ex:95
 #, elixir-autogen, elixir-format
 msgid "Shim (hundredths of mm)"
 msgstr "Calço (centésimos de mm)"
@@ -67,7 +67,7 @@ msgstr "Calço (centésimos de mm)"
 msgid "Something went wrong!"
 msgstr "Algo deu errado!"
 
-#: lib/afinados_web/live/setup_live.ex:160
+#: lib/afinados_web/live/setup_live.ex:98
 #, elixir-autogen, elixir-format
 msgid "Venturi (mm)"
 msgstr "Venturi (mm)"
@@ -76,3 +76,19 @@ msgstr "Venturi (mm)"
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "Sem conexão com a internet"
+
+#: lib/afinados_web/live/setup_live.ex:102
+#, elixir-autogen, elixir-format
+msgid "Save setup"
+msgstr "Salvar acerto"
+
+#: lib/afinados_web/live/setup_live.ex:165
+#: lib/afinados_web/live/setup_live.ex:166
+#, elixir-autogen, elixir-format
+msgid "Saved setups"
+msgstr "Acertos salvos"
+
+#: lib/afinados_web/live/setup_live.ex:170
+#, elixir-autogen, elixir-format
+msgid "clip"
+msgstr "clip"

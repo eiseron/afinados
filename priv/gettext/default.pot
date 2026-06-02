@@ -17,47 +17,47 @@ msgstr ""
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:147
+#: lib/afinados_web/live/setup_live.ex:88
 #, elixir-autogen, elixir-format
 msgid "Clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:126
+#: lib/afinados_web/live/setup_live.ex:67
 #, elixir-autogen, elixir-format
 msgid "Free fuel-passage area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:166
+#: lib/afinados_web/live/setup_live.ex:104
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:168
+#: lib/afinados_web/live/setup_live.ex:106
 #, elixir-autogen, elixir-format
 msgid "Maximum free area"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:135
+#: lib/afinados_web/live/setup_live.ex:76
 #, elixir-autogen, elixir-format
 msgid "Needle"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:141
+#: lib/afinados_web/live/setup_live.ex:82
 #, elixir-autogen, elixir-format
 msgid "Needle jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:224
+#: lib/afinados_web/live/setup_live.ex:163
 #, elixir-autogen, elixir-format
 msgid "Pick a needle and a needle jet to see the curve."
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:130
+#: lib/afinados_web/live/setup_live.ex:71
 #, elixir-autogen, elixir-format
 msgid "Setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:154
+#: lib/afinados_web/live/setup_live.ex:95
 #, elixir-autogen, elixir-format
 msgid "Shim (hundredths of mm)"
 msgstr ""
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:160
+#: lib/afinados_web/live/setup_live.ex:98
 #, elixir-autogen, elixir-format
 msgid "Venturi (mm)"
 msgstr ""
@@ -75,4 +75,20 @@ msgstr ""
 #: lib/afinados_web/components/layouts.ex:32
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:102
+#, elixir-autogen, elixir-format
+msgid "Save setup"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:165
+#: lib/afinados_web/live/setup_live.ex:166
+#, elixir-autogen, elixir-format
+msgid "Saved setups"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:170
+#, elixir-autogen, elixir-format
+msgid "clip"
 msgstr ""

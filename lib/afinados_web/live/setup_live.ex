@@ -1,10 +1,12 @@
 defmodule AfinadosWeb.SetupLive do
-  @moduledoc "Builds a carburetor setup from the catalog and renders its free-area curve as server-side SVG."
+  @moduledoc "Builds a carburetor setup from the catalog, renders its free-area curve (server-side SVG), and persists it to the guest's garage."
 
   use AfinadosWeb, :live_view
 
   alias Afinados.Carburetion
   alias Afinados.Carburetion.{Catalog, Clip, FuelMap, Setup, Shim, Venturi}
+  alias Afinados.Carburetion.Workbench
+  alias Afinados.{Garage, Identity}
 
   @vb_w 360
   @vb_h 220
@@ -20,13 +22,15 @@ defmodule AfinadosWeb.SetupLive do
   @y_top @pad_top
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     needles = Catalog.list_needles()
     needle_jets = Catalog.list_needle_jets()
 
     socket =
       socket
       |> assign(needles: needles, needle_jets: needle_jets)
+      |> assign(token: session["guest_token"], current_user: nil, current_garage: nil, saved: [])
+      |> load_work(Identity.user_for_token(session["guest_token"]))
       |> recompute(default_params(needles, needle_jets))
 
     {:ok, socket}
@@ -35,6 +39,28 @@ defmodule AfinadosWeb.SetupLive do
   @impl true
   def handle_event("change", %{"setup" => params}, socket) do
     {:noreply, recompute(socket, params)}
+  end
+
+  @impl true
+  def handle_event("save", _params, socket) do
+    user = Identity.ensure_user_for_token(socket.assigns.token)
+    garage = Garage.default_for(user)
+
+    case Workbench.save_setup(garage, socket.assigns.params) do
+      {:ok, _setup} -> {:noreply, load_work(socket, user)}
+      {:error, _changeset} -> {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("load", %{"id" => id}, socket) do
+    with %Garage{} = garage <- socket.assigns.current_garage,
+         {setup_id, ""} <- Integer.parse(id),
+         setup when not is_nil(setup) <- Workbench.get_setup(garage, setup_id) do
+      {:noreply, recompute(socket, saved_params(setup))}
+    else
+      _ -> {:noreply, socket}
+    end
   end
 
   @impl true
@@ -72,14 +98,13 @@ defmodule AfinadosWeb.SetupLive do
             label={gettext("Shim (hundredths of mm)")}
             min="0"
           />
-          <.input
-            field={@form[:venturi_mm]}
-            type="number"
-            label={gettext("Venturi (mm)")}
-            min="1"
-          />
+          <.input field={@form[:venturi_mm]} type="number" label={gettext("Venturi (mm)")} min="1" />
         </fieldset>
       </.form>
+
+      <button type="button" phx-click="save" disabled={is_nil(@chart)}>
+        {gettext("Save setup")}
+      </button>
 
       <section :if={@chart} aria-label={gettext("Free-area curve")}>
         <p>
@@ -141,8 +166,36 @@ defmodule AfinadosWeb.SetupLive do
       </section>
 
       <p :if={!@chart}>{gettext("Pick a needle and a needle jet to see the curve.")}</p>
+
+      <section :if={@saved != []} aria-label={gettext("Saved setups")}>
+        <h2>{gettext("Saved setups")}</h2>
+        <ul>
+          <li :for={setup <- @saved}>
+            <button type="button" phx-click="load" phx-value-id={setup.id}>
+              {setup.needle_part_number} · {gettext("clip")} {setup.clip_position} · {setup.carburetor.venturi_mm} mm
+            </button>
+          </li>
+        </ul>
+      </section>
     </main>
     """
+  end
+
+  defp load_work(socket, nil),
+    do: assign(socket, current_user: nil, current_garage: nil, saved: [])
+
+  defp load_work(socket, user) do
+    case Garage.list_for(user) do
+      [garage | _] ->
+        assign(socket,
+          current_user: user,
+          current_garage: garage,
+          saved: Workbench.list_setups(garage)
+        )
+
+      [] ->
+        assign(socket, current_user: user, current_garage: nil, saved: [])
+    end
   end
 
   defp default_params([], _needle_jets), do: %{}
@@ -159,6 +212,16 @@ defmodule AfinadosWeb.SetupLive do
 
   defp first_code([]), do: ""
   defp first_code([%{code: code} | _]), do: code
+
+  defp saved_params(setup) do
+    %{
+      "part_number" => setup.needle_part_number,
+      "needle_jet_code" => setup.needle_jet_code,
+      "clip_position" => to_string(setup.clip_position),
+      "shim_hundredths" => to_string(setup.shim_hundredths),
+      "venturi_mm" => to_string(setup.carburetor.venturi_mm)
+    }
+  end
 
   defp recompute(socket, params) do
     fuel_map = fuel_map_for(params)
