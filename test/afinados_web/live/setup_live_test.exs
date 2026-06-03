@@ -3,8 +3,7 @@ defmodule AfinadosWeb.SetupLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias Afinados.Carburetion
-  alias Afinados.Carburetion.{Catalog, Clip, HighJet, LowJet, Setup, Shim, Venturi}
+  alias Afinados.Carburetion.Catalog
   alias Afinados.Carburetion.Workbench
   alias Afinados.Garage
   alias Afinados.Repo
@@ -42,24 +41,9 @@ defmodule AfinadosWeb.SetupLiveTest do
     }
   end
 
-  defp max_area(venturi_mm) do
-    {:ok, needle} = Catalog.fetch_needle("4D3")
-    {:ok, needle_jet} = Catalog.fetch_needle_jet("159-P4")
-
-    %Setup{
-      needle: needle,
-      needle_jet: needle_jet,
-      high_jet: %HighJet{number: 150, free_area_mm2: :math.pi() / 4 * 1.5 * 1.5},
-      low_jet: %LowJet{number: 25.0, free_area_mm2: 0.005 * 25.0},
-      clip: %Clip{position: 3},
-      shim: %Shim{hundredths: 0},
-      venturi: %Venturi{mm: venturi_mm}
-    }
-    |> Carburetion.build_fuel_map()
-    |> Map.fetch!(:points)
-    |> Enum.map(& &1.free_area)
-    |> Enum.max()
-    |> :erlang.float_to_binary(decimals: 2)
+  defp active_polyline(html) do
+    [_, points] = Regex.run(~r/<polyline[^>]*points="([^"]+)"/, html)
+    points
   end
 
   test "renders the seeded needle from the catalog", %{conn: conn} do
@@ -75,22 +59,25 @@ defmodule AfinadosWeb.SetupLiveTest do
     assert length(String.split(points, " ", trim: true)) == 101
   end
 
-  test "shows the maximum free area for the default setup", %{conn: conn} do
+  test "the curve shows intermediate Y-scale levels, not just min and max", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/")
 
-    assert html =~ max_area(34.0)
+    assert length(Regex.scan(~r/text-anchor="end"/, html)) > 2
   end
 
   test "recomputes the curve when the venturi changes", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, html} = live(conn, "/")
 
-    assert render_change(view, "change", change_params("50")) =~ max_area(50.0)
+    refute active_polyline(render_change(view, "change", change_params("50"))) ==
+             active_polyline(html)
   end
 
   test "falls back to a default venturi when the input is invalid", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
+    invalid = render_change(view, "change", change_params("abc"))
 
-    assert render_change(view, "change", change_params("abc")) =~ max_area(1.0)
+    assert active_polyline(invalid) ==
+             active_polyline(render_change(view, "change", change_params("1")))
   end
 
   test "saving persists the current setup linked to the guest's garage", %{conn: conn} do
@@ -108,25 +95,28 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "loading a saved setup restores its curve", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, html} = live(conn, "/")
+    saved_curve = active_polyline(html)
     render_click(view, "save")
     render_change(view, "change", change_params("50"))
     [setup] = Repo.all(Workbench.Setup)
 
-    assert render_click(view, "load", %{"id" => to_string(setup.id)}) =~ max_area(34.0)
+    assert active_polyline(render_click(view, "load", %{"id" => to_string(setup.id)})) ==
+             saved_curve
   end
 
   test "ignores a load with a non-integer id without crashing", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, html} = live(conn, "/")
     render_click(view, "save")
 
-    assert render_click(view, "load", %{"id" => "not-an-int"}) =~ max_area(34.0)
+    assert active_polyline(render_click(view, "load", %{"id" => "not-an-int"})) ==
+             active_polyline(html)
   end
 
   test "ignores a load when the guest has no garage yet", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, html} = live(conn, "/")
 
-    assert render_click(view, "load", %{"id" => "999"}) =~ max_area(34.0)
+    assert active_polyline(render_click(view, "load", %{"id" => "999"})) == active_polyline(html)
   end
 
   test "comparing a saved setup overlays a second curve", %{conn: conn} do
@@ -158,13 +148,25 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     html = render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
 
-    assert html =~ "#dc2626" or html =~ "#16a34a"
+    assert html =~ "#16a34a"
   end
 
-  test "toggling the X axis switches the percent ticks to needle-position ticks", %{conn: conn} do
+  test "toggling the X axis switches the unit from percent to millimetres", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
 
-    refute render_click(view, "toggle_x_axis") =~ "75%"
+    assert render_click(view, "toggle_x_axis") =~ ~r{class="axis-unit">\s*mm\s*</text>}
+  end
+
+  test "labels the Y axis end with the mm² unit", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~ ~r{class="axis-unit">\s*mm²\s*</text>}
+  end
+
+  test "labels the X axis end with the percent unit in throttle mode", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~ ~r{class="axis-unit">\s*%\s*</text>}
   end
 
   test "in needle mode curves with different h0 start aligned at idle travel", %{conn: conn} do
@@ -185,5 +187,21 @@ defmodule AfinadosWeb.SetupLiveTest do
       |> Enum.map(fn [_, x] -> x end)
 
     assert match?([x, x], starts)
+  end
+
+  test "leads with the chart panel and places the setup controls after it", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+    {chart_at, _} = :binary.match(html, ~s(class="curve"))
+    {controls_at, _} = :binary.match(html, ~s(class="controls"))
+
+    assert chart_at < controls_at
+  end
+
+  test "places the page heading below the chart, not above it", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+    {chart_at, _} = :binary.match(html, ~s(class="curve"))
+    {heading_at, _} = :binary.match(html, "<h1")
+
+    assert chart_at < heading_at
   end
 end

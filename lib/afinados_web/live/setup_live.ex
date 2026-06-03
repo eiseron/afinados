@@ -9,11 +9,11 @@ defmodule AfinadosWeb.SetupLive do
   alias Afinados.{Garage, Identity}
 
   @vb_w 360
-  @vb_h 220
+  @vb_h 242
   @pad_left 44
-  @pad_right 12
-  @pad_top 12
-  @pad_bottom 28
+  @pad_right 20
+  @pad_top 22
+  @pad_bottom 40
   @plot_w @vb_w - @pad_left - @pad_right
   @plot_h @vb_h - @pad_top - @pad_bottom
   @x0 @pad_left
@@ -87,70 +87,7 @@ defmodule AfinadosWeb.SetupLive do
   def render(assigns) do
     ~H"""
     <main class="setup">
-      <h1>{gettext("Free fuel-passage area curve")}</h1>
-
-      <.form for={@form} phx-change="change">
-        <fieldset>
-          <legend>{gettext("Setup")}</legend>
-
-          <.input
-            field={@form[:part_number]}
-            type="select"
-            label={gettext("Needle")}
-            options={Enum.map(@needles, &{&1.part_number, &1.part_number})}
-          />
-          <.input
-            field={@form[:needle_jet_code]}
-            type="select"
-            label={gettext("Needle jet")}
-            options={Enum.map(@needle_jets, &{&1.code, &1.code})}
-          />
-          <.input
-            field={@form[:high_jet_number]}
-            type="number"
-            label={gettext("Main jet")}
-            min="1"
-            step="1"
-          />
-          <.input
-            field={@form[:low_jet_number]}
-            type="number"
-            label={gettext("Pilot jet")}
-            min="1"
-            step="0.5"
-          />
-          <.input
-            field={@form[:clip_position]}
-            type="number"
-            label={gettext("Clip")}
-            min="1"
-            max={clip_max(@needles, @params["part_number"])}
-          />
-          <.input
-            field={@form[:shim_hundredths]}
-            type="number"
-            label={gettext("Shim (hundredths of mm)")}
-            min="0"
-          />
-          <.input field={@form[:venturi_mm]} type="number" label={gettext("Venturi (mm)")} min="1" />
-        </fieldset>
-      </.form>
-
-      <button type="button" phx-click="save" disabled={is_nil(@active_map)}>
-        {gettext("Save setup")}
-      </button>
-
       <section :if={@chart} aria-label={gettext("Free-area curve")}>
-        <p :if={@active_map}>
-          {gettext("Maximum free area")}:
-          <strong id="max-area">{format_area(active_max(@active_map))}</strong>
-          mm²
-        </p>
-
-        <button type="button" phx-click="toggle_x_axis">
-          {gettext("X axis")}: {axis_label(@x_axis)}
-        </button>
-
         <svg viewBox={"0 0 #{@chart.vb_w} #{@chart.vb_h}"} width="100%" role="img" class="curve">
           <line
             :for={tick <- @chart.x_ticks}
@@ -158,6 +95,15 @@ defmodule AfinadosWeb.SetupLive do
             y1={@chart.y_top}
             x2={tick.x}
             y2={@chart.y_bottom}
+            stroke="#e5e7eb"
+            stroke-width="1"
+          />
+          <line
+            :for={tick <- @chart.y_ticks}
+            x1={@chart.x0}
+            y1={tick.y}
+            x2={@chart.x1}
+            y2={tick.y}
             stroke="#e5e7eb"
             stroke-width="1"
           />
@@ -180,6 +126,26 @@ defmodule AfinadosWeb.SetupLive do
             fill="#6b7280"
           >
             {tick.label}
+          </text>
+          <text
+            x={@chart.x0}
+            y={@chart.y_top - 8}
+            text-anchor="start"
+            font-size="9"
+            fill="#6b7280"
+            class="axis-unit"
+          >
+            mm²
+          </text>
+          <text
+            x={@chart.x1}
+            y={@chart.y_bottom + 30}
+            text-anchor="end"
+            font-size="9"
+            fill="#6b7280"
+            class="axis-unit"
+          >
+            {@chart.x_unit}
           </text>
 
           <line
@@ -230,25 +196,84 @@ defmodule AfinadosWeb.SetupLive do
 
       <p :if={!@chart}>{gettext("Pick a needle and a needle jet to see the curve.")}</p>
 
-      <section :if={@saved != []} aria-label={gettext("Saved setups")}>
-        <h2>{gettext("Saved setups")}</h2>
-        <ul>
-          <li :for={setup <- @saved}>
-            <label>
-              <input
-                type="checkbox"
-                phx-click="toggle_compare"
-                phx-value-id={setup.id}
-                checked={MapSet.member?(@compared, setup.id)}
-              />
-              {gettext("Compare")}
-            </label>
-            <button type="button" phx-click="load" phx-value-id={setup.id}>
-              {setup.needle_part_number} · {gettext("clip")} {setup.clip_position} · {setup.carburetor.venturi_mm} mm
-            </button>
-          </li>
-        </ul>
-      </section>
+      <h1>{gettext("Free fuel-passage area curve")}</h1>
+
+      <aside class="controls" aria-label={gettext("Setup controls")}>
+        <.form for={@form} phx-change="change">
+          <fieldset>
+            <legend>{gettext("Setup")}</legend>
+
+            <.input
+              field={@form[:part_number]}
+              type="select"
+              label={gettext("Needle")}
+              options={Enum.map(@needles, &{&1.part_number, &1.part_number})}
+            />
+            <.input
+              field={@form[:needle_jet_code]}
+              type="select"
+              label={gettext("Needle jet")}
+              options={Enum.map(@needle_jets, &{&1.code, &1.code})}
+            />
+            <.input
+              field={@form[:high_jet_number]}
+              type="number"
+              label={gettext("Main jet")}
+              min="1"
+              step="1"
+            />
+            <.input
+              field={@form[:low_jet_number]}
+              type="number"
+              label={gettext("Pilot jet")}
+              min="1"
+              step="0.5"
+            />
+            <.input
+              field={@form[:clip_position]}
+              type="number"
+              label={gettext("Clip")}
+              min="1"
+              max={clip_max(@needles, @params["part_number"])}
+            />
+            <.input
+              field={@form[:shim_hundredths]}
+              type="number"
+              label={gettext("Shim (hundredths of mm)")}
+              min="0"
+            />
+            <.input field={@form[:venturi_mm]} type="number" label={gettext("Venturi (mm)")} min="1" />
+          </fieldset>
+        </.form>
+
+        <button :if={@chart} type="button" phx-click="toggle_x_axis">
+          {gettext("X axis")}: {axis_label(@x_axis)}
+        </button>
+
+        <button type="button" phx-click="save" disabled={is_nil(@active_map)}>
+          {gettext("Save setup")}
+        </button>
+
+        <section :if={@saved != []} aria-label={gettext("Saved setups")}>
+          <h2>{gettext("Saved setups")}</h2>
+          <ul>
+            <li :for={setup <- @saved}>
+              <label>
+                <input
+                  type="checkbox"
+                  phx-click="toggle_compare"
+                  phx-value-id={setup.id}
+                  checked={MapSet.member?(@compared, setup.id)}
+                />
+                {gettext("Compare")}
+              </label>
+              <button type="button" phx-click="load" phx-value-id={setup.id}>
+                {setup.needle_part_number} · {gettext("clip")} {setup.clip_position} · {setup.carburetor.venturi_mm} mm
+              </button>
+            </li>
+          </ul>
+        </section>
+      </aside>
     </main>
     """
   end
@@ -348,8 +373,6 @@ defmodule AfinadosWeb.SetupLive do
     end
   end
 
-  defp active_max(%FuelMap{points: points}), do: points |> Enum.map(& &1.free_area) |> Enum.max()
-
   defp fuel_map_for(params) do
     with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),
          {:ok, needle_jet} <- Catalog.fetch_needle_jet(params["needle_jet_code"]),
@@ -410,8 +433,19 @@ defmodule AfinadosWeb.SetupLive do
       series: rendered,
       difference: difference_band(series, scale),
       x_ticks: x_ticks(mode, x_min, x_max),
-      y_ticks: [%{y: @y_bottom, label: "0"}, %{y: @y_top, label: format_area(y_max)}]
+      x_unit: x_unit(mode),
+      y_ticks: y_ticks(y_max)
     }
+  end
+
+  defp x_unit(:throttle), do: "%"
+  defp x_unit(:needle), do: "mm"
+
+  defp y_ticks(y_max) do
+    Enum.map(0..4, fn i ->
+      value = y_max * i / 4
+      %{y: round1(scale_y(value, y_max)), label: format_area(value)}
+    end)
   end
 
   defp x_range(_series, :throttle), do: {0.0, 100.0}
@@ -424,7 +458,7 @@ defmodule AfinadosWeb.SetupLive do
   defp point_x(point, h0, :needle), do: point.h - h0
 
   defp x_ticks(:throttle, x_min, x_max) do
-    Enum.map([0, 25, 50, 75, 100], &%{x: round1(scale_x(&1, x_min, x_max)), label: "#{&1}%"})
+    Enum.map([0, 25, 50, 75, 100], &%{x: round1(scale_x(&1, x_min, x_max)), label: "#{&1}"})
   end
 
   defp x_ticks(:needle, x_min, x_max) do
@@ -456,8 +490,8 @@ defmodule AfinadosWeb.SetupLive do
 
   defp difference_band(_series, _scale), do: []
 
-  defp diff_color(true), do: "#16a34a"
-  defp diff_color(false), do: "#dc2626"
+  defp diff_color(true), do: "#dc2626"
+  defp diff_color(false), do: "#16a34a"
 
   defp scale_x(value, x_min, x_max) when x_max > x_min,
     do: @x0 + (value - x_min) / (x_max - x_min) * @plot_w
