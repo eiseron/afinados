@@ -160,4 +160,30 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     assert html =~ "#dc2626" or html =~ "#16a34a"
   end
+
+  test "toggling the X axis switches the percent ticks to needle-position ticks", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+
+    refute render_click(view, "toggle_x_axis") =~ "75%"
+  end
+
+  test "in needle mode curves with different h0 start aligned at idle travel", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+
+    render_change(view, "change", %{
+      "setup" => Map.put(change_params("34")["setup"], "clip_position", "5")
+    })
+
+    [setup] = Repo.all(Workbench.Setup)
+    render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
+    html = render_click(view, "toggle_x_axis")
+
+    starts =
+      ~r/<polyline[^>]*points="([0-9.]+),/
+      |> Regex.scan(html)
+      |> Enum.map(fn [_, x] -> x end)
+
+    assert match?([x, x], starts)
+  end
 end

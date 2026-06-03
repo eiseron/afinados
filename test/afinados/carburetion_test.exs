@@ -36,10 +36,10 @@ defmodule Afinados.CarburetionTest do
       assert positions == Enum.to_list(0..100)
     end
 
-    test "the window spans from h0 to h0 + venturi", %{setup: setup} do
+    test "the window spans h0 to h0 + venturi, anchored at the taper start", %{setup: setup} do
       map = Carburetion.build_fuel_map(setup)
 
-      assert {map.h0, map.h_max} == {3.0, 37.0}
+      assert {Float.round(map.h0, 4), Float.round(map.h_max, 4)} == {28.3, 62.3}
     end
 
     test "at idle (0%) the free area is the pilot floor", %{setup: setup} do
@@ -58,12 +58,15 @@ defmodule Afinados.CarburetionTest do
       assert areas(setup) == Enum.sort(areas(setup))
     end
 
-    test "marks the needle's unused span beyond the window", %{setup: setup} do
-      assert Carburetion.build_fuel_map(setup).unused_span == %{from: 37.0, to: 50.3}
+    test "marks the needle's unused span at the top (inside the slide)", %{setup: setup} do
+      assert Carburetion.build_fuel_map(setup).unused_span == %{from: 0.0, to: 28.3}
     end
 
-    test "has no unused span when the needle fits within the window", %{setup: setup} do
-      assert Carburetion.build_fuel_map(%{setup | venturi: %Venturi{mm: 60.0}}).unused_span == nil
+    test "a bigger venturi extends the window's end, not its start", %{setup: setup} do
+      small = Carburetion.build_fuel_map(setup)
+      big = Carburetion.build_fuel_map(%{setup | venturi: %Venturi{mm: 44.0}})
+
+      assert {big.h0 == small.h0, big.h_max > small.h_max} == {true, true}
     end
   end
 
@@ -124,11 +127,10 @@ defmodule Afinados.CarburetionTest do
   end
 
   describe "h0/1" do
-    test "is the clip offset (1 mm per position) plus the shim offset (hundredths)", %{
+    test "anchors the idle position at the taper start (offset by clip/shim)", %{
       setup: setup
     } do
-      assert Carburetion.h0(%{setup | clip: %Clip{position: 3}, shim: %Shim{hundredths: 25}}) ==
-               3.25
+      assert_in_delta Carburetion.h0(setup), 25.3 + 3.0, 1.0e-9
     end
 
     test "raising the clip lifts the whole window", %{setup: setup} do

@@ -33,7 +33,10 @@ defmodule Afinados.Carburetion do
   def bore_area(%NeedleJet{bore_mm: bore_mm}), do: :math.pi() / 4 * bore_mm * bore_mm
 
   @spec h0(Setup.t()) :: float()
-  def h0(%Setup{clip: clip, shim: shim}), do: clip.position * 1.0 + shim.hundredths / 100
+  def h0(%Setup{needle: needle, clip: clip, shim: shim}) do
+    [straight_end | _] = needle.taper_points_mm
+    straight_end + clip.position * 1.0 + shim.hundredths / 100
+  end
 
   @spec compute_annular_area(Setup.t(), number()) :: float()
   def compute_annular_area(%Setup{needle: needle, needle_jet: needle_jet}, h) do
@@ -53,7 +56,7 @@ defmodule Afinados.Carburetion do
   end
 
   @spec build_fuel_map(Setup.t()) :: FuelMap.t()
-  def build_fuel_map(%Setup{venturi: %Venturi{mm: venturi_mm}, needle: needle} = setup) do
+  def build_fuel_map(%Setup{venturi: %Venturi{mm: venturi_mm}} = setup) do
     base = h0(setup)
     h_max = base + venturi_mm
 
@@ -63,7 +66,7 @@ defmodule Afinados.Carburetion do
         %{position: position, h: h, free_area: compute_free_area(setup, h)}
       end)
 
-    %FuelMap{points: points, h0: base, h_max: h_max, unused_span: unused_span(needle, h_max)}
+    %FuelMap{points: points, h0: base, h_max: h_max, unused_span: unused_span(base)}
   end
 
   defp series_area(annular, _high) when annular <= 0.0, do: 0.0
@@ -84,8 +87,6 @@ defmodule Afinados.Carburetion do
     d_low + fraction * (d_high - d_low)
   end
 
-  defp unused_span(%Needle{total_length_mm: total_length_mm}, h_max) when total_length_mm > h_max,
-    do: %{from: h_max, to: total_length_mm}
-
-  defp unused_span(_needle, _h_max), do: nil
+  defp unused_span(base) when base > 0.0, do: %{from: 0.0, to: Float.round(base, 1)}
+  defp unused_span(_base), do: nil
 end

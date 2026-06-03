@@ -33,7 +33,7 @@ defmodule AfinadosWeb.SetupLive do
       socket
       |> assign(catalog)
       |> assign(token: session["guest_token"], current_user: nil, current_garage: nil)
-      |> assign(saved: [], compared: MapSet.new())
+      |> assign(saved: [], compared: MapSet.new(), x_axis: :throttle)
       |> load_work(Identity.user_for_token(session["guest_token"]))
       |> recompute(default_params(catalog))
 
@@ -65,6 +65,11 @@ defmodule AfinadosWeb.SetupLive do
     else
       _ -> {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("toggle_x_axis", _params, socket) do
+    {:noreply, socket |> assign(x_axis: other_axis(socket.assigns.x_axis)) |> rebuild_chart()}
   end
 
   @impl true
@@ -141,6 +146,10 @@ defmodule AfinadosWeb.SetupLive do
           <strong id="max-area">{format_area(active_max(@active_map))}</strong>
           mm²
         </p>
+
+        <button type="button" phx-click="toggle_x_axis">
+          {gettext("X axis")}: {axis_label(@x_axis)}
+        </button>
 
         <svg viewBox={"0 0 #{@chart.vb_w} #{@chart.vb_h}"} width="100%" role="img" class="curve">
           <line
@@ -303,8 +312,14 @@ defmodule AfinadosWeb.SetupLive do
         map -> [%{label: gettext("Current"), map: map}]
       end
 
-    assign(socket, chart: build_chart(active ++ compared_series(socket)))
+    assign(socket, chart: build_chart(active ++ compared_series(socket), socket.assigns.x_axis))
   end
+
+  defp other_axis(:throttle), do: :needle
+  defp other_axis(:needle), do: :throttle
+
+  defp axis_label(:throttle), do: gettext("Throttle (%)")
+  defp axis_label(:needle), do: gettext("Needle travel (mm)")
 
   defp compared_series(%{assigns: %{current_garage: nil}}), do: []
 
@@ -364,13 +379,15 @@ defmodule AfinadosWeb.SetupLive do
     end
   end
 
-  defp build_chart([]), do: nil
+  defp build_chart([], _mode), do: nil
 
-  defp build_chart(series) do
+  defp build_chart(series, mode) do
     max_area =
       series |> Enum.flat_map(fn s -> Enum.map(s.map.points, & &1.free_area) end) |> Enum.max()
 
     y_max = if max_area <= 0.0, do: 1.0, else: max_area * 1.1
+    {x_min, x_max} = x_range(series, mode)
+    scale = %{mode: mode, x_min: x_min, x_max: x_max, y_max: y_max}
 
     rendered =
       series
@@ -379,7 +396,7 @@ defmodule AfinadosWeb.SetupLive do
         %{
           label: serie.label,
           color: Enum.at(@palette, rem(index, length(@palette))),
-          polyline: series_polyline(serie.map, y_max)
+          polyline: series_polyline(serie.map, scale)
         }
       end)
 
@@ -391,37 +408,61 @@ defmodule AfinadosWeb.SetupLive do
       y_top: @y_top,
       y_bottom: @y_bottom,
       series: rendered,
-      difference: difference_band(series, y_max),
-      x_ticks: Enum.map([0, 25, 50, 75, 100], &%{x: round1(scale_x(&1)), label: "#{&1}%"}),
+      difference: difference_band(series, scale),
+      x_ticks: x_ticks(mode, x_min, x_max),
       y_ticks: [%{y: @y_bottom, label: "0"}, %{y: @y_top, label: format_area(y_max)}]
     }
   end
 
-  defp series_polyline(%FuelMap{points: points}, y_max) do
-    Enum.map_join(points, " ", fn point ->
-      "#{round1(scale_x(point.position))},#{round1(scale_y(point.free_area, y_max))}"
+  defp x_range(_series, :throttle), do: {0.0, 100.0}
+
+  defp x_range(series, :needle) do
+    {0.0, series |> Enum.map(fn s -> s.map.h_max - s.map.h0 end) |> Enum.max()}
+  end
+
+  defp point_x(point, _h0, :throttle), do: point.position
+  defp point_x(point, h0, :needle), do: point.h - h0
+
+  defp x_ticks(:throttle, x_min, x_max) do
+    Enum.map([0, 25, 50, 75, 100], &%{x: round1(scale_x(&1, x_min, x_max)), label: "#{&1}%"})
+  end
+
+  defp x_ticks(:needle, x_min, x_max) do
+    Enum.map(0..4, fn i ->
+      h = x_min + (x_max - x_min) * i / 4
+      %{x: round1(scale_x(h, x_min, x_max)), label: "#{round(h)}"}
     end)
   end
 
-  defp difference_band([%{map: map_a}, %{map: map_b}], y_max) do
+  defp series_polyline(%FuelMap{points: points, h0: h0}, scale) do
+    Enum.map_join(points, " ", fn point ->
+      px = round1(scale_x(point_x(point, h0, scale.mode), scale.x_min, scale.x_max))
+      "#{px},#{round1(scale_y(point.free_area, scale.y_max))}"
+    end)
+  end
+
+  defp difference_band([%{map: map_a}, %{map: map_b}], %{mode: :throttle} = scale) do
     diffs = Comparison.compute_difference(map_a, map_b)
 
     Enum.zip_with([map_a.points, map_b.points, diffs], fn [a, b, d] ->
       %{
-        x: round1(scale_x(a.position)),
-        y_a: round1(scale_y(a.free_area, y_max)),
-        y_b: round1(scale_y(b.free_area, y_max)),
+        x: round1(scale_x(a.position, scale.x_min, scale.x_max)),
+        y_a: round1(scale_y(a.free_area, scale.y_max)),
+        y_b: round1(scale_y(b.free_area, scale.y_max)),
         color: diff_color(d.difference >= 0.0)
       }
     end)
   end
 
-  defp difference_band(_series, _y_max), do: []
+  defp difference_band(_series, _scale), do: []
 
   defp diff_color(true), do: "#16a34a"
   defp diff_color(false), do: "#dc2626"
 
-  defp scale_x(position), do: @x0 + position / 100 * @plot_w
+  defp scale_x(value, x_min, x_max) when x_max > x_min,
+    do: @x0 + (value - x_min) / (x_max - x_min) * @plot_w
+
+  defp scale_x(_value, _x_min, _x_max), do: @x0 * 1.0
   defp scale_y(area, y_max), do: @y_bottom - area / y_max * @plot_h
   defp round1(value), do: Float.round(value * 1.0, 1)
   defp format_area(value), do: :erlang.float_to_binary(value * 1.0, decimals: 2)
