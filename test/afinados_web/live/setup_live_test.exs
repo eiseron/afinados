@@ -220,4 +220,8 @@ defmodule AfinadosWeb.SetupLiveTest do
     assert active_polyline(render_change(view, "change", over)) ==
              active_polyline(render_change(view, "change", at_max))
   end
+
+  test "the page links the bundled stylesheet", %{conn: conn} do
+    assert html_response(get(conn, "/"), 200) =~ ~s(href="/assets/css/app.css")
+  end
 end

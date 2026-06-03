@@ -1,0 +1,11 @@
+/* Entry stylesheet. Bundled by esbuild into /assets/css/app.css.
+   Import order is the cascade order:
+     1. tokens   — theme variables (no rules, just :root custom properties)
+     2. global   — shared base, applied app-wide
+     3. components — reusable pieces (one file per component)
+     4. pages    — per-template layout (one file per HTML page) */
+@import "./tokens.css";
+@import "./global.css";
+@import "./components/forms.css";
+@import "./components/flash.css";
+@import "./pages/setup.css";

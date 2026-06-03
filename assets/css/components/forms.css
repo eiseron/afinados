@@ -1,0 +1,67 @@
+/* Component — form controls rendered by core_components <.input>/<.label>
+   and the setup <fieldset>. Shared by any page that renders a form. */
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin: 0;
+}
+
+legend {
+  padding: 0 var(--space-2);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select {
+  width: 100%;
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+button {
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-4);
+  font: inherit;
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-border);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

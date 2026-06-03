@@ -87,7 +87,7 @@ defmodule AfinadosWeb.SetupLive do
   def render(assigns) do
     ~H"""
     <main class="setup">
-      <section :if={@chart} aria-label={gettext("Free-area curve")}>
+      <section :if={@chart} class="chart-panel" aria-label={gettext("Free-area curve")}>
         <svg viewBox={"0 0 #{@chart.vb_w} #{@chart.vb_h}"} width="100%" role="img" class="curve">
           <line
             :for={tick <- @chart.x_ticks}
@@ -196,7 +196,7 @@ defmodule AfinadosWeb.SetupLive do
 
       <p :if={!@chart}>{gettext("Pick a needle and a needle jet to see the curve.")}</p>
 
-      <h1>{gettext("Free fuel-passage area curve")}</h1>
+      <h1 class="sr-only">{gettext("Free fuel-passage area curve")}</h1>
 
       <aside class="controls" aria-label={gettext("Setup controls")}>
         <.form for={@form} phx-change="change">
