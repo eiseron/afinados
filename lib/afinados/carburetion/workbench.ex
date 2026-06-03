@@ -3,6 +3,7 @@ defmodule Afinados.Carburetion.Workbench do
 
   import Ecto.Query
 
+  alias Afinados.Carburetion
   alias Afinados.Carburetion.{Catalog, Clip, Shim, Venturi}
   alias Afinados.Carburetion.Setup, as: ResolvedSetup
   alias Afinados.Carburetion.Workbench.{Carburetor, Setup}
@@ -52,6 +53,8 @@ defmodule Afinados.Carburetion.Workbench do
        %ResolvedSetup{
          needle: needle,
          needle_jet: needle_jet,
+         high_jet: Carburetion.build_high_jet(setup.high_jet_number),
+         low_jet: Carburetion.build_low_jet(setup.low_jet_number),
          clip: %Clip{position: setup.clip_position},
          shim: %Shim{hundredths: setup.shim_hundredths},
          venturi: %Venturi{mm: venturi_mm * 1.0}
@@ -66,7 +69,9 @@ defmodule Afinados.Carburetion.Workbench do
       needle_part_number: params["part_number"],
       clip_position: params["clip_position"],
       shim_hundredths: params["shim_hundredths"] || 0,
-      needle_jet_code: params["needle_jet_code"]
+      needle_jet_code: params["needle_jet_code"],
+      high_jet_number: params["high_jet_number"],
+      low_jet_number: params["low_jet_number"]
     })
   end
 end

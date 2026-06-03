@@ -4,7 +4,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   import Phoenix.LiveViewTest
 
   alias Afinados.Carburetion
-  alias Afinados.Carburetion.{Catalog, Clip, Setup, Shim, Venturi}
+  alias Afinados.Carburetion.{Catalog, Clip, HighJet, LowJet, Setup, Shim, Venturi}
   alias Afinados.Carburetion.Workbench
   alias Afinados.Garage
   alias Afinados.Repo
@@ -28,6 +28,20 @@ defmodule AfinadosWeb.SetupLiveTest do
     :ok
   end
 
+  defp change_params(venturi_mm) do
+    %{
+      "setup" => %{
+        "part_number" => "4D3",
+        "needle_jet_code" => "159-P4",
+        "high_jet_number" => "150",
+        "low_jet_number" => "25",
+        "clip_position" => "3",
+        "shim_hundredths" => "0",
+        "venturi_mm" => venturi_mm
+      }
+    }
+  end
+
   defp max_area(venturi_mm) do
     {:ok, needle} = Catalog.fetch_needle("4D3")
     {:ok, needle_jet} = Catalog.fetch_needle_jet("159-P4")
@@ -35,6 +49,8 @@ defmodule AfinadosWeb.SetupLiveTest do
     %Setup{
       needle: needle,
       needle_jet: needle_jet,
+      high_jet: %HighJet{number: 150, free_area_mm2: :math.pi() / 4 * 1.5 * 1.5},
+      low_jet: %LowJet{number: 25.0, free_area_mm2: 0.005 * 25.0},
       clip: %Clip{position: 3},
       shim: %Shim{hundredths: 0},
       venturi: %Venturi{mm: venturi_mm}
@@ -68,35 +84,13 @@ defmodule AfinadosWeb.SetupLiveTest do
   test "recomputes the curve when the venturi changes", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
 
-    html =
-      render_change(view, "change", %{
-        "setup" => %{
-          "part_number" => "4D3",
-          "needle_jet_code" => "159-P4",
-          "clip_position" => "3",
-          "shim_hundredths" => "0",
-          "venturi_mm" => "50"
-        }
-      })
-
-    assert html =~ max_area(50.0)
+    assert render_change(view, "change", change_params("50")) =~ max_area(50.0)
   end
 
   test "falls back to a default venturi when the input is invalid", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
 
-    html =
-      render_change(view, "change", %{
-        "setup" => %{
-          "part_number" => "4D3",
-          "needle_jet_code" => "159-P4",
-          "clip_position" => "3",
-          "shim_hundredths" => "0",
-          "venturi_mm" => "abc"
-        }
-      })
-
-    assert html =~ max_area(1.0)
+    assert render_change(view, "change", change_params("abc")) =~ max_area(1.0)
   end
 
   test "saving persists the current setup linked to the guest's garage", %{conn: conn} do
@@ -109,29 +103,17 @@ defmodule AfinadosWeb.SetupLiveTest do
 
   test "a saved setup is listed for the guest", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
-    html = render_click(view, "save")
 
-    assert html =~ "4D3 · clip 3 · 34 mm"
+    assert render_click(view, "save") =~ "4D3 · clip 3 · 34 mm"
   end
 
   test "loading a saved setup restores its curve", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
     render_click(view, "save")
-
-    render_change(view, "change", %{
-      "setup" => %{
-        "part_number" => "4D3",
-        "needle_jet_code" => "159-P4",
-        "clip_position" => "3",
-        "shim_hundredths" => "0",
-        "venturi_mm" => "50"
-      }
-    })
-
+    render_change(view, "change", change_params("50"))
     [setup] = Repo.all(Workbench.Setup)
-    html = render_click(view, "load", %{"id" => to_string(setup.id)})
 
-    assert html =~ max_area(34.0)
+    assert render_click(view, "load", %{"id" => to_string(setup.id)}) =~ max_area(34.0)
   end
 
   test "ignores a load with a non-integer id without crashing", %{conn: conn} do

@@ -23,15 +23,17 @@ defmodule AfinadosWeb.SetupLive do
 
   @impl true
   def mount(_params, session, socket) do
-    needles = Catalog.list_needles()
-    needle_jets = Catalog.list_needle_jets()
+    catalog = %{
+      needles: Catalog.list_needles(),
+      needle_jets: Catalog.list_needle_jets()
+    }
 
     socket =
       socket
-      |> assign(needles: needles, needle_jets: needle_jets)
+      |> assign(catalog)
       |> assign(token: session["guest_token"], current_user: nil, current_garage: nil, saved: [])
       |> load_work(Identity.user_for_token(session["guest_token"]))
-      |> recompute(default_params(needles, needle_jets))
+      |> recompute(default_params(catalog))
 
     {:ok, socket}
   end
@@ -84,6 +86,20 @@ defmodule AfinadosWeb.SetupLive do
             type="select"
             label={gettext("Needle jet")}
             options={Enum.map(@needle_jets, &{&1.code, &1.code})}
+          />
+          <.input
+            field={@form[:high_jet_number]}
+            type="number"
+            label={gettext("Main jet")}
+            min="1"
+            step="1"
+          />
+          <.input
+            field={@form[:low_jet_number]}
+            type="number"
+            label={gettext("Pilot jet")}
+            min="1"
+            step="0.5"
           />
           <.input
             field={@form[:clip_position]}
@@ -198,25 +214,29 @@ defmodule AfinadosWeb.SetupLive do
     end
   end
 
-  defp default_params([], _needle_jets), do: %{}
+  defp default_params(%{needles: []}), do: %{}
 
-  defp default_params([needle | _], needle_jets) do
+  defp default_params(catalog) do
     %{
-      "part_number" => needle.part_number,
-      "needle_jet_code" => first_code(needle_jets),
+      "part_number" => hd(catalog.needles).part_number,
+      "needle_jet_code" => first_field(catalog.needle_jets, :code),
+      "high_jet_number" => "150",
+      "low_jet_number" => "25",
       "clip_position" => "3",
       "shim_hundredths" => "0",
       "venturi_mm" => "34"
     }
   end
 
-  defp first_code([]), do: ""
-  defp first_code([%{code: code} | _]), do: code
+  defp first_field([], _key), do: ""
+  defp first_field([record | _], key), do: Map.fetch!(record, key)
 
   defp saved_params(setup) do
     %{
       "part_number" => setup.needle_part_number,
       "needle_jet_code" => setup.needle_jet_code,
+      "high_jet_number" => to_string(setup.high_jet_number),
+      "low_jet_number" => to_string(setup.low_jet_number),
       "clip_position" => to_string(setup.clip_position),
       "shim_hundredths" => to_string(setup.shim_hundredths),
       "venturi_mm" => to_string(setup.carburetor.venturi_mm)
@@ -233,17 +253,23 @@ defmodule AfinadosWeb.SetupLive do
 
   defp fuel_map_for(params) do
     with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),
-         {:ok, needle_jet} <- Catalog.fetch_needle_jet(params["needle_jet_code"]) do
+         {:ok, needle_jet} <- Catalog.fetch_needle_jet(params["needle_jet_code"]),
+         {high_number, ""} when high_number > 0 <-
+           Integer.parse(to_string(params["high_jet_number"])),
+         {low_number, ""} when low_number > 0 <-
+           Float.parse(to_string(params["low_jet_number"])) do
       %Setup{
         needle: needle,
         needle_jet: needle_jet,
+        high_jet: Carburetion.build_high_jet(high_number),
+        low_jet: Carburetion.build_low_jet(low_number),
         clip: %Clip{position: parse_int(params["clip_position"], 1)},
         shim: %Shim{hundredths: parse_int(params["shim_hundredths"], 0)},
         venturi: %Venturi{mm: parse_int(params["venturi_mm"], 1) * 1.0}
       }
       |> Carburetion.build_fuel_map()
     else
-      :error -> nil
+      _ -> nil
     end
   end
 

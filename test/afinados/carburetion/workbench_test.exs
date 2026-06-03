@@ -30,36 +30,37 @@ defmodule Afinados.Carburetion.WorkbenchTest do
       "venturi_mm" => "34",
       "part_number" => "4D3",
       "needle_jet_code" => "159-P4",
+      "high_jet_number" => "150",
+      "low_jet_number" => "25",
       "clip_position" => "3",
       "shim_hundredths" => "0"
     }
   end
 
   describe "save_setup/2" do
-    test "persists a setup scoped to the garage", %{garage: garage} do
-      {:ok, setup} = Workbench.save_setup(garage, valid_params())
+    test "persists a setup scoped to the garage", ctx do
+      {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
 
-      assert setup.garage_id == garage.id
+      assert setup.garage_id == ctx.garage.id
     end
 
-    test "rejects a non-positive venturi", %{garage: garage} do
+    test "rejects a non-positive venturi", ctx do
       assert {:error, _changeset} =
-               Workbench.save_setup(garage, Map.put(valid_params(), "venturi_mm", "0"))
+               Workbench.save_setup(ctx.garage, Map.put(valid_params(), "venturi_mm", "0"))
     end
   end
 
   describe "list_setups/1" do
-    test "lists the garage's setups with the carburetor preloaded", %{garage: garage} do
-      Workbench.save_setup(garage, valid_params())
+    test "lists the garage's setups with the carburetor preloaded", ctx do
+      Workbench.save_setup(ctx.garage, valid_params())
 
-      assert hd(Workbench.list_setups(garage)).carburetor.venturi_mm == 34
+      assert hd(Workbench.list_setups(ctx.garage)).carburetor.venturi_mm == 34
     end
   end
 
   describe "get_setup/2" do
-    test "does not leak a setup across garages" do
-      garage = Garage.default_for(Identity.ensure_user_for_token(Identity.generate_token()))
-      {:ok, setup} = Workbench.save_setup(garage, valid_params())
+    test "does not leak a setup across garages", ctx do
+      {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
       other = Garage.default_for(Identity.ensure_user_for_token(Identity.generate_token()))
 
       assert Workbench.get_setup(other, setup.id) == nil
@@ -67,9 +68,9 @@ defmodule Afinados.Carburetion.WorkbenchTest do
   end
 
   describe "resolve/1" do
-    test "builds a pure setup that produces the curve", %{garage: garage} do
-      {:ok, saved} = Workbench.save_setup(garage, valid_params())
-      {:ok, resolved} = Workbench.resolve(Workbench.get_setup(garage, saved.id))
+    test "builds a pure setup (with both jets) that produces the curve", ctx do
+      {:ok, saved} = Workbench.save_setup(ctx.garage, valid_params())
+      {:ok, resolved} = Workbench.resolve(Workbench.get_setup(ctx.garage, saved.id))
 
       assert length(Carburetion.build_fuel_map(resolved).points) == 101
     end

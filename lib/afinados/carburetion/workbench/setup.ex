@@ -1,5 +1,5 @@
 defmodule Afinados.Carburetion.Workbench.Setup do
-  @moduledoc "Persisted setup (the acerto): the catalog parts chosen for a carburetor, owned by a garage."
+  @moduledoc "Persisted setup (the acerto): the catalog parts and jet numbers chosen for a carburetor, owned by a garage."
 
   use Ecto.Schema
 
@@ -15,9 +15,19 @@ defmodule Afinados.Carburetion.Workbench.Setup do
     :needle_part_number,
     :clip_position,
     :shim_hundredths,
-    :needle_jet_code
+    :needle_jet_code,
+    :high_jet_number,
+    :low_jet_number
   ]
-  @required [:garage_id, :carburetor_id, :needle_part_number, :clip_position, :needle_jet_code]
+  @required [
+    :garage_id,
+    :carburetor_id,
+    :needle_part_number,
+    :clip_position,
+    :needle_jet_code,
+    :high_jet_number,
+    :low_jet_number
+  ]
 
   schema "setups" do
     field :label, :string
@@ -25,6 +35,8 @@ defmodule Afinados.Carburetion.Workbench.Setup do
     field :clip_position, :integer
     field :shim_hundredths, :integer, default: 0
     field :needle_jet_code, :string
+    field :high_jet_number, :integer
+    field :low_jet_number, :float
     belongs_to :garage, Garage
     belongs_to :carburetor, Carburetor
 
@@ -37,6 +49,8 @@ defmodule Afinados.Carburetion.Workbench.Setup do
     |> validate_required(@required)
     |> validate_number(:clip_position, greater_than_or_equal_to: 1)
     |> validate_number(:shim_hundredths, greater_than_or_equal_to: 0)
+    |> validate_number(:high_jet_number, greater_than: 0)
+    |> validate_number(:low_jet_number, greater_than: 0)
     |> foreign_key_constraint(:needle_part_number)
     |> foreign_key_constraint(:needle_jet_code)
     |> foreign_key_constraint(:carburetor_id)

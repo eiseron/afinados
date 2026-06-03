@@ -2,7 +2,19 @@ defmodule Afinados.Carburetion.CatalogTest do
   use Afinados.DataCase, async: true
 
   alias Afinados.Carburetion
-  alias Afinados.Carburetion.{Catalog, Clip, Needle, NeedleJet, Setup, Shim, Venturi}
+
+  alias Afinados.Carburetion.{
+    Catalog,
+    Clip,
+    HighJet,
+    LowJet,
+    Needle,
+    NeedleJet,
+    Setup,
+    Shim,
+    Venturi
+  }
+
   alias Afinados.Repo
 
   defp seed_needle do
@@ -55,7 +67,7 @@ defmodule Afinados.Carburetion.CatalogTest do
     end
   end
 
-  test "resolves catalog integer units end-to-end into the computed area (mm/mm²)" do
+  test "resolves catalog integer units end-to-end into the computed annular area (mm/mm²)" do
     seed_needle()
     seed_needle_jet()
     {:ok, needle} = Catalog.fetch_needle("4D3")
@@ -64,13 +76,15 @@ defmodule Afinados.Carburetion.CatalogTest do
     setup = %Setup{
       needle: needle,
       needle_jet: needle_jet,
+      high_jet: %HighJet{number: 150, free_area_mm2: 1.0},
+      low_jet: %LowJet{number: 25.0, free_area_mm2: 0.125},
       clip: %Clip{position: 3},
       shim: %Shim{hundredths: 0},
       venturi: %Venturi{mm: 34.0}
     }
 
-    [first | _] = Carburetion.build_fuel_map(setup).points
-
-    assert_in_delta first.free_area, :math.pi() / 4 * (2.7 * 2.7 - 2.511 * 2.511), 0.0001
+    assert_in_delta Carburetion.compute_annular_area(setup, Carburetion.h0(setup)),
+                    :math.pi() / 4 * (2.7 * 2.7 - 2.511 * 2.511),
+                    0.0001
   end
 end

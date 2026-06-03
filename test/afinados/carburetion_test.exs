@@ -2,7 +2,7 @@ defmodule Afinados.CarburetionTest do
   use ExUnit.Case, async: true
 
   alias Afinados.Carburetion
-  alias Afinados.Carburetion.{Clip, Needle, NeedleJet, Setup, Shim, Venturi}
+  alias Afinados.Carburetion.{Clip, HighJet, LowJet, Needle, NeedleJet, Setup, Shim, Venturi}
 
   setup do
     setup = %Setup{
@@ -14,12 +14,18 @@ defmodule Afinados.CarburetionTest do
         num_clips: 5
       },
       needle_jet: %NeedleJet{code: "159-P4", bore_mm: 2.7},
+      high_jet: %HighJet{number: 150, free_area_mm2: :math.pi() / 4 * 1.5 * 1.5},
+      low_jet: %LowJet{number: 25.0, free_area_mm2: 0.125},
       clip: %Clip{position: 3},
       shim: %Shim{hundredths: 0},
       venturi: %Venturi{mm: 34.0}
     }
 
     %{setup: setup}
+  end
+
+  defp areas(setup) do
+    setup |> Carburetion.build_fuel_map() |> Map.fetch!(:points) |> Enum.map(& &1.free_area)
   end
 
   describe "build_fuel_map/1" do
@@ -36,45 +42,84 @@ defmodule Afinados.CarburetionTest do
       assert {map.h0, map.h_max} == {3.0, 37.0}
     end
 
-    test "the area grows as the throttle opens", %{setup: setup} do
-      areas =
-        setup |> Carburetion.build_fuel_map() |> Map.fetch!(:points) |> Enum.map(& &1.free_area)
+    test "at idle (0%) the free area is the pilot floor", %{setup: setup} do
+      assert_in_delta List.first(areas(setup)), setup.low_jet.free_area_mm2, 1.0e-9
+    end
 
-      assert List.last(areas) > List.first(areas)
+    test "no point falls below the pilot floor", %{setup: setup} do
+      assert Enum.all?(areas(setup), &(&1 >= setup.low_jet.free_area_mm2))
+    end
+
+    test "the area grows as the throttle opens", %{setup: setup} do
+      assert List.last(areas(setup)) > List.first(areas(setup))
     end
 
     test "the area is non-decreasing across positions", %{setup: setup} do
-      areas =
-        setup |> Carburetion.build_fuel_map() |> Map.fetch!(:points) |> Enum.map(& &1.free_area)
-
-      assert areas == Enum.sort(areas)
-    end
-
-    test "no area exceeds the needle jet bore nor goes negative", %{setup: setup} do
-      bore_area = Carburetion.bore_area(setup.needle_jet)
-      map = Carburetion.build_fuel_map(setup)
-
-      assert Enum.all?(map.points, &(&1.free_area >= 0.0 and &1.free_area <= bore_area))
+      assert areas(setup) == Enum.sort(areas(setup))
     end
 
     test "marks the needle's unused span beyond the window", %{setup: setup} do
-      map = Carburetion.build_fuel_map(setup)
-
-      assert map.unused_span == %{from: 37.0, to: 50.3}
+      assert Carburetion.build_fuel_map(setup).unused_span == %{from: 37.0, to: 50.3}
     end
 
     test "has no unused span when the needle fits within the window", %{setup: setup} do
-      map = Carburetion.build_fuel_map(%{setup | venturi: %Venturi{mm: 60.0}})
-
-      assert map.unused_span == nil
+      assert Carburetion.build_fuel_map(%{setup | venturi: %Venturi{mm: 60.0}}).unused_span == nil
     end
   end
 
   describe "compute_annular_area/2" do
     test "on the straight section equals (pi/4)*(bore^2 - straight^2)", %{setup: setup} do
-      expected = :math.pi() / 4 * (2.7 * 2.7 - 2.511 * 2.511)
+      assert_in_delta Carburetion.compute_annular_area(setup, 10.0),
+                      :math.pi() / 4 * (2.7 * 2.7 - 2.511 * 2.511),
+                      0.0001
+    end
 
-      assert_in_delta Carburetion.compute_annular_area(setup, 10.0), expected, 0.0001
+    test "never exceeds the needle jet bore", %{setup: setup} do
+      bore_area = Carburetion.bore_area(setup.needle_jet)
+
+      annular =
+        Enum.map(
+          0..100,
+          &Carburetion.compute_annular_area(setup, setup.clip.position + &1 * 0.34)
+        )
+
+      assert Enum.all?(annular, &(&1 <= bore_area))
+    end
+  end
+
+  describe "compute_effective_area/2 (series restriction)" do
+    test "never exceeds the main jet area", %{setup: setup} do
+      effective = Enum.map(0..100, &Carburetion.compute_effective_area(setup, 3.0 + &1 * 0.34))
+
+      assert Enum.all?(effective, &(&1 < setup.high_jet.free_area_mm2))
+    end
+
+    test "never exceeds the annular area", %{setup: setup} do
+      below? = fn h ->
+        Carburetion.compute_effective_area(setup, h) < Carburetion.compute_annular_area(setup, h)
+      end
+
+      assert Enum.all?(Enum.map(0..100, &(3.0 + &1 * 0.34)), below?)
+    end
+  end
+
+  describe "compute_free_area/2 (pilot floor)" do
+    test "at idle equals the pilot floor exactly", %{setup: setup} do
+      assert_in_delta Carburetion.compute_free_area(setup, Carburetion.h0(setup)),
+                      setup.low_jet.free_area_mm2,
+                      1.0e-9
+    end
+
+    test "a bigger pilot raises every position by the same constant", %{setup: setup} do
+      richer = %{setup | low_jet: %LowJet{number: 50.0, free_area_mm2: 0.25}}
+
+      diffs =
+        Enum.map(0..100, fn p ->
+          Carburetion.compute_free_area(richer, 3.0 + p * 0.34) -
+            Carburetion.compute_free_area(setup, 3.0 + p * 0.34)
+        end)
+
+      assert Enum.all?(diffs, &(abs(&1 - 0.125) < 1.0e-9))
     end
   end
 
@@ -82,9 +127,8 @@ defmodule Afinados.CarburetionTest do
     test "is the clip offset (1 mm per position) plus the shim offset (hundredths)", %{
       setup: setup
     } do
-      setup = %{setup | clip: %Clip{position: 3}, shim: %Shim{hundredths: 25}}
-
-      assert Carburetion.h0(setup) == 3.25
+      assert Carburetion.h0(%{setup | clip: %Clip{position: 3}, shim: %Shim{hundredths: 25}}) ==
+               3.25
     end
 
     test "raising the clip lifts the whole window", %{setup: setup} do
@@ -92,6 +136,22 @@ defmodule Afinados.CarburetionTest do
       base = Carburetion.h0(%{setup | clip: %Clip{position: 3}})
 
       assert lifted - base == 1.0
+    end
+  end
+
+  describe "build_high_jet/1" do
+    test "derives the area from the nominal diameter (number/100 mm)" do
+      assert_in_delta Carburetion.build_high_jet(150).free_area_mm2,
+                      :math.pi() / 4 * 1.5 * 1.5,
+                      0.0001
+    end
+  end
+
+  describe "build_low_jet/1" do
+    test "area is linear in the flow number" do
+      assert_in_delta Carburetion.build_low_jet(50).free_area_mm2,
+                      2 * Carburetion.build_low_jet(25).free_area_mm2,
+                      0.0001
     end
   end
 end
