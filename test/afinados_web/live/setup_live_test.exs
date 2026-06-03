@@ -204,4 +204,20 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     assert chart_at < heading_at
   end
+
+  test "offers the clip position as a select bounded by the needle's clip count", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+    [select] = Regex.run(~r{<select[^>]*clip_position.*?</select>}s, html)
+
+    assert length(Regex.scan(~r/<option/, select)) == 5
+  end
+
+  test "clamps an out-of-range clip position to the needle's clip count", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    over = change_params("34") |> put_in(["setup", "clip_position"], "100")
+    at_max = change_params("34") |> put_in(["setup", "clip_position"], "5")
+
+    assert active_polyline(render_change(view, "change", over)) ==
+             active_polyline(render_change(view, "change", at_max))
+  end
 end

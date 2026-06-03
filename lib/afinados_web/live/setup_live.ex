@@ -231,10 +231,9 @@ defmodule AfinadosWeb.SetupLive do
             />
             <.input
               field={@form[:clip_position]}
-              type="number"
+              type="select"
               label={gettext("Clip")}
-              min="1"
-              max={clip_max(@needles, @params["part_number"])}
+              options={clip_options(@needles, @params["part_number"])}
             />
             <.input
               field={@form[:shim_hundredths]}
@@ -385,7 +384,7 @@ defmodule AfinadosWeb.SetupLive do
         needle_jet: needle_jet,
         high_jet: Carburetion.build_high_jet(high_number),
         low_jet: Carburetion.build_low_jet(low_number),
-        clip: %Clip{position: parse_int(params["clip_position"], 1)},
+        clip: %Clip{position: clamp_clip(parse_int(params["clip_position"], 1), needle.num_clips)},
         shim: %Shim{hundredths: parse_int(params["shim_hundredths"], 0)},
         venturi: %Venturi{mm: parse_int(params["venturi_mm"], 1) * 1.0}
       }
@@ -401,6 +400,8 @@ defmodule AfinadosWeb.SetupLive do
       _ -> default
     end
   end
+
+  defp clamp_clip(position, num_clips), do: position |> max(1) |> min(num_clips)
 
   defp build_chart([], _mode), do: nil
 
@@ -506,5 +507,9 @@ defmodule AfinadosWeb.SetupLive do
       nil -> 5
       needle -> needle.num_clips
     end
+  end
+
+  defp clip_options(needles, part_number) do
+    Enum.map(1..clip_max(needles, part_number), &{to_string(&1), to_string(&1)})
   end
 end
