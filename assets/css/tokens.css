@@ -1,24 +1,29 @@
 /* Design tokens — single source of truth for the theme.
-   Every other stylesheet consumes these variables; no raw values elsewhere. */
+   Colors are defined once with light-dark(light, dark); the active side is
+   chosen by `color-scheme`, which follows the OS by default and is forced by
+   the theme toggle (see the [data-theme] rules at the bottom). Every other
+   stylesheet consumes these variables; no raw values elsewhere. */
 :root {
+  color-scheme: light dark;
+
   /* Color — surfaces & text */
-  --color-bg: #ffffff;
-  --color-surface: #f9fafb;
-  --color-surface-raised: #ffffff;
-  --color-text: #111827;
-  --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
+  --color-bg: light-dark(#ffffff, #0f1115);
+  --color-surface: light-dark(#f9fafb, #171a21);
+  --color-surface-raised: light-dark(#ffffff, #1e222b);
+  --color-text: light-dark(#111827, #e8eaed);
+  --color-text-muted: light-dark(#6b7280, #9aa3af);
+  --color-border: light-dark(#e5e7eb, #2d333b);
 
   /* Color — chart */
-  --color-axis: #9ca3af;
-  --color-grid: #e5e7eb;
-  --color-series-1: #2563eb;
-  --color-diff-positive: #16a34a;
-  --color-diff-negative: #dc2626;
+  --color-axis: light-dark(#9ca3af, #6b7280);
+  --color-grid: light-dark(#e5e7eb, #262b33);
+  --color-series-1: light-dark(#2563eb, #60a5fa);
+  --color-diff-positive: light-dark(#16a34a, #4ade80);
+  --color-diff-negative: light-dark(#dc2626, #f87171);
 
   /* Color — feedback */
-  --color-accent: #2563eb;
-  --color-danger: #dc2626;
+  --color-accent: light-dark(#2563eb, #60a5fa);
+  --color-danger: light-dark(#dc2626, #f87171);
 
   /* Spacing scale */
   --space-1: 0.25rem;
@@ -45,10 +50,20 @@
 
   /* Sizing / layout */
   --touch-target: 2.75rem;
+  --topbar-height: 3rem;
   --sidebar-width: 20rem;
   --chart-max-width: 48rem;
   --layout-breakpoint: 48rem;
 
   /* Elevation */
-  --shadow-panel: 0 1px 3px rgba(17, 24, 39, 0.08);
+  --shadow-panel: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+/* Theme toggle — force one side by pinning color-scheme. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }

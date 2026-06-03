@@ -5,14 +5,13 @@
 .setup {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  flex: 1;
+  min-height: 0;
   background: var(--color-bg);
 }
 
 .chart-panel {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  flex: none;
   padding: 0;
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
@@ -22,6 +21,20 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+.curve text {
+  fill: var(--color-text-muted);
+}
+
+.curve .grid-line {
+  stroke: var(--color-grid);
+  stroke-width: 1;
+}
+
+.curve .axis-line {
+  stroke: var(--color-axis);
+  stroke-width: 1;
 }
 
 .legend {
@@ -45,8 +58,11 @@
 .controls {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   gap: var(--space-4);
   padding: var(--space-4);
+  overflow-y: auto;
 }
 
 .controls form {
@@ -96,8 +112,8 @@
   .setup {
     display: grid;
     grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: minmax(0, 1fr);
     grid-template-areas: "controls chart";
-    height: 100dvh;
   }
 
   .chart-panel {
@@ -105,14 +121,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100dvh;
     border-bottom: none;
   }
 
   .controls {
     grid-area: controls;
-    height: 100dvh;
-    overflow-y: auto;
     border-right: 1px solid var(--color-border);
     background: var(--color-surface);
   }

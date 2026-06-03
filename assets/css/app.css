@@ -6,6 +6,7 @@
      4. pages    — per-template layout (one file per HTML page) */
 @import "./tokens.css";
 @import "./global.css";
+@import "./components/topbar.css";
 @import "./components/forms.css";
 @import "./components/flash.css";
 @import "./pages/setup.css";

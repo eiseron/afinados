@@ -4,6 +4,8 @@ defmodule AfinadosWeb.Layouts do
 
   embed_templates("layouts/*")
 
+  def app_version, do: :afinados |> Application.spec(:vsn) |> to_string()
+
   attr(:flash, :map, required: true, doc: "the map of flash messages")
   slot(:inner_block, required: true)
 

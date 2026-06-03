@@ -224,4 +224,20 @@ defmodule AfinadosWeb.SetupLiveTest do
   test "the page links the bundled stylesheet", %{conn: conn} do
     assert html_response(get(conn, "/"), 200) =~ ~s(href="/assets/css/app.css")
   end
+
+  test "the chart paints its grid lines through a themeable CSS class", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~ ~s(class="grid-line")
+  end
+
+  test "the top bar renders a theme toggle", %{conn: conn} do
+    assert html_response(get(conn, "/"), 200) =~ ~s(id="theme-toggle")
+  end
+
+  test "the top bar shows the running app version", %{conn: conn} do
+    version = :afinados |> Application.spec(:vsn) |> to_string()
+
+    assert html_response(get(conn, "/"), 200) =~ "v#{version}"
+  end
 end

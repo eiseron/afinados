@@ -14,6 +14,23 @@ const liveSocket = new LiveSocket("/live", Socket, {
 liveSocket.connect()
 window.liveSocket = liveSocket
 
+// Theme toggle: flip between light and dark, persisting the choice.
+// Until toggled, the theme follows the OS via color-scheme (see tokens.css).
+const themeRoot = document.documentElement
+const activeTheme = () =>
+  themeRoot.getAttribute("data-theme") ||
+  (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+
+document.getElementById("theme-toggle")?.addEventListener("click", () => {
+  const next = activeTheme() === "dark" ? "light" : "dark"
+  themeRoot.setAttribute("data-theme", next)
+  try {
+    localStorage.setItem("theme", next)
+  } catch (_) {
+    // ignore storage being unavailable (private mode, etc.)
+  }
+})
+
 if (process.env.NODE_ENV === "development") {
   window.addEventListener("phx:live_reload:attached", ({detail: reloader}) => {
     reloader.enableServerLogs()

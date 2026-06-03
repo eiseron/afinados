@@ -95,8 +95,7 @@ defmodule AfinadosWeb.SetupLive do
             y1={@chart.y_top}
             x2={tick.x}
             y2={@chart.y_bottom}
-            stroke="#e5e7eb"
-            stroke-width="1"
+            class="grid-line"
           />
           <line
             :for={tick <- @chart.y_ticks}
@@ -104,8 +103,7 @@ defmodule AfinadosWeb.SetupLive do
             y1={tick.y}
             x2={@chart.x1}
             y2={tick.y}
-            stroke="#e5e7eb"
-            stroke-width="1"
+            class="grid-line"
           />
           <text
             :for={tick <- @chart.x_ticks}
@@ -113,7 +111,6 @@ defmodule AfinadosWeb.SetupLive do
             y={@chart.y_bottom + 16}
             text-anchor="middle"
             font-size="9"
-            fill="#6b7280"
           >
             {tick.label}
           </text>
@@ -123,18 +120,10 @@ defmodule AfinadosWeb.SetupLive do
             y={tick.y + 3}
             text-anchor="end"
             font-size="9"
-            fill="#6b7280"
           >
             {tick.label}
           </text>
-          <text
-            x={@chart.x0}
-            y={@chart.y_top - 8}
-            text-anchor="start"
-            font-size="9"
-            fill="#6b7280"
-            class="axis-unit"
-          >
+          <text x={@chart.x0} y={@chart.y_top - 8} text-anchor="start" font-size="9" class="axis-unit">
             mm²
           </text>
           <text
@@ -142,7 +131,6 @@ defmodule AfinadosWeb.SetupLive do
             y={@chart.y_bottom + 30}
             text-anchor="end"
             font-size="9"
-            fill="#6b7280"
             class="axis-unit"
           >
             {@chart.x_unit}
@@ -153,16 +141,14 @@ defmodule AfinadosWeb.SetupLive do
             y1={@chart.y_top}
             x2={@chart.x0}
             y2={@chart.y_bottom}
-            stroke="#9ca3af"
-            stroke-width="1"
+            class="axis-line"
           />
           <line
             x1={@chart.x0}
             y1={@chart.y_bottom}
             x2={@chart.x1}
             y2={@chart.y_bottom}
-            stroke="#9ca3af"
-            stroke-width="1"
+            class="axis-line"
           />
 
           <line
