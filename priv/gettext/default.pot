@@ -17,47 +17,47 @@ msgstr ""
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:107
+#: lib/afinados_web/live/setup_live.ex:120
 #, elixir-autogen, elixir-format
 msgid "Clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:72
+#: lib/afinados_web/live/setup_live.ex:85
 #, elixir-autogen, elixir-format
 msgid "Free fuel-passage area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:125
+#: lib/afinados_web/live/setup_live.ex:138
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:127
+#: lib/afinados_web/live/setup_live.ex:140
 #, elixir-autogen, elixir-format
 msgid "Maximum free area"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:81
+#: lib/afinados_web/live/setup_live.ex:94
 #, elixir-autogen, elixir-format
 msgid "Needle"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:87
+#: lib/afinados_web/live/setup_live.ex:100
 #, elixir-autogen, elixir-format
 msgid "Needle jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:184
+#: lib/afinados_web/live/setup_live.ex:212
 #, elixir-autogen, elixir-format
 msgid "Pick a needle and a needle jet to see the curve."
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:76
+#: lib/afinados_web/live/setup_live.ex:89
 #, elixir-autogen, elixir-format
 msgid "Setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:114
+#: lib/afinados_web/live/setup_live.ex:127
 #, elixir-autogen, elixir-format
 msgid "Shim (hundredths of mm)"
 msgstr ""
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:117
+#: lib/afinados_web/live/setup_live.ex:130
 #, elixir-autogen, elixir-format
 msgid "Venturi (mm)"
 msgstr ""
@@ -77,28 +77,39 @@ msgstr ""
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:122
+#: lib/afinados_web/live/setup_live.ex:135
 #, elixir-autogen, elixir-format
 msgid "Save setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:186
-#: lib/afinados_web/live/setup_live.ex:187
+#: lib/afinados_web/live/setup_live.ex:214
+#: lib/afinados_web/live/setup_live.ex:215
 #, elixir-autogen, elixir-format
 msgid "Saved setups"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:191
+#: lib/afinados_web/live/setup_live.ex:228
+#: lib/afinados_web/live/setup_live.ex:316
 #, elixir-autogen, elixir-format
 msgid "clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:93
+#: lib/afinados_web/live/setup_live.ex:106
 #, elixir-autogen, elixir-format
 msgid "Main jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:100
+#: lib/afinados_web/live/setup_live.ex:113
 #, elixir-autogen, elixir-format
 msgid "Pilot jet"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:225
+#, elixir-autogen, elixir-format
+msgid "Compare"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:293
+#, elixir-autogen, elixir-format
+msgid "Current"
 msgstr ""

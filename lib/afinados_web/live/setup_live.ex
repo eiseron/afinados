@@ -4,7 +4,7 @@ defmodule AfinadosWeb.SetupLive do
   use AfinadosWeb, :live_view
 
   alias Afinados.Carburetion
-  alias Afinados.Carburetion.{Catalog, Clip, FuelMap, Setup, Shim, Venturi}
+  alias Afinados.Carburetion.{Catalog, Clip, Comparison, FuelMap, Setup, Shim, Venturi}
   alias Afinados.Carburetion.Workbench
   alias Afinados.{Garage, Identity}
 
@@ -20,6 +20,7 @@ defmodule AfinadosWeb.SetupLive do
   @x1 @pad_left + @plot_w
   @y_bottom @pad_top + @plot_h
   @y_top @pad_top
+  @palette ~w(#2563eb #ea580c #16a34a #9333ea #dc2626 #0891b2)
 
   @impl true
   def mount(_params, session, socket) do
@@ -31,7 +32,8 @@ defmodule AfinadosWeb.SetupLive do
     socket =
       socket
       |> assign(catalog)
-      |> assign(token: session["guest_token"], current_user: nil, current_garage: nil, saved: [])
+      |> assign(token: session["guest_token"], current_user: nil, current_garage: nil)
+      |> assign(saved: [], compared: MapSet.new())
       |> load_work(Identity.user_for_token(session["guest_token"]))
       |> recompute(default_params(catalog))
 
@@ -62,6 +64,17 @@ defmodule AfinadosWeb.SetupLive do
       {:noreply, recompute(socket, saved_params(setup))}
     else
       _ -> {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("toggle_compare", %{"id" => id}, socket) do
+    case Integer.parse(id) do
+      {setup_id, ""} ->
+        {:noreply, socket |> update(:compared, &toggle(&1, setup_id)) |> rebuild_chart()}
+
+      _ ->
+        {:noreply, socket}
     end
   end
 
@@ -118,14 +131,14 @@ defmodule AfinadosWeb.SetupLive do
         </fieldset>
       </.form>
 
-      <button type="button" phx-click="save" disabled={is_nil(@chart)}>
+      <button type="button" phx-click="save" disabled={is_nil(@active_map)}>
         {gettext("Save setup")}
       </button>
 
       <section :if={@chart} aria-label={gettext("Free-area curve")}>
-        <p>
+        <p :if={@active_map}>
           {gettext("Maximum free area")}:
-          <strong id="max-area">{format_area(@chart.max_area)}</strong>
+          <strong id="max-area">{format_area(active_max(@active_map))}</strong>
           mm²
         </p>
 
@@ -177,8 +190,33 @@ defmodule AfinadosWeb.SetupLive do
             stroke-width="1"
           />
 
-          <polyline points={@chart.polyline} fill="none" stroke="#2563eb" stroke-width="2" />
+          <line
+            :for={d <- @chart.difference}
+            x1={d.x}
+            y1={d.y_a}
+            x2={d.x}
+            y2={d.y_b}
+            stroke={d.color}
+            stroke-width="3"
+            stroke-opacity="0.3"
+          />
+          <polyline
+            :for={s <- @chart.series}
+            points={s.polyline}
+            fill="none"
+            stroke={s.color}
+            stroke-width="2"
+          />
         </svg>
+
+        <ul class="legend">
+          <li :for={s <- @chart.series}>
+            <svg width="12" height="12" aria-hidden="true">
+              <rect width="12" height="12" fill={s.color} />
+            </svg>
+            {s.label}
+          </li>
+        </ul>
       </section>
 
       <p :if={!@chart}>{gettext("Pick a needle and a needle jet to see the curve.")}</p>
@@ -187,6 +225,15 @@ defmodule AfinadosWeb.SetupLive do
         <h2>{gettext("Saved setups")}</h2>
         <ul>
           <li :for={setup <- @saved}>
+            <label>
+              <input
+                type="checkbox"
+                phx-click="toggle_compare"
+                phx-value-id={setup.id}
+                checked={MapSet.member?(@compared, setup.id)}
+              />
+              {gettext("Compare")}
+            </label>
             <button type="button" phx-click="load" phx-value-id={setup.id}>
               {setup.needle_part_number} · {gettext("clip")} {setup.clip_position} · {setup.carburetor.venturi_mm} mm
             </button>
@@ -244,12 +291,49 @@ defmodule AfinadosWeb.SetupLive do
   end
 
   defp recompute(socket, params) do
-    fuel_map = fuel_map_for(params)
-
     socket
-    |> assign(params: params, form: to_form(params, as: :setup))
-    |> assign(fuel_map: fuel_map, chart: fuel_map && build_chart(fuel_map))
+    |> assign(params: params, form: to_form(params, as: :setup), active_map: fuel_map_for(params))
+    |> rebuild_chart()
   end
+
+  defp rebuild_chart(socket) do
+    active =
+      case socket.assigns.active_map do
+        nil -> []
+        map -> [%{label: gettext("Current"), map: map}]
+      end
+
+    assign(socket, chart: build_chart(active ++ compared_series(socket)))
+  end
+
+  defp compared_series(%{assigns: %{current_garage: nil}}), do: []
+
+  defp compared_series(%{assigns: assigns}) do
+    assigns.saved
+    |> Enum.filter(&MapSet.member?(assigns.compared, &1.id))
+    |> Enum.map(&compared_curve/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp compared_curve(setup) do
+    case Workbench.resolve(setup) do
+      {:ok, resolved} -> %{label: setup_label(setup), map: Carburetion.build_fuel_map(resolved)}
+      :error -> nil
+    end
+  end
+
+  defp setup_label(setup) do
+    "#{setup.needle_part_number} · #{gettext("clip")} #{setup.clip_position} · #{setup.carburetor.venturi_mm} mm"
+  end
+
+  defp toggle(set, id) do
+    case MapSet.member?(set, id) do
+      true -> MapSet.delete(set, id)
+      false -> MapSet.put(set, id)
+    end
+  end
+
+  defp active_max(%FuelMap{points: points}), do: points |> Enum.map(& &1.free_area) |> Enum.max()
 
   defp fuel_map_for(params) do
     with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),
@@ -280,14 +364,23 @@ defmodule AfinadosWeb.SetupLive do
     end
   end
 
-  defp build_chart(%FuelMap{points: points}) do
-    areas = Enum.map(points, & &1.free_area)
-    max_area = Enum.max(areas)
+  defp build_chart([]), do: nil
+
+  defp build_chart(series) do
+    max_area =
+      series |> Enum.flat_map(fn s -> Enum.map(s.map.points, & &1.free_area) end) |> Enum.max()
+
     y_max = if max_area <= 0.0, do: 1.0, else: max_area * 1.1
 
-    polyline =
-      Enum.map_join(points, " ", fn point ->
-        "#{round1(scale_x(point.position))},#{round1(scale_y(point.free_area, y_max))}"
+    rendered =
+      series
+      |> Enum.with_index()
+      |> Enum.map(fn {serie, index} ->
+        %{
+          label: serie.label,
+          color: Enum.at(@palette, rem(index, length(@palette))),
+          polyline: series_polyline(serie.map, y_max)
+        }
       end)
 
     %{
@@ -297,12 +390,36 @@ defmodule AfinadosWeb.SetupLive do
       x1: @x1,
       y_top: @y_top,
       y_bottom: @y_bottom,
-      polyline: polyline,
-      max_area: max_area,
+      series: rendered,
+      difference: difference_band(series, y_max),
       x_ticks: Enum.map([0, 25, 50, 75, 100], &%{x: round1(scale_x(&1)), label: "#{&1}%"}),
       y_ticks: [%{y: @y_bottom, label: "0"}, %{y: @y_top, label: format_area(y_max)}]
     }
   end
+
+  defp series_polyline(%FuelMap{points: points}, y_max) do
+    Enum.map_join(points, " ", fn point ->
+      "#{round1(scale_x(point.position))},#{round1(scale_y(point.free_area, y_max))}"
+    end)
+  end
+
+  defp difference_band([%{map: map_a}, %{map: map_b}], y_max) do
+    diffs = Comparison.compute_difference(map_a, map_b)
+
+    Enum.zip_with([map_a.points, map_b.points, diffs], fn [a, b, d] ->
+      %{
+        x: round1(scale_x(a.position)),
+        y_a: round1(scale_y(a.free_area, y_max)),
+        y_b: round1(scale_y(b.free_area, y_max)),
+        color: diff_color(d.difference >= 0.0)
+      }
+    end)
+  end
+
+  defp difference_band(_series, _y_max), do: []
+
+  defp diff_color(true), do: "#16a34a"
+  defp diff_color(false), do: "#dc2626"
 
   defp scale_x(position), do: @x0 + position / 100 * @plot_w
   defp scale_y(area, y_max), do: @y_bottom - area / y_max * @plot_h

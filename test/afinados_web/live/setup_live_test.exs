@@ -128,4 +128,36 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     assert render_click(view, "load", %{"id" => "999"}) =~ max_area(34.0)
   end
+
+  test "comparing a saved setup overlays a second curve", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+    [setup] = Repo.all(Workbench.Setup)
+
+    html = render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
+
+    assert length(Regex.scan(~r/<polyline/, html)) == 2
+  end
+
+  test "unchecking a compared setup removes its curve", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+    [setup] = Repo.all(Workbench.Setup)
+    render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
+
+    html = render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
+
+    assert length(Regex.scan(~r/<polyline/, html)) == 1
+  end
+
+  test "comparing two different setups highlights the signed difference", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+    render_change(view, "change", change_params("50"))
+    [setup] = Repo.all(Workbench.Setup)
+
+    html = render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
+
+    assert html =~ "#dc2626" or html =~ "#16a34a"
+  end
 end
