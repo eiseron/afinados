@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title default="Afinados">{assigns[:page_title]}</.live_title>
-    <script>
+    <script nonce={@csp_nonce}>
       var savedTheme = window.localStorage && localStorage.getItem("theme");
       if (savedTheme === "dark" || savedTheme === "light")
         document.documentElement.setAttribute("data-theme", savedTheme);

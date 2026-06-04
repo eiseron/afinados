@@ -8,11 +8,23 @@ defmodule AfinadosWeb.Router do
     plug(:put_root_layout, html: {AfinadosWeb.Layouts, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers, %{"content-security-policy" => "default-src 'self'"})
+    plug(:put_csp_nonce)
     plug(AfinadosWeb.GuestToken)
   end
 
   pipeline :api do
     plug(:accepts, ["json"])
+  end
+
+  defp put_csp_nonce(conn, _opts) do
+    nonce = 16 |> :crypto.strong_rand_bytes() |> Base.url_encode64(padding: false)
+
+    conn
+    |> Plug.Conn.assign(:csp_nonce, nonce)
+    |> Plug.Conn.put_resp_header(
+      "content-security-policy",
+      "default-src 'self'; script-src 'self' 'nonce-#{nonce}'"
+    )
   end
 
   scope "/", AfinadosWeb do

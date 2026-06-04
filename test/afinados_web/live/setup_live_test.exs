@@ -313,4 +313,12 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     assert render_change(view, "change", broken) =~ ~s(class="chart-empty")
   end
+
+  test "the inline theme script carries the response CSP nonce", %{conn: conn} do
+    conn = get(conn, "/")
+    [csp] = get_resp_header(conn, "content-security-policy")
+    [_, nonce] = Regex.run(~r/'nonce-([^']+)'/, csp)
+
+    assert html_response(conn, 200) =~ ~s(<script nonce="#{nonce}">)
+  end
 end
