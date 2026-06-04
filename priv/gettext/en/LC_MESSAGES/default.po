@@ -22,11 +22,6 @@ msgstr ""
 msgid "Clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:221
-#, elixir-autogen, elixir-format
-msgid "Free fuel-passage area curve"
-msgstr ""
-
 #: lib/afinados_web/live/setup_live.ex:120
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
@@ -158,6 +153,7 @@ msgstr ""
 msgid "No saved setups yet."
 msgstr ""
 
+#: lib/afinados_web/live/hub_live.ex:17
 #: lib/afinados_web/live/setup_live.ex:213
 #, elixir-autogen, elixir-format
 msgid "Comparative estimate only, not jetting advice."
@@ -176,4 +172,35 @@ msgstr ""
 #: lib/afinados_web/live/setup_live.ex:381
 #, elixir-autogen, elixir-format
 msgid "Setup not found, redirecting."
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:16
+#, elixir-autogen, elixir-format
+msgid "Tools for carburetor tuning."
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:23
+#: lib/afinados_web/live/setup_live.ex:221
+#, elixir-autogen, elixir-format
+msgid "Fuel-passage area"
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:25
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Estimate and compare the fuel-passage area across throttle position."
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:31
+#, elixir-autogen, elixir-format
+msgid "Coming soon"
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:33
+#, elixir-autogen, elixir-format
+msgid "Estimate the ideal carburetor venturi size."
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "Venturi sizing"
 msgstr ""

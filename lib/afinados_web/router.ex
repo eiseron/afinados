@@ -30,7 +30,7 @@ defmodule AfinadosWeb.Router do
   scope "/", AfinadosWeb do
     pipe_through(:browser)
 
-    live("/", SetupLive)
+    live("/", HubLive)
     live("/carburetion/setups", SetupLive)
     live("/carburetion/setups/:id", SetupLive)
   end

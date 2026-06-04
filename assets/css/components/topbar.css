@@ -14,6 +14,7 @@
 .topbar .brand {
   font-weight: var(--weight-bold);
   color: var(--color-text);
+  text-decoration: none;
 }
 
 .topbar .version {

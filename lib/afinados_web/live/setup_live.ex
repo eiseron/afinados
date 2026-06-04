@@ -218,7 +218,7 @@ defmodule AfinadosWeb.SetupLive do
         {gettext("Enter a valid setup to see the curve.")}
       </p>
 
-      <h1 class="sr-only">{gettext("Free fuel-passage area curve")}</h1>
+      <h1 class="sr-only">{gettext("Fuel-passage area")}</h1>
 
       <aside class="controls" aria-label={gettext("Setup controls")}>
         <details class="saved" open={@saved_open}>

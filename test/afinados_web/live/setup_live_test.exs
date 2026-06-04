@@ -47,33 +47,33 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "renders the seeded needle from the catalog", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ "4D3"
   end
 
   test "renders the curve as an SVG polyline with one point per throttle position", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
     [_, points] = Regex.run(~r/<polyline[^>]*points="([^"]+)"/, html)
 
     assert length(String.split(points, " ", trim: true)) == 101
   end
 
   test "the curve shows intermediate Y-scale levels, not just min and max", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert length(Regex.scan(~r/text-anchor="end"/, html)) > 2
   end
 
   test "recomputes the curve when the venturi changes", %{conn: conn} do
-    {:ok, view, html} = live(conn, "/")
+    {:ok, view, html} = live(conn, "/carburetion/setups")
 
     refute active_polyline(render_change(view, "change", change_params("50"))) ==
              active_polyline(html)
   end
 
   test "falls back to a default venturi when the input is invalid", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     invalid = render_change(view, "change", change_params("abc"))
 
     assert active_polyline(invalid) ==
@@ -81,7 +81,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "saving persists the current setup linked to the guest's garage", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     setup = Repo.one(Workbench.Setup)
 
@@ -89,13 +89,13 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "a saved setup is listed for the guest", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
 
     assert render_click(view, "save") =~ "150/25 · 4D3 · clip 3"
   end
 
   test "loading a saved setup restores its curve", %{conn: conn} do
-    {:ok, view, html} = live(conn, "/")
+    {:ok, view, html} = live(conn, "/carburetion/setups")
     saved_curve = active_polyline(html)
     render_click(view, "save")
     render_change(view, "change", change_params("50"))
@@ -106,7 +106,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "loading a setup patches the URL to its own path", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     [setup] = Repo.all(Workbench.Setup)
     render_click(view, "load", %{"id" => to_string(setup.id)})
@@ -125,7 +125,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "comparing a saved setup overlays a second curve", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     [setup] = Repo.all(Workbench.Setup)
 
@@ -135,7 +135,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "unchecking a compared setup removes its curve", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     [setup] = Repo.all(Workbench.Setup)
     render_click(view, "toggle_compare", %{"id" => to_string(setup.id)})
@@ -146,7 +146,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "comparing two different setups highlights the signed difference", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     render_change(view, "change", change_params("50"))
     [setup] = Repo.all(Workbench.Setup)
@@ -157,25 +157,25 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "toggling the X axis switches the unit from percent to millimetres", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
 
     assert render_click(view, "toggle_x_axis") =~ ~r{class="axis-unit">\s*mm\s*</text>}
   end
 
   test "labels the Y axis end with the mm² unit", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ ~r{class="axis-unit">\s*mm²\s*</text>}
   end
 
   test "labels the X axis end with the percent unit in throttle mode", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ ~r{class="axis-unit">\s*%\s*</text>}
   end
 
   test "in needle mode curves with different h0 start aligned at idle travel", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
 
     render_change(view, "change", %{
@@ -195,7 +195,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "leads with the chart panel and places the setup controls after it", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
     {chart_at, _} = :binary.match(html, ~s(class="curve"))
     {controls_at, _} = :binary.match(html, ~s(class="controls"))
 
@@ -203,7 +203,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "places the page heading below the chart, not above it", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
     {chart_at, _} = :binary.match(html, ~s(class="curve"))
     {heading_at, _} = :binary.match(html, "<h1")
 
@@ -211,14 +211,14 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "offers the clip position as a select bounded by the needle's clip count", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
     [select] = Regex.run(~r{<select[^>]*clip_position.*?</select>}s, html)
 
     assert length(Regex.scan(~r/<option/, select)) == 5
   end
 
   test "clamps an out-of-range clip position to the needle's clip count", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     over = change_params("34") |> put_in(["setup", "clip_position"], "100")
     at_max = change_params("34") |> put_in(["setup", "clip_position"], "5")
 
@@ -231,7 +231,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "the chart paints its grid lines through a themeable CSS class", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ ~s(class="grid-line")
   end
@@ -247,7 +247,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "deleting a saved setup removes it", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     [setup] = Repo.all(Workbench.Setup)
     render_click(view, "delete", %{"id" => to_string(setup.id)})
@@ -256,32 +256,32 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "saving a setup shows a confirmation flash", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
 
     assert render_click(view, "save") =~ ~s(id="flash-info")
   end
 
   test "the saved panel shows how many setups are saved", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
 
     assert render_click(view, "save") =~ ~r{class="count">\s*2}
   end
 
   test "the saved panel stays visible with an empty state when nothing is saved", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ ~s(class="empty")
   end
 
   test "collapsing the saved panel closes the details", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
 
     refute render_click(view, "toggle_saved") =~ ~r{<details[^>]*\sopen}
   end
 
   test "selecting all overlays every saved setup", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     render_change(view, "change", change_params("50"))
     render_click(view, "save")
@@ -292,7 +292,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "unselecting all clears the comparison", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     render_click(view, "save")
     render_click(view, "toggle_compare_all")
 
@@ -302,13 +302,13 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "shows the approximation disclaimer near the curve", %{conn: conn} do
-    {:ok, _view, html} = live(conn, "/")
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ ~s(class="disclaimer")
   end
 
   test "renders a styled empty state when the chart cannot be built", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
     broken = %{"setup" => Map.put(change_params("34")["setup"], "high_jet_number", "0")}
 
     assert render_change(view, "change", broken) =~ ~s(class="chart-empty")
