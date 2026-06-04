@@ -295,4 +295,17 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     assert length(Regex.scan(~r/<polyline/, html)) == 1
   end
+
+  test "shows the approximation disclaimer near the curve", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~ ~s(class="disclaimer")
+  end
+
+  test "renders a styled empty state when the chart cannot be built", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    broken = %{"setup" => Map.put(change_params("34")["setup"], "high_jet_number", "0")}
+
+    assert render_change(view, "change", broken) =~ ~s(class="chart-empty")
+  end
 end

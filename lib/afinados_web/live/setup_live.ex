@@ -207,9 +207,15 @@ defmodule AfinadosWeb.SetupLive do
             {s.label}
           </li>
         </ul>
+
+        <p class="disclaimer">
+          {gettext("Comparative estimate only, not jetting advice.")}
+        </p>
       </section>
 
-      <p :if={!@chart}>{gettext("Pick a needle and a needle jet to see the curve.")}</p>
+      <p :if={!@chart} class="chart-empty">
+        {gettext("Enter a valid setup to see the curve.")}
+      </p>
 
       <h1 class="sr-only">{gettext("Free fuel-passage area curve")}</h1>
 
@@ -302,7 +308,7 @@ defmodule AfinadosWeb.SetupLive do
         </.form>
 
         <button :if={@chart} type="button" phx-click="toggle_x_axis">
-          {gettext("X axis")}: {axis_label(@x_axis)}
+          {gettext("View by")}: {axis_label(other_axis(@x_axis))}
         </button>
 
         <button type="button" phx-click="save" disabled={is_nil(@active_map)}>
