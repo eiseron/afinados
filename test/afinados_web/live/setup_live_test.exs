@@ -105,18 +105,23 @@ defmodule AfinadosWeb.SetupLiveTest do
              saved_curve
   end
 
-  test "ignores a load with a non-integer id without crashing", %{conn: conn} do
-    {:ok, view, html} = live(conn, "/")
+  test "loading a setup patches the URL to its own path", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
     render_click(view, "save")
+    [setup] = Repo.all(Workbench.Setup)
+    render_click(view, "load", %{"id" => to_string(setup.id)})
 
-    assert active_polyline(render_click(view, "load", %{"id" => "not-an-int"})) ==
-             active_polyline(html)
+    assert_patch(view, "/carburetion/setups/#{setup.id}")
   end
 
-  test "ignores a load when the guest has no garage yet", %{conn: conn} do
-    {:ok, view, html} = live(conn, "/")
+  test "navigating to a missing setup redirects to the simulator", %{conn: conn} do
+    assert {:error, {:live_redirect, %{to: "/carburetion/setups"}}} =
+             live(conn, "/carburetion/setups/999")
+  end
 
-    assert active_polyline(render_click(view, "load", %{"id" => "999"})) == active_polyline(html)
+  test "navigating to a non-integer setup id redirects to the simulator", %{conn: conn} do
+    assert {:error, {:live_redirect, %{to: "/carburetion/setups"}}} =
+             live(conn, "/carburetion/setups/not-an-int")
   end
 
   test "comparing a saved setup overlays a second curve", %{conn: conn} do

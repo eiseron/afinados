@@ -41,6 +41,13 @@ defmodule AfinadosWeb.SetupLive do
   end
 
   @impl true
+  def handle_params(%{"id" => id}, _uri, socket) do
+    {:noreply, show_setup(socket, find_setup(socket, id))}
+  end
+
+  def handle_params(_params, _uri, socket), do: {:noreply, socket}
+
+  @impl true
   def handle_event("change", %{"setup" => params}, socket) do
     {:noreply, recompute(socket, params)}
   end
@@ -61,13 +68,7 @@ defmodule AfinadosWeb.SetupLive do
 
   @impl true
   def handle_event("load", %{"id" => id}, socket) do
-    with %Garage{} = garage <- socket.assigns.current_garage,
-         {setup_id, ""} <- Integer.parse(id),
-         setup when not is_nil(setup) <- Workbench.get_setup(garage, setup_id) do
-      {:noreply, recompute(socket, saved_params(setup))}
-    else
-      _ -> {:noreply, socket}
-    end
+    {:noreply, push_patch(socket, to: ~p"/carburetion/setups/#{id}")}
   end
 
   @impl true
@@ -364,6 +365,24 @@ defmodule AfinadosWeb.SetupLive do
       "venturi_mm" => to_string(setup.carburetor.venturi_mm)
     }
   end
+
+  defp find_setup(socket, id) do
+    with %Garage{} = garage <- socket.assigns.current_garage,
+         {setup_id, ""} <- Integer.parse(id),
+         setup when not is_nil(setup) <- Workbench.get_setup(garage, setup_id) do
+      setup
+    else
+      _ -> nil
+    end
+  end
+
+  defp show_setup(socket, nil) do
+    socket
+    |> put_flash(:error, gettext("Setup not found, redirecting."))
+    |> push_navigate(to: ~p"/carburetion/setups")
+  end
+
+  defp show_setup(socket, setup), do: recompute(socket, saved_params(setup))
 
   defp recompute(socket, params) do
     socket

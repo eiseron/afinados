@@ -19,6 +19,8 @@ defmodule AfinadosWeb.Router do
     pipe_through(:browser)
 
     live("/", SetupLive)
+    live("/carburetion/setups", SetupLive)
+    live("/carburetion/setups/:id", SetupLive)
   end
 
   if Application.compile_env(:afinados, :dev_routes) do
