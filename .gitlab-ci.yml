@@ -1,12 +1,12 @@
 include:
   - project: eiseron/stack/ci
     file: /templates/phoenix.yml
-    ref: v0.1.0
+    ref: v0.1.6
     inputs:
       app_name: afinados
   - project: eiseron/stack/ci
     file: /templates/sync-github.yml
-    ref: v0.1.0
+    ref: v0.1.6
 
 stages:
   - lint
