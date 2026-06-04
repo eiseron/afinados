@@ -67,6 +67,30 @@ defmodule Afinados.Carburetion.WorkbenchTest do
     end
   end
 
+  describe "delete_setup/2" do
+    test "removes the setup from the garage", ctx do
+      {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
+      Workbench.delete_setup(ctx.garage, setup.id)
+
+      assert Workbench.list_setups(ctx.garage) == []
+    end
+
+    test "also removes the setup's carburetor", ctx do
+      {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
+      Workbench.delete_setup(ctx.garage, setup.id)
+
+      assert Repo.aggregate(Workbench.Carburetor, :count) == 0
+    end
+
+    test "does not delete a setup belonging to another garage", ctx do
+      {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
+      other = Garage.default_for(Identity.ensure_user_for_token(Identity.generate_token()))
+      Workbench.delete_setup(other, setup.id)
+
+      assert Workbench.get_setup(ctx.garage, setup.id)
+    end
+  end
+
   describe "resolve/1" do
     test "builds a pure setup (with both jets) that produces the curve", ctx do
       {:ok, saved} = Workbench.save_setup(ctx.garage, valid_params())

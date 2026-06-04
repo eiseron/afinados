@@ -11,125 +11,159 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/afinados_web/components/layouts.ex:37
-#: lib/afinados_web/components/layouts.ex:48
+#: lib/afinados_web/components/layouts.ex:39
+#: lib/afinados_web/components/layouts.ex:50
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:221
+#: lib/afinados_web/live/setup_live.ex:278
 #, elixir-autogen, elixir-format
 msgid "Clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:185
+#: lib/afinados_web/live/setup_live.ex:208
 #, elixir-autogen, elixir-format
 msgid "Free fuel-passage area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:90
+#: lib/afinados_web/live/setup_live.ex:113
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:195
+#: lib/afinados_web/live/setup_live.ex:252
 #, elixir-autogen, elixir-format
 msgid "Needle"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:201
+#: lib/afinados_web/live/setup_live.ex:258
 #, elixir-autogen, elixir-format
 msgid "Needle jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:183
+#: lib/afinados_web/live/setup_live.ex:206
 #, elixir-autogen, elixir-format
 msgid "Pick a needle and a needle jet to see the curve."
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:190
+#: lib/afinados_web/live/setup_live.ex:247
 #, elixir-autogen, elixir-format
 msgid "Setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:227
+#: lib/afinados_web/live/setup_live.ex:284
 #, elixir-autogen, elixir-format
 msgid "Shim (hundredths of mm)"
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:43
+#: lib/afinados_web/components/layouts.ex:45
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:230
+#: lib/afinados_web/live/setup_live.ex:287
 #, elixir-autogen, elixir-format
 msgid "Venturi (mm)"
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:32
+#: lib/afinados_web/components/layouts.ex:34
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:239
+#: lib/afinados_web/live/setup_live.ex:296
 #, elixir-autogen, elixir-format
 msgid "Save setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:242
-#: lib/afinados_web/live/setup_live.ex:243
+#: lib/afinados_web/live/setup_live.ex:213
 #, elixir-autogen, elixir-format
 msgid "Saved setups"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:256
-#: lib/afinados_web/live/setup_live.ex:351
+#: lib/afinados_web/live/setup_live.ex:388
 #, elixir-autogen, elixir-format
 msgid "clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:207
+#: lib/afinados_web/live/setup_live.ex:264
 #, elixir-autogen, elixir-format
 msgid "Main jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:214
+#: lib/afinados_web/live/setup_live.ex:271
 #, elixir-autogen, elixir-format
 msgid "Pilot jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:253
+#: lib/afinados_web/live/setup_live.ex:218
+#: lib/afinados_web/live/setup_live.ex:226
 #, elixir-autogen, elixir-format
 msgid "Compare"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:322
+#: lib/afinados_web/live/setup_live.ex:359
 #, elixir-autogen, elixir-format
 msgid "Current"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:331
+#: lib/afinados_web/live/setup_live.ex:368
 #, elixir-autogen, elixir-format
 msgid "Throttle (%)"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:235
+#: lib/afinados_web/live/setup_live.ex:292
 #, elixir-autogen, elixir-format
 msgid "X axis"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:332
+#: lib/afinados_web/live/setup_live.ex:369
 #, elixir-autogen, elixir-format
 msgid "Needle travel (mm)"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:187
+#: lib/afinados_web/live/setup_live.ex:210
 #, elixir-autogen, elixir-format
 msgid "Setup controls"
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:25
+#: lib/afinados_web/components/layouts/root.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:58
+#, elixir-autogen, elixir-format
+msgid "Could not save the setup"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:237
+#, elixir-autogen, elixir-format
+msgid "Delete setup"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:236
+#, elixir-autogen, elixir-format
+msgid "Delete this setup?"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:81
+#, elixir-autogen, elixir-format
+msgid "Setup deleted"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:55
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Setup saved"
+msgstr ""
+
+#: lib/afinados_web/components/core_components.ex:30
+#, elixir-autogen, elixir-format
+msgid "Close"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:216
+#, elixir-autogen, elixir-format
+msgid "No saved setups yet."
 msgstr ""

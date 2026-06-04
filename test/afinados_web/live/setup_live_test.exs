@@ -91,7 +91,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   test "a saved setup is listed for the guest", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
 
-    assert render_click(view, "save") =~ "4D3 · clip 3 · 34 mm"
+    assert render_click(view, "save") =~ "150/25 · 4D3 · clip 3"
   end
 
   test "loading a saved setup restores its curve", %{conn: conn} do
@@ -239,5 +239,60 @@ defmodule AfinadosWeb.SetupLiveTest do
     version = :afinados |> Application.spec(:vsn) |> to_string()
 
     assert html_response(get(conn, "/"), 200) =~ "v#{version}"
+  end
+
+  test "deleting a saved setup removes it", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+    [setup] = Repo.all(Workbench.Setup)
+    render_click(view, "delete", %{"id" => to_string(setup.id)})
+
+    assert Repo.all(Workbench.Setup) == []
+  end
+
+  test "saving a setup shows a confirmation flash", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+
+    assert render_click(view, "save") =~ ~s(id="flash-info")
+  end
+
+  test "the saved panel shows how many setups are saved", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+
+    assert render_click(view, "save") =~ ~r{class="count">\s*2}
+  end
+
+  test "the saved panel stays visible with an empty state when nothing is saved", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~ ~s(class="empty")
+  end
+
+  test "collapsing the saved panel closes the details", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+
+    refute render_click(view, "toggle_saved") =~ ~r{<details[^>]*\sopen}
+  end
+
+  test "selecting all overlays every saved setup", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+    render_change(view, "change", change_params("50"))
+    render_click(view, "save")
+
+    html = render_click(view, "toggle_compare_all")
+
+    assert length(Regex.scan(~r/<polyline/, html)) == 3
+  end
+
+  test "unselecting all clears the comparison", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+    render_click(view, "save")
+    render_click(view, "toggle_compare_all")
+
+    html = render_click(view, "toggle_compare_all")
+
+    assert length(Regex.scan(~r/<polyline/, html)) == 1
   end
 end

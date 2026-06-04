@@ -21,9 +21,16 @@ defmodule AfinadosWeb.CoreComponents do
       :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
       id={@id}
       role="alert"
-      phx-click={JS.hide(to: "##{@id}")}
       {@rest}
     >
+      <button
+        type="button"
+        class="flash-close"
+        phx-click={JS.hide(to: "##{@id}")}
+        aria-label={gettext("Close")}
+      >
+        ×
+      </button>
       <p :if={@title}>{@title}</p>
       <p>{msg}</p>
     </div>

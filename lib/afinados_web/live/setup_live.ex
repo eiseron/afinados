@@ -33,7 +33,7 @@ defmodule AfinadosWeb.SetupLive do
       socket
       |> assign(catalog)
       |> assign(token: session["guest_token"], current_user: nil, current_garage: nil)
-      |> assign(saved: [], compared: MapSet.new(), x_axis: :throttle)
+      |> assign(saved: [], compared: MapSet.new(), x_axis: :throttle, saved_open: true)
       |> load_work(Identity.user_for_token(session["guest_token"]))
       |> recompute(default_params(catalog))
 
@@ -51,8 +51,11 @@ defmodule AfinadosWeb.SetupLive do
     garage = Garage.default_for(user)
 
     case Workbench.save_setup(garage, socket.assigns.params) do
-      {:ok, _setup} -> {:noreply, load_work(socket, user)}
-      {:error, _changeset} -> {:noreply, socket}
+      {:ok, _setup} ->
+        {:noreply, socket |> load_work(user) |> put_flash(:info, gettext("Setup saved"))}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not save the setup"))}
     end
   end
 
@@ -65,6 +68,25 @@ defmodule AfinadosWeb.SetupLive do
     else
       _ -> {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("delete", %{"id" => id}, socket) do
+    with %Garage{} = garage <- socket.assigns.current_garage,
+         {setup_id, ""} <- Integer.parse(id),
+         :ok <- Workbench.delete_setup(garage, setup_id) do
+      {:noreply,
+       socket
+       |> load_work(socket.assigns.current_user)
+       |> put_flash(:info, gettext("Setup deleted"))}
+    else
+      _ -> {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("toggle_saved", _params, socket) do
+    {:noreply, update(socket, :saved_open, &(not &1))}
   end
 
   @impl true
@@ -84,8 +106,15 @@ defmodule AfinadosWeb.SetupLive do
   end
 
   @impl true
+  def handle_event("toggle_compare_all", _params, socket) do
+    compared = compare_all_next(socket.assigns.saved, socket.assigns.compared)
+    {:noreply, socket |> assign(compared: compared) |> rebuild_chart()}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
+    <Layouts.flash_group flash={@flash} />
     <main class="setup">
       <section :if={@chart} class="chart-panel" aria-label={gettext("Free-area curve")}>
         <svg viewBox={"0 0 #{@chart.vb_w} #{@chart.vb_h}"} width="100%" role="img" class="curve">
@@ -185,6 +214,47 @@ defmodule AfinadosWeb.SetupLive do
       <h1 class="sr-only">{gettext("Free fuel-passage area curve")}</h1>
 
       <aside class="controls" aria-label={gettext("Setup controls")}>
+        <details class="saved" open={@saved_open}>
+          <summary class="saved-toggle" phx-click="toggle_saved">
+            {gettext("Saved setups")} <span class="count">{length(@saved)}</span>
+          </summary>
+          <p :if={@saved == []} class="empty">
+            {gettext("No saved setups yet.")}
+          </p>
+          <label :if={@saved != []} class="compare-hint">
+            <input
+              type="checkbox"
+              phx-click="toggle_compare_all"
+              checked={all_saved_compared?(@saved, @compared)}
+            />
+            {gettext("Compare")}
+          </label>
+          <ul :if={@saved != []}>
+            <li :for={setup <- @saved}>
+              <input
+                type="checkbox"
+                phx-click="toggle_compare"
+                phx-value-id={setup.id}
+                checked={MapSet.member?(@compared, setup.id)}
+                aria-label={gettext("Compare")}
+              />
+              <button type="button" class="load" phx-click="load" phx-value-id={setup.id}>
+                {setup_label(setup)}
+              </button>
+              <button
+                type="button"
+                class="delete"
+                phx-click="delete"
+                phx-value-id={setup.id}
+                data-confirm={gettext("Delete this setup?")}
+                aria-label={gettext("Delete setup")}
+              >
+                ×
+              </button>
+            </li>
+          </ul>
+        </details>
+
         <.form for={@form} phx-change="change">
           <fieldset>
             <legend>{gettext("Setup")}</legend>
@@ -238,26 +308,6 @@ defmodule AfinadosWeb.SetupLive do
         <button type="button" phx-click="save" disabled={is_nil(@active_map)}>
           {gettext("Save setup")}
         </button>
-
-        <section :if={@saved != []} aria-label={gettext("Saved setups")}>
-          <h2>{gettext("Saved setups")}</h2>
-          <ul>
-            <li :for={setup <- @saved}>
-              <label>
-                <input
-                  type="checkbox"
-                  phx-click="toggle_compare"
-                  phx-value-id={setup.id}
-                  checked={MapSet.member?(@compared, setup.id)}
-                />
-                {gettext("Compare")}
-              </label>
-              <button type="button" phx-click="load" phx-value-id={setup.id}>
-                {setup.needle_part_number} · {gettext("clip")} {setup.clip_position} · {setup.carburetor.venturi_mm} mm
-              </button>
-            </li>
-          </ul>
-        </section>
       </aside>
     </main>
     """
@@ -348,7 +398,17 @@ defmodule AfinadosWeb.SetupLive do
   end
 
   defp setup_label(setup) do
-    "#{setup.needle_part_number} · #{gettext("clip")} #{setup.clip_position} · #{setup.carburetor.venturi_mm} mm"
+    "#{format_jet(setup.high_jet_number)}/#{format_jet(setup.low_jet_number)} · #{setup.needle_part_number} · #{gettext("clip")} #{setup.clip_position}"
+  end
+
+  defp format_jet(number) when is_integer(number), do: Integer.to_string(number)
+  defp format_jet(number) when is_float(number), do: trim_float(number)
+
+  defp trim_float(number) do
+    case number == trunc(number) do
+      true -> Integer.to_string(trunc(number))
+      false -> Float.to_string(number)
+    end
   end
 
   defp toggle(set, id) do
@@ -357,6 +417,18 @@ defmodule AfinadosWeb.SetupLive do
       false -> MapSet.put(set, id)
     end
   end
+
+  defp compare_all_next(saved, compared) do
+    set_all_compared(all_saved_compared?(saved, compared), saved)
+  end
+
+  defp set_all_compared(true, _saved), do: MapSet.new()
+  defp set_all_compared(false, saved), do: MapSet.new(Enum.map(saved, & &1.id))
+
+  defp all_saved_compared?([], _compared), do: false
+
+  defp all_saved_compared?(saved, compared),
+    do: Enum.all?(saved, &MapSet.member?(compared, &1.id))
 
   defp fuel_map_for(params) do
     with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),

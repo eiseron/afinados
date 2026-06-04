@@ -45,6 +45,14 @@ defmodule Afinados.Carburetion.Workbench do
     end
   end
 
+  @spec delete_setup(Garage.t(), integer()) :: :ok | :error
+  def delete_setup(%Garage{id: garage_id}, id) do
+    case Repo.get_by(Setup, id: id, garage_id: garage_id) do
+      nil -> :error
+      setup -> delete_with_carburetor(setup, garage_id)
+    end
+  end
+
   @spec resolve(Setup.t()) :: {:ok, ResolvedSetup.t()} | :error
   def resolve(%Setup{carburetor: %Carburetor{venturi_mm: venturi_mm}} = setup) do
     with {:ok, needle} <- Catalog.fetch_needle(setup.needle_part_number),
@@ -61,6 +69,21 @@ defmodule Afinados.Carburetion.Workbench do
        }}
     end
   end
+
+  defp delete_with_carburetor(setup, garage_id) do
+    Multi.new()
+    |> Multi.delete(:setup, setup)
+    |> Multi.delete_all(:carburetor, carburetor_to_delete(setup.carburetor_id, garage_id))
+    |> Repo.transaction()
+    |> deletion_result()
+  end
+
+  defp carburetor_to_delete(carburetor_id, garage_id) do
+    from c in Carburetor, where: c.id == ^carburetor_id and c.garage_id == ^garage_id
+  end
+
+  defp deletion_result({:ok, _changes}), do: :ok
+  defp deletion_result({:error, _step, _value, _changes}), do: :error
 
   defp setup_changeset(%{carburetor: carburetor}, garage_id, params) do
     Setup.changeset(%Setup{}, %{
