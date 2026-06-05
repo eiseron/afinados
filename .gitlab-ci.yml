@@ -7,8 +7,15 @@ include:
   - project: eiseron/stack/ci
     file: /templates/sync-github.yml
     ref: v0.1.6
+  - project: eiseron/stack/ci
+    file: /templates/publish-docs.yml
+    ref: v0.1.10
+    inputs:
+      site_repo: eiseron/afinados/afinados-site
+      locale_map: '{"pt_BR":"src/docs","en":"src/en/docs"}'
 
 stages:
   - lint
   - test
   - sync
+  - publish
