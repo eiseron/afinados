@@ -5,9 +5,6 @@ include:
     inputs:
       app_name: afinados
   - project: eiseron/stack/ci
-    file: /templates/sync-github.yml
-    ref: v0.1.6
-  - project: eiseron/stack/ci
     file: /templates/publish-docs.yml
     ref: v0.1.10
     inputs:
@@ -17,5 +14,4 @@ include:
 stages:
   - lint
   - test
-  - sync
   - publish
