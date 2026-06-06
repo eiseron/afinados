@@ -5,6 +5,12 @@ include:
     inputs:
       app_name: afinados
   - project: eiseron/stack/ci
+    file: /templates/preview-build.yml
+    ref: v0.1.15
+    inputs:
+      app_name: afinados
+      preview_zone: afinados.io
+  - project: eiseron/stack/ci
     file: /templates/publish-docs.yml
     ref: v0.1.10
     inputs:
@@ -14,4 +20,6 @@ include:
 stages:
   - lint
   - test
+  - build
+  - preview
   - publish

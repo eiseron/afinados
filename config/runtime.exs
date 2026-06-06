@@ -7,7 +7,7 @@ end
 config :afinados, AfinadosWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
-if config_env() == :prod do
+if config_env() in [:prod, :preview] do
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
