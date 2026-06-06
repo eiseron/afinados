@@ -14,7 +14,9 @@ defmodule Afinados.Carburetion.Catalog do
   @spec list_needle_jets() :: [NeedleJetRecord.t()]
   def list_needle_jets, do: Repo.all(from j in NeedleJetRecord, order_by: j.code)
 
-  @spec fetch_needle(String.t()) :: {:ok, Needle.t()} | :error
+  @spec fetch_needle(String.t() | nil) :: {:ok, Needle.t()} | :error
+  def fetch_needle(nil), do: :error
+
   def fetch_needle(part_number) do
     case Repo.get_by(NeedleRecord, part_number: part_number) do
       nil -> :error
@@ -22,7 +24,9 @@ defmodule Afinados.Carburetion.Catalog do
     end
   end
 
-  @spec fetch_needle_jet(String.t()) :: {:ok, NeedleJet.t()} | :error
+  @spec fetch_needle_jet(String.t() | nil) :: {:ok, NeedleJet.t()} | :error
+  def fetch_needle_jet(nil), do: :error
+
   def fetch_needle_jet(code) do
     case Repo.get_by(NeedleJetRecord, code: code) do
       nil -> :error

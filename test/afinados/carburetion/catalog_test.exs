@@ -53,6 +53,10 @@ defmodule Afinados.Carburetion.CatalogTest do
     test "returns :error for an unknown part number" do
       assert Catalog.fetch_needle("nope") == :error
     end
+
+    test "returns :error for a nil part number without querying" do
+      assert Catalog.fetch_needle(nil) == :error
+    end
   end
 
   describe "fetch_needle_jet/1" do
@@ -64,6 +68,10 @@ defmodule Afinados.Carburetion.CatalogTest do
 
     test "returns :error for an unknown code" do
       assert Catalog.fetch_needle_jet("nope") == :error
+    end
+
+    test "returns :error for a nil code without querying" do
+      assert Catalog.fetch_needle_jet(nil) == :error
     end
   end
 
