@@ -19,6 +19,8 @@ include:
   - project: eiseron/stack/ci
     file: /templates/release.yml
     ref: v0.1.17
+    inputs:
+      automation_ref: v0.5.3
 
 stages:
   - lint
