@@ -16,6 +16,9 @@ include:
     inputs:
       site_repo: eiseron/afinados/afinados-site
       locale_map: '{"pt_BR":"src/docs","en":"src/en/docs"}'
+  - project: eiseron/stack/ci
+    file: /templates/release.yml
+    ref: v0.1.17
 
 stages:
   - lint
@@ -23,3 +26,4 @@ stages:
   - build
   - preview
   - publish
+  - release
