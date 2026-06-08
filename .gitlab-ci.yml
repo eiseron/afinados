@@ -21,6 +21,13 @@ include:
     ref: v0.1.17
     inputs:
       automation_ref: v0.5.3
+  - project: eiseron/stack/ci
+    file: /templates/prod-build.yml
+    ref: v0.1.23
+    inputs:
+      app_name: afinados
+      assets_bucket: afinados-assets
+      sourcemaps_bucket: afinados-sourcemaps
 
 workflow:
   rules:
@@ -33,6 +40,8 @@ stages:
   - lint
   - test
   - build
+  - upload
+  - deploy
   - preview
   - publish
   - release
