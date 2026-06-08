@@ -28,6 +28,10 @@ defmodule AfinadosWeb.Router do
   end
 
   scope "/", AfinadosWeb do
+    get("/up", HealthController, :index)
+  end
+
+  scope "/", AfinadosWeb do
     pipe_through(:browser)
 
     live("/", HubLive)
