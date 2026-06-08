@@ -23,7 +23,7 @@ include:
       automation_ref: v0.5.3
   - project: eiseron/stack/ci
     file: /templates/prod-build.yml
-    ref: v0.1.23
+    ref: v0.1.25
     inputs:
       app_name: afinados
       assets_bucket: afinados-assets
