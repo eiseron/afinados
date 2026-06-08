@@ -1,0 +1,35 @@
+FROM registry.gitlab.com/eiseron/stack/public-image-bases/elixir-builder:v0.1.15 AS build
+
+WORKDIR /app
+ENV MIX_ENV=prod
+
+RUN mix local.hex --force && mix local.rebar --force
+
+COPY mix.exs mix.lock ./
+RUN mix deps.get --only prod
+RUN mix deps.compile
+
+COPY config config
+COPY priv priv
+COPY lib lib
+
+RUN mix compile
+RUN mix release
+
+FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8 AS app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      libstdc++6 openssl libncurses6 locales ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+
+WORKDIR /app
+RUN groupadd -g 1000 app && useradd -u 1000 -g app -m app
+
+COPY --from=build --chown=app:app /app/_build/prod/rel/afinados ./
+
+USER app
+ENV PHX_SERVER=true
+
+CMD ["/app/bin/afinados", "start"]

@@ -15,6 +15,7 @@ defmodule Afinados.MixProject do
         ignore_modules: [
           Afinados.Application,
           Afinados.Mailer,
+          Afinados.Release,
           Afinados.Repo,
           AfinadosWeb,
           AfinadosWeb.Endpoint,
@@ -28,7 +29,17 @@ defmodule Afinados.MixProject do
         ]
       ],
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
-      listeners: [Phoenix.CodeReloader]
+      listeners: [Phoenix.CodeReloader],
+      releases: releases()
+    ]
+  end
+
+  defp releases do
+    [
+      afinados: [
+        include_executables_for: [:unix],
+        steps: [:assemble]
+      ]
     ]
   end
 
