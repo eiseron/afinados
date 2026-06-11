@@ -230,6 +230,11 @@ defmodule AfinadosWeb.SetupLiveTest do
     assert html_response(get(conn, "/"), 200) =~ ~s(href="/assets/css/app.css")
   end
 
+  test "the page points its Open Graph image at the shared static asset", %{conn: conn} do
+    assert html_response(get(conn, "/"), 200) =~
+             ~s(property="og:image" content="https://afinados.io/og-image.svg")
+  end
+
   test "the chart paints its grid lines through a themeable CSS class", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/carburetion/setups")
 

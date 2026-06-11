@@ -113,7 +113,7 @@ msgstr "Curso da agulha (mm)"
 msgid "Setup controls"
 msgstr "Controles do acerto"
 
-#: lib/afinados_web/components/layouts/root.html.heex:24
+#: lib/afinados_web/components/layouts/root.html.heex:40
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr "Alternar tema"
@@ -204,3 +204,16 @@ msgstr "Estime o tamanho ideal do venturi do carburador."
 #, elixir-autogen, elixir-format
 msgid "Venturi sizing"
 msgstr "Dimensionamento de venturi"
+
+#: lib/afinados_web/components/layouts/root.html.heex:7
+#: lib/afinados_web/components/layouts/root.html.heex:11
+#: lib/afinados_web/components/layouts/root.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Afinados gathers calculation tools for motorcycle tuning."
+msgstr "O Afinados reúne ferramentas de cálculo para preparação de motocicletas."
+
+#: lib/afinados_web/components/layouts/root.html.heex:10
+#: lib/afinados_web/components/layouts/root.html.heex:19
+#, elixir-autogen, elixir-format
+msgid "Afinados, calculation tools for motorcycle tuning"
+msgstr "Afinados, ferramentas de cálculo para preparação de motocicletas"

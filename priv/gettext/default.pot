@@ -113,7 +113,7 @@ msgstr ""
 msgid "Setup controls"
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:24
+#: lib/afinados_web/components/layouts/root.html.heex:40
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr ""
@@ -203,4 +203,17 @@ msgstr ""
 #: lib/afinados_web/live/hub_live.ex:32
 #, elixir-autogen, elixir-format
 msgid "Venturi sizing"
+msgstr ""
+
+#: lib/afinados_web/components/layouts/root.html.heex:7
+#: lib/afinados_web/components/layouts/root.html.heex:11
+#: lib/afinados_web/components/layouts/root.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Afinados gathers calculation tools for motorcycle tuning."
+msgstr ""
+
+#: lib/afinados_web/components/layouts/root.html.heex:10
+#: lib/afinados_web/components/layouts/root.html.heex:19
+#, elixir-autogen, elixir-format
+msgid "Afinados, calculation tools for motorcycle tuning"
 msgstr ""
