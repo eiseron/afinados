@@ -226,8 +226,9 @@ defmodule AfinadosWeb.SetupLiveTest do
              active_polyline(render_change(view, "change", at_max))
   end
 
-  test "the page links the bundled stylesheet", %{conn: conn} do
-    assert html_response(get(conn, "/"), 200) =~ ~s(href="/assets/css/app.css")
+  test "the page links the stylesheet on the static (CDN) host", %{conn: conn} do
+    assert html_response(get(conn, "/"), 200) =~
+             ~s(href="#{AfinadosWeb.Endpoint.static_url()}/assets/css/app.css")
   end
 
   test "the page points its Open Graph image at the shared static asset", %{conn: conn} do
@@ -325,5 +326,12 @@ defmodule AfinadosWeb.SetupLiveTest do
     [_, nonce] = Regex.run(~r/'nonce-([^']+)'/, csp)
 
     assert html_response(conn, 200) =~ ~s(<script nonce="#{nonce}">)
+  end
+
+  test "the response CSP allows the static host for styles", %{conn: conn} do
+    conn = get(conn, "/")
+    static = AfinadosWeb.Endpoint.static_url()
+
+    assert hd(get_resp_header(conn, "content-security-policy")) =~ "style-src 'self' #{static}"
   end
 end

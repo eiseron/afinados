@@ -21,9 +21,21 @@ defmodule AfinadosWeb.Router do
 
     conn
     |> Plug.Conn.assign(:csp_nonce, nonce)
-    |> Plug.Conn.put_resp_header(
-      "content-security-policy",
-      "default-src 'self'; script-src 'self' 'nonce-#{nonce}'"
+    |> Plug.Conn.put_resp_header("content-security-policy", content_security_policy(nonce))
+  end
+
+  defp content_security_policy(nonce) do
+    static = AfinadosWeb.Endpoint.static_url()
+
+    Enum.join(
+      [
+        "default-src 'self'",
+        "script-src 'self' 'nonce-#{nonce}' #{static}",
+        "style-src 'self' #{static}",
+        "img-src 'self' #{static}",
+        "font-src 'self' #{static}"
+      ],
+      "; "
     )
   end
 
