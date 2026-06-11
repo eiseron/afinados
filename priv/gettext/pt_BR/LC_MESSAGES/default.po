@@ -11,8 +11,8 @@ msgstr ""
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/afinados_web/components/layouts.ex:39
-#: lib/afinados_web/components/layouts.ex:50
+#: lib/afinados_web/components/layouts.ex:41
+#: lib/afinados_web/components/layouts.ex:52
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr "Tentando reconectar"
@@ -47,7 +47,7 @@ msgstr "Acerto"
 msgid "Shim (hundredths of mm)"
 msgstr "Calço (centésimos de mm)"
 
-#: lib/afinados_web/components/layouts.ex:45
+#: lib/afinados_web/components/layouts.ex:47
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Algo deu errado!"
@@ -57,7 +57,7 @@ msgstr "Algo deu errado!"
 msgid "Venturi (mm)"
 msgstr "Venturi (mm)"
 
-#: lib/afinados_web/components/layouts.ex:34
+#: lib/afinados_web/components/layouts.ex:36
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "Sem conexão com a internet"
@@ -113,7 +113,7 @@ msgstr "Curso da agulha (mm)"
 msgid "Setup controls"
 msgstr "Controles do acerto"
 
-#: lib/afinados_web/components/layouts/root.html.heex:40
+#: lib/afinados_web/components/layouts/root.html.heex:55
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr "Alternar tema"
@@ -205,15 +205,15 @@ msgstr "Estime o tamanho ideal do venturi do carburador."
 msgid "Venturi sizing"
 msgstr "Dimensionamento de venturi"
 
-#: lib/afinados_web/components/layouts/root.html.heex:7
-#: lib/afinados_web/components/layouts/root.html.heex:11
-#: lib/afinados_web/components/layouts/root.html.heex:20
+#: lib/afinados_web/components/layouts/root.html.heex:9
+#: lib/afinados_web/components/layouts/root.html.heex:19
+#: lib/afinados_web/components/layouts/root.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Afinados gathers calculation tools for motorcycle tuning."
 msgstr "O Afinados reúne ferramentas de cálculo para preparação de motocicletas."
 
-#: lib/afinados_web/components/layouts/root.html.heex:10
-#: lib/afinados_web/components/layouts/root.html.heex:19
+#: lib/afinados_web/components/layouts/root.html.heex:15
+#: lib/afinados_web/components/layouts/root.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Afinados, calculation tools for motorcycle tuning"
 msgstr "Afinados, ferramentas de cálculo para preparação de motocicletas"

@@ -11,8 +11,8 @@
 msgid ""
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:39
-#: lib/afinados_web/components/layouts.ex:50
+#: lib/afinados_web/components/layouts.ex:41
+#: lib/afinados_web/components/layouts.ex:52
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
@@ -47,7 +47,7 @@ msgstr ""
 msgid "Shim (hundredths of mm)"
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:45
+#: lib/afinados_web/components/layouts.ex:47
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Venturi (mm)"
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:34
+#: lib/afinados_web/components/layouts.ex:36
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Setup controls"
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:40
+#: lib/afinados_web/components/layouts/root.html.heex:55
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr ""
@@ -205,15 +205,15 @@ msgstr ""
 msgid "Venturi sizing"
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:7
-#: lib/afinados_web/components/layouts/root.html.heex:11
-#: lib/afinados_web/components/layouts/root.html.heex:20
+#: lib/afinados_web/components/layouts/root.html.heex:9
+#: lib/afinados_web/components/layouts/root.html.heex:19
+#: lib/afinados_web/components/layouts/root.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Afinados gathers calculation tools for motorcycle tuning."
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:10
-#: lib/afinados_web/components/layouts/root.html.heex:19
+#: lib/afinados_web/components/layouts/root.html.heex:15
+#: lib/afinados_web/components/layouts/root.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Afinados, calculation tools for motorcycle tuning"
 msgstr ""
