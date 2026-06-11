@@ -1,6 +1,3 @@
-Code.require_file("priv/repo/seeds/carburetion/needle.exs")
-Code.require_file("priv/repo/seeds/carburetion/needle_jet.exs")
-
 defmodule Afinados.Seeds.CatalogSeedTest do
   use Afinados.DataCase, async: true
 

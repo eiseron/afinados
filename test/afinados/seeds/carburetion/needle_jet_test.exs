@@ -1,5 +1,3 @@
-Code.require_file("priv/repo/seeds/carburetion/needle_jet.exs")
-
 defmodule Afinados.Seeds.Carburetion.NeedleJetTest do
   use ExUnit.Case, async: true
 

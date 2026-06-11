@@ -1,1 +1,1 @@
-Code.require_file("seeds/#{Mix.env()}.exs", __DIR__)
+Afinados.Seeds.run(to_string(Mix.env()))
