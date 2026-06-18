@@ -5,7 +5,9 @@ defmodule AfinadosWeb.Endpoint do
     store: :cookie,
     key: "_afinados_key",
     signing_salt: "E6cHh0FK",
-    same_site: "Lax"
+    same_site: "Lax",
+    max_age: 60 * 60 * 24 * 365,
+    secure: true
   ]
 
   socket("/live", Phoenix.LiveView.Socket,
