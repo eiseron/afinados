@@ -1,20 +1,27 @@
 defmodule Afinados.Carburetion do
   @moduledoc "Pure carburetion core: builds the free fuel-passage area curve from a setup."
 
-  alias Afinados.Carburetion.{FuelMap, HighJet, LowJet, Needle, NeedleJet, Setup, Venturi}
+  alias Afinados.Carburetion.{
+    FuelMap,
+    HighJet,
+    LowJet,
+    Manufacturer,
+    Needle,
+    NeedleJet,
+    Setup,
+    Venturi
+  }
 
   @positions 0..100
-  @pilot_area_per_number 0.005
 
-  @spec build_high_jet(integer()) :: HighJet.t()
-  def build_high_jet(number) when is_integer(number) and number > 0 do
-    diameter_mm = number / 100
-    %HighJet{number: number, free_area_mm2: :math.pi() / 4 * diameter_mm * diameter_mm}
+  @spec build_high_jet(String.t(), integer()) :: HighJet.t()
+  def build_high_jet(manufacturer, number) when is_integer(number) and number > 0 do
+    %HighJet{number: number, free_area_mm2: Manufacturer.high_jet_area(manufacturer, number)}
   end
 
-  @spec build_low_jet(number()) :: LowJet.t()
-  def build_low_jet(number) when is_number(number) and number > 0 do
-    %LowJet{number: number, free_area_mm2: @pilot_area_per_number * number}
+  @spec build_low_jet(String.t(), number()) :: LowJet.t()
+  def build_low_jet(manufacturer, number) when is_number(number) and number > 0 do
+    %LowJet{number: number, free_area_mm2: Manufacturer.low_jet_area(manufacturer, number)}
   end
 
   @spec diameter_at(Needle.t(), number()) :: float()

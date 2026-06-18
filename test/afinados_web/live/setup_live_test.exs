@@ -30,6 +30,7 @@ defmodule AfinadosWeb.SetupLiveTest do
   defp change_params(venturi_mm) do
     %{
       "setup" => %{
+        "manufacturer" => "mikuni",
         "part_number" => "4D3",
         "needle_jet_code" => "159-P4",
         "high_jet_number" => "150",
@@ -46,10 +47,62 @@ defmodule AfinadosWeb.SetupLiveTest do
     points
   end
 
+  defp insert_needle(part_number, manufacturer) do
+    %Catalog.Needle{}
+    |> Catalog.Needle.changeset(%{
+      part_number: part_number,
+      manufacturer: manufacturer,
+      total_length_tenths_mm: 503,
+      taper_points_tenths_mm: [253],
+      station_diameters_um: [2511, 2511, 2421, 2253, 2100],
+      num_clips: 5
+    })
+    |> Repo.insert!()
+  end
+
   test "renders the seeded needle from the catalog", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/carburetion/setups")
 
     assert html =~ "4D3"
+  end
+
+  test "offers a manufacturer select carrying the seeded manufacturer", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
+    [select] = Regex.run(~r{<select[^>]*manufacturer.*?</select>}s, html)
+
+    assert select =~ ~s(value="mikuni")
+  end
+
+  test "a saved setup is labelled with its manufacturer", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
+
+    assert render_click(view, "save") =~ "Mikuni · 150/25 · 4D3 · clip 3"
+  end
+
+  test "omits a catalog manufacturer that lacks runtime parametrisation", %{conn: conn} do
+    insert_needle("RX1", "rochester")
+
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
+    [select] = Regex.run(~r{<select[^>]*manufacturer.*?</select>}s, html)
+
+    assert select =~ ~s(value="mikuni")
+    refute select =~ "rochester"
+  end
+
+  test "switching manufacturer reconciles a stale needle and jet selection", %{conn: conn} do
+    insert_needle("90DT", "keihin")
+
+    %Catalog.NeedleJet{}
+    |> Catalog.NeedleJet.changeset(%{code: "K-99", manufacturer: "keihin", bore_um: 2700})
+    |> Repo.insert!()
+
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
+    stale = Map.put(change_params("34")["setup"], "manufacturer", "keihin")
+    html = render_change(view, "change", %{"setup" => stale})
+
+    assert html =~ "90DT"
+    assert html =~ "K-99"
+    assert Regex.match?(~r/<polyline/, html)
   end
 
   test "renders the curve as an SVG polyline with one point per throttle position", %{conn: conn} do

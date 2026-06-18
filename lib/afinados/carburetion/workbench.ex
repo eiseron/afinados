@@ -16,7 +16,7 @@ defmodule Afinados.Carburetion.Workbench do
     carburetor =
       Carburetor.changeset(%Carburetor{}, %{
         garage_id: garage_id,
-        manufacturer: "mikuni",
+        manufacturer: params["manufacturer"],
         venturi_mm: params["venturi_mm"]
       })
 
@@ -54,15 +54,18 @@ defmodule Afinados.Carburetion.Workbench do
   end
 
   @spec resolve(Setup.t()) :: {:ok, ResolvedSetup.t()} | :error
-  def resolve(%Setup{carburetor: %Carburetor{venturi_mm: venturi_mm}} = setup) do
+  def resolve(
+        %Setup{carburetor: %Carburetor{venturi_mm: venturi_mm, manufacturer: manufacturer}} =
+          setup
+      ) do
     with {:ok, needle} <- Catalog.fetch_needle(setup.needle_part_number),
          {:ok, needle_jet} <- Catalog.fetch_needle_jet(setup.needle_jet_code) do
       {:ok,
        %ResolvedSetup{
          needle: needle,
          needle_jet: needle_jet,
-         high_jet: Carburetion.build_high_jet(setup.high_jet_number),
-         low_jet: Carburetion.build_low_jet(setup.low_jet_number),
+         high_jet: Carburetion.build_high_jet(manufacturer, setup.high_jet_number),
+         low_jet: Carburetion.build_low_jet(manufacturer, setup.low_jet_number),
          clip: %Clip{position: setup.clip_position},
          shim: %Shim{hundredths: setup.shim_hundredths},
          venturi: %Venturi{mm: venturi_mm * 1.0}

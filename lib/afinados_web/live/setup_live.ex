@@ -4,7 +4,18 @@ defmodule AfinadosWeb.SetupLive do
   use AfinadosWeb, :live_view
 
   alias Afinados.Carburetion
-  alias Afinados.Carburetion.{Catalog, Clip, Comparison, FuelMap, Setup, Shim, Venturi}
+
+  alias Afinados.Carburetion.{
+    Catalog,
+    Clip,
+    Comparison,
+    FuelMap,
+    Manufacturer,
+    Setup,
+    Shim,
+    Venturi
+  }
+
   alias Afinados.Carburetion.Workbench
   alias Afinados.{Garage, Identity}
 
@@ -24,20 +35,17 @@ defmodule AfinadosWeb.SetupLive do
 
   @impl true
   def mount(_params, session, socket) do
-    catalog = %{
-      needles: Catalog.list_needles(),
-      needle_jets: Catalog.list_needle_jets()
-    }
+    manufacturers = Enum.filter(Catalog.list_manufacturers(), &Manufacturer.known?/1)
 
     socket =
       socket
-      |> assign(catalog)
+      |> assign(manufacturers: manufacturers)
       |> assign(token: session["guest_token"], current_user: nil, current_garage: nil)
       |> assign(saved: [], compared: MapSet.new(), x_axis: :throttle, saved_open: true)
       |> load_work(Identity.user_for_token(session["guest_token"]))
-      |> recompute(default_params(catalog))
+      |> assign_catalog(default_manufacturer(manufacturers))
 
-    {:ok, socket}
+    {:ok, recompute(socket, default_params(socket.assigns))}
   end
 
   @impl true
@@ -267,6 +275,12 @@ defmodule AfinadosWeb.SetupLive do
             <legend>{gettext("Setup")}</legend>
 
             <.input
+              field={@form[:manufacturer]}
+              type="select"
+              label={gettext("Manufacturer")}
+              options={Enum.map(@manufacturers, &{manufacturer_label(&1), &1})}
+            />
+            <.input
               field={@form[:part_number]}
               type="select"
               label={gettext("Needle")}
@@ -337,12 +351,14 @@ defmodule AfinadosWeb.SetupLive do
     end
   end
 
-  defp default_params(%{needles: []}), do: %{}
+  defp default_params(%{needles: [], manufacturer: manufacturer}),
+    do: %{"manufacturer" => manufacturer}
 
-  defp default_params(catalog) do
+  defp default_params(assigns) do
     %{
-      "part_number" => hd(catalog.needles).part_number,
-      "needle_jet_code" => first_field(catalog.needle_jets, :code),
+      "manufacturer" => assigns.manufacturer,
+      "part_number" => hd(assigns.needles).part_number,
+      "needle_jet_code" => first_field(assigns.needle_jets, :code),
       "high_jet_number" => "150",
       "low_jet_number" => "25",
       "clip_position" => "3",
@@ -356,6 +372,7 @@ defmodule AfinadosWeb.SetupLive do
 
   defp saved_params(setup) do
     %{
+      "manufacturer" => setup.carburetor.manufacturer,
       "part_number" => setup.needle_part_number,
       "needle_jet_code" => setup.needle_jet_code,
       "high_jet_number" => to_string(setup.high_jet_number),
@@ -385,10 +402,48 @@ defmodule AfinadosWeb.SetupLive do
   defp show_setup(socket, setup), do: recompute(socket, saved_params(setup))
 
   defp recompute(socket, params) do
+    socket = assign_catalog(socket, params["manufacturer"])
+    params = reconcile_selection(socket.assigns, params)
+
     socket
     |> assign(params: params, form: to_form(params, as: :setup), active_map: fuel_map_for(params))
     |> rebuild_chart()
   end
+
+  defp reconcile_selection(assigns, params) do
+    params
+    |> reconcile_field("part_number", Enum.map(assigns.needles, & &1.part_number))
+    |> reconcile_field("needle_jet_code", Enum.map(assigns.needle_jets, & &1.code))
+  end
+
+  defp reconcile_field(params, _key, []), do: params
+
+  defp reconcile_field(params, key, valid) do
+    case params[key] in valid do
+      true -> params
+      false -> Map.put(params, key, hd(valid))
+    end
+  end
+
+  defp assign_catalog(%{assigns: %{manufacturer: manufacturer}} = socket, manufacturer),
+    do: socket
+
+  defp assign_catalog(socket, manufacturer) do
+    assign(socket,
+      manufacturer: manufacturer,
+      needles: Catalog.list_needles(manufacturer),
+      needle_jets: Catalog.list_needle_jets(manufacturer)
+    )
+  end
+
+  defp default_manufacturer(manufacturers) do
+    case Manufacturer.default() in manufacturers do
+      true -> Manufacturer.default()
+      false -> List.first(manufacturers)
+    end
+  end
+
+  defp manufacturer_label(manufacturer), do: String.capitalize(manufacturer)
 
   defp rebuild_chart(socket) do
     active =
@@ -423,7 +478,7 @@ defmodule AfinadosWeb.SetupLive do
   end
 
   defp setup_label(setup) do
-    "#{format_jet(setup.high_jet_number)}/#{format_jet(setup.low_jet_number)} · #{setup.needle_part_number} · #{gettext("clip")} #{setup.clip_position}"
+    "#{manufacturer_label(setup.carburetor.manufacturer)} · #{format_jet(setup.high_jet_number)}/#{format_jet(setup.low_jet_number)} · #{setup.needle_part_number} · #{gettext("clip")} #{setup.clip_position}"
   end
 
   defp format_jet(number) when is_integer(number), do: Integer.to_string(number)
@@ -456,6 +511,8 @@ defmodule AfinadosWeb.SetupLive do
     do: Enum.all?(saved, &MapSet.member?(compared, &1.id))
 
   defp fuel_map_for(params) do
+    manufacturer = params["manufacturer"]
+
     with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),
          {:ok, needle_jet} <- Catalog.fetch_needle_jet(params["needle_jet_code"]),
          {high_number, ""} when high_number > 0 <-
@@ -465,8 +522,8 @@ defmodule AfinadosWeb.SetupLive do
       %Setup{
         needle: needle,
         needle_jet: needle_jet,
-        high_jet: Carburetion.build_high_jet(high_number),
-        low_jet: Carburetion.build_low_jet(low_number),
+        high_jet: Carburetion.build_high_jet(manufacturer, high_number),
+        low_jet: Carburetion.build_low_jet(manufacturer, low_number),
         clip: %Clip{position: clamp_clip(parse_int(params["clip_position"], 1), needle.num_clips)},
         shim: %Shim{hundredths: parse_int(params["shim_hundredths"], 0)},
         venturi: %Venturi{mm: parse_int(params["venturi_mm"], 1) * 1.0}

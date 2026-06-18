@@ -17,32 +17,32 @@ msgstr ""
 msgid "Attempting to reconnect"
 msgstr "Tentando reconectar"
 
-#: lib/afinados_web/live/setup_live.ex:298
+#: lib/afinados_web/live/setup_live.ex:301
 #, elixir-autogen, elixir-format
 msgid "Clip"
 msgstr "Clip"
 
-#: lib/afinados_web/live/setup_live.ex:120
+#: lib/afinados_web/live/setup_live.ex:117
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
 msgstr "Curva de área livre"
 
-#: lib/afinados_web/live/setup_live.ex:272
+#: lib/afinados_web/live/setup_live.ex:275
 #, elixir-autogen, elixir-format
 msgid "Needle"
 msgstr "Agulha"
 
-#: lib/afinados_web/live/setup_live.ex:278
+#: lib/afinados_web/live/setup_live.ex:281
 #, elixir-autogen, elixir-format
 msgid "Needle jet"
 msgstr "Difusor"
 
-#: lib/afinados_web/live/setup_live.ex:267
+#: lib/afinados_web/live/setup_live.ex:264
 #, elixir-autogen, elixir-format
 msgid "Setup"
 msgstr "Acerto"
 
-#: lib/afinados_web/live/setup_live.ex:304
+#: lib/afinados_web/live/setup_live.ex:307
 #, elixir-autogen, elixir-format
 msgid "Shim (hundredths of mm)"
 msgstr "Calço (centésimos de mm)"
@@ -52,7 +52,7 @@ msgstr "Calço (centésimos de mm)"
 msgid "Something went wrong!"
 msgstr "Algo deu errado!"
 
-#: lib/afinados_web/live/setup_live.ex:307
+#: lib/afinados_web/live/setup_live.ex:310
 #, elixir-autogen, elixir-format
 msgid "Venturi (mm)"
 msgstr "Venturi (mm)"
@@ -62,53 +62,53 @@ msgstr "Venturi (mm)"
 msgid "We can't find the internet"
 msgstr "Sem conexão com a internet"
 
-#: lib/afinados_web/live/setup_live.ex:316
+#: lib/afinados_web/live/setup_live.ex:319
 #, elixir-autogen, elixir-format
 msgid "Save setup"
 msgstr "Salvar acerto"
 
-#: lib/afinados_web/live/setup_live.ex:226
+#: lib/afinados_web/live/setup_live.ex:223
 #, elixir-autogen, elixir-format
 msgid "Saved setups"
 msgstr "Acertos salvos"
 
-#: lib/afinados_web/live/setup_live.ex:426
+#: lib/afinados_web/live/setup_live.ex:452
 #, elixir-autogen, elixir-format
 msgid "clip"
 msgstr "clip"
 
-#: lib/afinados_web/live/setup_live.ex:284
+#: lib/afinados_web/live/setup_live.ex:287
 #, elixir-autogen, elixir-format
 msgid "Main jet"
 msgstr "Gicle de alta"
 
-#: lib/afinados_web/live/setup_live.ex:291
+#: lib/afinados_web/live/setup_live.ex:294
 #, elixir-autogen, elixir-format
 msgid "Pilot jet"
 msgstr "Gicle de baixa"
 
-#: lib/afinados_web/live/setup_live.ex:237
-#: lib/afinados_web/live/setup_live.ex:246
+#: lib/afinados_web/live/setup_live.ex:234
+#: lib/afinados_web/live/setup_live.ex:243
 #, elixir-autogen, elixir-format
 msgid "Compare"
 msgstr "Comparar"
 
-#: lib/afinados_web/live/setup_live.ex:397
+#: lib/afinados_web/live/setup_live.ex:423
 #, elixir-autogen, elixir-format
 msgid "Current"
 msgstr "Atual"
 
-#: lib/afinados_web/live/setup_live.ex:406
+#: lib/afinados_web/live/setup_live.ex:432
 #, elixir-autogen, elixir-format
 msgid "Throttle (%)"
 msgstr "Acelerador (%)"
 
-#: lib/afinados_web/live/setup_live.ex:407
+#: lib/afinados_web/live/setup_live.ex:433
 #, elixir-autogen, elixir-format
 msgid "Needle travel (mm)"
 msgstr "Curso da agulha (mm)"
 
-#: lib/afinados_web/live/setup_live.ex:223
+#: lib/afinados_web/live/setup_live.ex:220
 #, elixir-autogen, elixir-format
 msgid "Setup controls"
 msgstr "Controles do acerto"
@@ -118,27 +118,27 @@ msgstr "Controles do acerto"
 msgid "Toggle theme"
 msgstr "Alternar tema"
 
-#: lib/afinados_web/live/setup_live.ex:65
+#: lib/afinados_web/live/setup_live.ex:62
 #, elixir-autogen, elixir-format
 msgid "Could not save the setup"
 msgstr "Não foi possível salvar o acerto"
 
-#: lib/afinados_web/live/setup_live.ex:257
+#: lib/afinados_web/live/setup_live.ex:254
 #, elixir-autogen, elixir-format
 msgid "Delete setup"
 msgstr "Apagar acerto"
 
-#: lib/afinados_web/live/setup_live.ex:256
+#: lib/afinados_web/live/setup_live.ex:253
 #, elixir-autogen, elixir-format
 msgid "Delete this setup?"
 msgstr "Apagar este acerto?"
 
-#: lib/afinados_web/live/setup_live.ex:82
+#: lib/afinados_web/live/setup_live.ex:79
 #, elixir-autogen, elixir-format
 msgid "Setup deleted"
 msgstr "Acerto apagado"
 
-#: lib/afinados_web/live/setup_live.ex:62
+#: lib/afinados_web/live/setup_live.ex:59
 #, elixir-autogen, elixir-format
 msgid "Setup saved"
 msgstr "Acerto salvo"
@@ -148,28 +148,28 @@ msgstr "Acerto salvo"
 msgid "Close"
 msgstr "Fechar"
 
-#: lib/afinados_web/live/setup_live.ex:229
+#: lib/afinados_web/live/setup_live.ex:226
 #, elixir-autogen, elixir-format
 msgid "No saved setups yet."
 msgstr "Nenhum acerto salvo ainda."
 
 #: lib/afinados_web/live/hub_live.ex:17
-#: lib/afinados_web/live/setup_live.ex:213
+#: lib/afinados_web/live/setup_live.ex:210
 #, elixir-autogen, elixir-format
 msgid "Comparative estimate only, not jetting advice."
 msgstr "Apenas estimativa comparativa, não recomendação de gicleagem."
 
-#: lib/afinados_web/live/setup_live.ex:218
+#: lib/afinados_web/live/setup_live.ex:215
 #, elixir-autogen, elixir-format
 msgid "Enter a valid setup to see the curve."
 msgstr "Informe um acerto válido para ver a curva."
 
-#: lib/afinados_web/live/setup_live.ex:312
+#: lib/afinados_web/live/setup_live.ex:315
 #, elixir-autogen, elixir-format
 msgid "View by"
 msgstr "Ver por"
 
-#: lib/afinados_web/live/setup_live.ex:381
+#: lib/afinados_web/live/setup_live.ex:387
 #, elixir-autogen, elixir-format
 msgid "Setup not found, redirecting."
 msgstr "Acerto não encontrado, redirecionando."
@@ -180,7 +180,7 @@ msgid "Tools for carburetor tuning."
 msgstr "Ferramentas para acerto de carburador."
 
 #: lib/afinados_web/live/hub_live.ex:23
-#: lib/afinados_web/live/setup_live.ex:221
+#: lib/afinados_web/live/setup_live.ex:218
 #, elixir-autogen, elixir-format
 msgid "Fuel-passage area"
 msgstr "Área de passagem de combustível"
@@ -217,3 +217,8 @@ msgstr "O Afinados reúne ferramentas de cálculo para preparação de motocicle
 #, elixir-autogen, elixir-format
 msgid "Afinados, calculation tools for motorcycle tuning"
 msgstr "Afinados, ferramentas de cálculo para preparação de motocicletas"
+
+#: lib/afinados_web/live/setup_live.ex:269
+#, elixir-autogen, elixir-format
+msgid "Manufacturer"
+msgstr "Fabricante"

@@ -25,7 +25,7 @@ defmodule Afinados.SeedsTest do
     test "loads the complete needle reference dataset" do
       Seeds.run("prod")
 
-      assert length(Catalog.list_needles()) == length(Needle.data())
+      assert length(Catalog.list_needles("mikuni")) == length(Needle.data())
     end
   end
 end

@@ -141,18 +141,18 @@ defmodule Afinados.CarburetionTest do
     end
   end
 
-  describe "build_high_jet/1" do
+  describe "build_high_jet/2" do
     test "derives the area from the nominal diameter (number/100 mm)" do
-      assert_in_delta Carburetion.build_high_jet(150).free_area_mm2,
+      assert_in_delta Carburetion.build_high_jet("mikuni", 150).free_area_mm2,
                       :math.pi() / 4 * 1.5 * 1.5,
                       0.0001
     end
   end
 
-  describe "build_low_jet/1" do
+  describe "build_low_jet/2" do
     test "area is linear in the flow number" do
-      assert_in_delta Carburetion.build_low_jet(50).free_area_mm2,
-                      2 * Carburetion.build_low_jet(25).free_area_mm2,
+      assert_in_delta Carburetion.build_low_jet("mikuni", 50).free_area_mm2,
+                      2 * Carburetion.build_low_jet("mikuni", 25).free_area_mm2,
                       0.0001
     end
   end

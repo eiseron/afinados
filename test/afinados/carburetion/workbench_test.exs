@@ -27,6 +27,7 @@ defmodule Afinados.Carburetion.WorkbenchTest do
 
   defp valid_params do
     %{
+      "manufacturer" => "mikuni",
       "venturi_mm" => "34",
       "part_number" => "4D3",
       "needle_jet_code" => "159-P4",
@@ -42,6 +43,12 @@ defmodule Afinados.Carburetion.WorkbenchTest do
       {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
 
       assert setup.garage_id == ctx.garage.id
+    end
+
+    test "records the chosen manufacturer on the carburetor", ctx do
+      {:ok, setup} = Workbench.save_setup(ctx.garage, valid_params())
+
+      assert Repo.get!(Workbench.Carburetor, setup.carburetor_id).manufacturer == "mikuni"
     end
 
     test "rejects a non-positive venturi", ctx do

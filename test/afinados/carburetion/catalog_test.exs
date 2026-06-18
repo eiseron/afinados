@@ -36,6 +36,19 @@ defmodule Afinados.Carburetion.CatalogTest do
     |> Repo.insert!()
   end
 
+  defp seed_keihin_needle do
+    %Catalog.Needle{}
+    |> Catalog.Needle.changeset(%{
+      part_number: "90DT",
+      manufacturer: "keihin",
+      total_length_tenths_mm: 503,
+      taper_points_tenths_mm: [253],
+      station_diameters_um: [2511, 2511, 2421, 2253, 2100],
+      num_clips: 5
+    })
+    |> Repo.insert!()
+  end
+
   describe "fetch_needle/1" do
     test "resolves the catalog record into a pure needle in millimeters" do
       seed_needle()
@@ -72,6 +85,22 @@ defmodule Afinados.Carburetion.CatalogTest do
 
     test "returns :error for a nil code without querying" do
       assert Catalog.fetch_needle_jet(nil) == :error
+    end
+  end
+
+  describe "scoping by manufacturer" do
+    test "list_needles/1 returns only the manufacturer's needles" do
+      seed_needle()
+      seed_keihin_needle()
+
+      assert Enum.map(Catalog.list_needles("mikuni"), & &1.part_number) == ["4D3"]
+    end
+
+    test "list_manufacturers/0 lists the distinct seeded manufacturers" do
+      seed_needle()
+      seed_keihin_needle()
+
+      assert Catalog.list_manufacturers() == ["keihin", "mikuni"]
     end
   end
 

@@ -8,11 +8,24 @@ defmodule Afinados.Carburetion.Catalog do
   alias Afinados.Carburetion.{Needle, NeedleJet}
   alias Afinados.Repo
 
-  @spec list_needles() :: [NeedleRecord.t()]
-  def list_needles, do: Repo.all(from n in NeedleRecord, order_by: n.part_number)
+  @spec list_manufacturers() :: [String.t()]
+  def list_manufacturers do
+    Repo.all(
+      from n in NeedleRecord, distinct: true, select: n.manufacturer, order_by: n.manufacturer
+    )
+  end
 
-  @spec list_needle_jets() :: [NeedleJetRecord.t()]
-  def list_needle_jets, do: Repo.all(from j in NeedleJetRecord, order_by: j.code)
+  @spec list_needles(String.t()) :: [NeedleRecord.t()]
+  def list_needles(manufacturer) do
+    Repo.all(
+      from n in NeedleRecord, where: n.manufacturer == ^manufacturer, order_by: n.part_number
+    )
+  end
+
+  @spec list_needle_jets(String.t()) :: [NeedleJetRecord.t()]
+  def list_needle_jets(manufacturer) do
+    Repo.all(from j in NeedleJetRecord, where: j.manufacturer == ^manufacturer, order_by: j.code)
+  end
 
   @spec fetch_needle(String.t() | nil) :: {:ok, Needle.t()} | :error
   def fetch_needle(nil), do: :error

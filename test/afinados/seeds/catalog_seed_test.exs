@@ -20,6 +20,6 @@ defmodule Afinados.Seeds.CatalogSeedTest do
     Needle.seed()
     Needle.seed()
 
-    assert length(Catalog.list_needles()) == length(Needle.data())
+    assert length(Catalog.list_needles("mikuni")) == length(Needle.data())
   end
 end
