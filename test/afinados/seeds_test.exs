@@ -13,13 +13,13 @@ defmodule Afinados.SeedsTest do
     test "makes a known needle resolvable through the catalog" do
       Seeds.run("prod")
 
-      assert {:ok, %{part_number: "4D3"}} = Catalog.fetch_needle("4D3")
+      assert {:ok, %{part_number: "4D3"}} = Catalog.fetch_needle("mikuni", "4D3")
     end
 
     test "makes a known needle jet resolvable through the catalog" do
       Seeds.run("prod")
 
-      assert {:ok, %{code: "159-P-5"}} = Catalog.fetch_needle_jet("159-P-5")
+      assert {:ok, %{code: "159-P-5"}} = Catalog.fetch_needle_jet("mikuni", "159-P-5")
     end
 
     test "loads the complete needle reference dataset" do

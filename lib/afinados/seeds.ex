@@ -1,5 +1,7 @@
 defmodule Afinados.Seeds do
   @moduledoc false
+  alias Afinados.Seeds.Carburetion.KeihinNeedle
+  alias Afinados.Seeds.Carburetion.KeihinNeedleJet
   alias Afinados.Seeds.Carburetion.Needle
   alias Afinados.Seeds.Carburetion.NeedleJet
 
@@ -12,6 +14,8 @@ defmodule Afinados.Seeds do
   defp seed_reference_data do
     Needle.seed()
     NeedleJet.seed()
+    KeihinNeedle.seed()
+    KeihinNeedleJet.seed()
     :ok
   end
 

@@ -16,9 +16,20 @@ defmodule Afinados.Carburetion.Catalog do
   end
 
   @spec list_needles(String.t()) :: [NeedleRecord.t()]
-  def list_needles(manufacturer) do
+  def list_needles(manufacturer), do: list_needles(manufacturer, nil)
+
+  @spec list_needles(String.t(), String.t() | nil) :: [NeedleRecord.t()]
+  def list_needles(manufacturer, nil) do
     Repo.all(
       from n in NeedleRecord, where: n.manufacturer == ^manufacturer, order_by: n.part_number
+    )
+  end
+
+  def list_needles(manufacturer, series) do
+    Repo.all(
+      from n in NeedleRecord,
+        where: n.manufacturer == ^manufacturer and n.series == ^series,
+        order_by: n.part_number
     )
   end
 
@@ -27,21 +38,23 @@ defmodule Afinados.Carburetion.Catalog do
     Repo.all(from j in NeedleJetRecord, where: j.manufacturer == ^manufacturer, order_by: j.code)
   end
 
-  @spec fetch_needle(String.t() | nil) :: {:ok, Needle.t()} | :error
-  def fetch_needle(nil), do: :error
+  @spec fetch_needle(String.t() | nil, String.t() | nil) :: {:ok, Needle.t()} | :error
+  def fetch_needle(_manufacturer, nil), do: :error
+  def fetch_needle(nil, _part_number), do: :error
 
-  def fetch_needle(part_number) do
-    case Repo.get_by(NeedleRecord, part_number: part_number) do
+  def fetch_needle(manufacturer, part_number) do
+    case Repo.get_by(NeedleRecord, manufacturer: manufacturer, part_number: part_number) do
       nil -> :error
       record -> {:ok, build_needle(record)}
     end
   end
 
-  @spec fetch_needle_jet(String.t() | nil) :: {:ok, NeedleJet.t()} | :error
-  def fetch_needle_jet(nil), do: :error
+  @spec fetch_needle_jet(String.t() | nil, String.t() | nil) :: {:ok, NeedleJet.t()} | :error
+  def fetch_needle_jet(_manufacturer, nil), do: :error
+  def fetch_needle_jet(nil, _code), do: :error
 
-  def fetch_needle_jet(code) do
-    case Repo.get_by(NeedleJetRecord, code: code) do
+  def fetch_needle_jet(manufacturer, code) do
+    case Repo.get_by(NeedleJetRecord, manufacturer: manufacturer, code: code) do
       nil -> :error
       record -> {:ok, build_needle_jet(record)}
     end

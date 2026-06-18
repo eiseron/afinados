@@ -49,7 +49,7 @@ defmodule Afinados.Carburetion.CatalogTest do
     |> Repo.insert!()
   end
 
-  describe "fetch_needle/1" do
+  describe "fetch_needle/2" do
     test "resolves the catalog record into a pure needle in millimeters" do
       seed_needle()
 
@@ -60,31 +60,32 @@ defmodule Afinados.Carburetion.CatalogTest do
                 taper_points_mm: [25.3],
                 station_diameters_mm: [2.511, 2.511, 2.421, 2.253, 2.1],
                 num_clips: 5
-              }} = Catalog.fetch_needle("4D3")
+              }} = Catalog.fetch_needle("mikuni", "4D3")
     end
 
     test "returns :error for an unknown part number" do
-      assert Catalog.fetch_needle("nope") == :error
+      assert Catalog.fetch_needle("mikuni", "nope") == :error
     end
 
     test "returns :error for a nil part number without querying" do
-      assert Catalog.fetch_needle(nil) == :error
+      assert Catalog.fetch_needle("mikuni", nil) == :error
     end
   end
 
-  describe "fetch_needle_jet/1" do
+  describe "fetch_needle_jet/2" do
     test "resolves the bore from micrometers into millimeters" do
       seed_needle_jet()
 
-      assert {:ok, %NeedleJet{code: "159-P4", bore_mm: 2.7}} = Catalog.fetch_needle_jet("159-P4")
+      assert {:ok, %NeedleJet{code: "159-P4", bore_mm: 2.7}} =
+               Catalog.fetch_needle_jet("mikuni", "159-P4")
     end
 
     test "returns :error for an unknown code" do
-      assert Catalog.fetch_needle_jet("nope") == :error
+      assert Catalog.fetch_needle_jet("mikuni", "nope") == :error
     end
 
     test "returns :error for a nil code without querying" do
-      assert Catalog.fetch_needle_jet(nil) == :error
+      assert Catalog.fetch_needle_jet("mikuni", nil) == :error
     end
   end
 
@@ -107,8 +108,8 @@ defmodule Afinados.Carburetion.CatalogTest do
   test "resolves catalog integer units end-to-end into the computed annular area (mm/mm²)" do
     seed_needle()
     seed_needle_jet()
-    {:ok, needle} = Catalog.fetch_needle("4D3")
-    {:ok, needle_jet} = Catalog.fetch_needle_jet("159-P4")
+    {:ok, needle} = Catalog.fetch_needle("mikuni", "4D3")
+    {:ok, needle_jet} = Catalog.fetch_needle_jet("mikuni", "159-P4")
 
     setup = %Setup{
       needle: needle,

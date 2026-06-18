@@ -8,15 +8,19 @@ defmodule Afinados.Carburetion.Catalog.Needle do
   @fields [
     :part_number,
     :manufacturer,
+    :series,
     :total_length_tenths_mm,
     :taper_points_tenths_mm,
     :station_diameters_um,
     :num_clips
   ]
 
+  @required @fields -- [:series]
+
   schema "needles" do
     field :part_number, :string
     field :manufacturer, :string
+    field :series, :string
     field :total_length_tenths_mm, :integer
     field :taper_points_tenths_mm, {:array, :integer}
     field :station_diameters_um, {:array, :integer}
@@ -28,7 +32,7 @@ defmodule Afinados.Carburetion.Catalog.Needle do
   def changeset(needle, attrs) do
     needle
     |> cast(attrs, @fields)
-    |> validate_required(@fields)
+    |> validate_required(@required)
     |> validate_number(:num_clips, greater_than: 0)
     |> validate_length(:taper_points_tenths_mm, min: 1)
     |> validate_length(:station_diameters_um, min: 2)

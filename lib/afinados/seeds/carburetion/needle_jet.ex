@@ -29,7 +29,10 @@ defmodule Afinados.Seeds.Carburetion.NeedleJet do
     Enum.each(data(), fn attrs ->
       %Catalog.NeedleJet{}
       |> Catalog.NeedleJet.changeset(attrs)
-      |> Repo.insert!(on_conflict: :nothing, conflict_target: :code)
+      |> Repo.insert!(
+        on_conflict: {:replace_all_except, [:id, :inserted_at]},
+        conflict_target: :code
+      )
     end)
   end
 end

@@ -9,14 +9,14 @@ A ferramenta de área de passagem calcula **área geométrica**, não vazão. É
 
 ## O que é calculado
 
-A área livre de passagem de combustível (mm²) ao longo do acelerador, a partir de:
+A área livre de passagem de combustível (mm²) ao longo do acelerador, como **soma** de duas contribuições paralelas:
 
-- o **perfil da agulha** dentro do furo do difusor (a área anular entre agulha e difusor);
-- o **gicle de alta**, modelado como restrição **em série** com a passagem anular. A área efetiva tende ao gicle de alta, mas nunca atinge um teto duro.
-- o **gicle de baixa**, modelado como um **piso** constante presente em toda a curva;
-- o **venturi**, que define o curso da agulha e, portanto, até onde a curva vai. Não muda o formato do trecho comum.
+- o circuito **principal**: a passagem anular entre agulha e difusor **em série** com o gicle de alta. A área efetiva tende ao gicle de alta, mas nunca atinge um teto duro;
+- o circuito do **gicle de baixa**, somado em paralelo como uma contribuição constante presente em toda a curva.
 
-A curva começa na marcha lenta, com a agulha ancorada no início do cone, e sobe com o acelerador.
+O **venturi** define o curso da agulha e, portanto, até onde a curva vai. Não muda o formato do trecho comum.
+
+A curva começa na marcha lenta — já com a contribuição do circuito principal no ponto de idle somada à do gicle de baixa — e sobe com o acelerador conforme a agulha levanta e a área anular abre.
 
 ## O que NÃO é calculado
 
@@ -25,8 +25,8 @@ A curva começa na marcha lenta, com a agulha ancorada no início do cone, e sob
 
 ## Aproximações conhecidas
 
-- A área do **gicle de baixa** é tomada proporcional à numeração; a constante de calibração depende de dados de bancada.
-- O **gicle de alta** é aproximado pelo diâmetro nominal.
+- A área do **gicle de baixa** Keihin é derivada do diâmetro nominal (numeração em centésimos de mm). A do Mikuni é tomada proporcional à numeração como placeholder; a constante de calibração depende de dados de bancada.
+- O **gicle de alta** é aproximado pelo diâmetro nominal (idem para Mikuni round-head e Keihin).
 - O **venturi** é aproximado pelo curso da agulha.
 - Outras marcas de carburador (ex.: Keihin) são modeladas a partir do catálogo próprio; a equivalência entre marcas é aproximada.
 

@@ -58,8 +58,7 @@ defmodule Afinados.Carburetion do
 
   @spec compute_free_area(Setup.t(), number()) :: float()
   def compute_free_area(%Setup{low_jet: low_jet} = setup, h) do
-    idle = compute_effective_area(setup, h0(setup))
-    low_jet.free_area_mm2 + max(compute_effective_area(setup, h) - idle, 0.0)
+    compute_effective_area(setup, h) + low_jet.free_area_mm2
   end
 
   @spec build_fuel_map(Setup.t()) :: FuelMap.t()

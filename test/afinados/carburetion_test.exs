@@ -42,8 +42,12 @@ defmodule Afinados.CarburetionTest do
       assert {Float.round(map.h0, 4), Float.round(map.h_max, 4)} == {28.3, 62.3}
     end
 
-    test "at idle (0%) the free area is the pilot floor", %{setup: setup} do
-      assert_in_delta List.first(areas(setup)), setup.low_jet.free_area_mm2, 1.0e-9
+    test "at idle (0%) the free area is the idle effective plus the pilot floor", %{setup: setup} do
+      expected =
+        Carburetion.compute_effective_area(setup, Carburetion.h0(setup)) +
+          setup.low_jet.free_area_mm2
+
+      assert_in_delta List.first(areas(setup)), expected, 1.0e-9
     end
 
     test "no point falls below the pilot floor", %{setup: setup} do
@@ -107,9 +111,11 @@ defmodule Afinados.CarburetionTest do
   end
 
   describe "compute_free_area/2 (pilot floor)" do
-    test "at idle equals the pilot floor exactly", %{setup: setup} do
+    test "at idle equals the effective area at h0 plus the pilot floor", %{setup: setup} do
+      idle_effective = Carburetion.compute_effective_area(setup, Carburetion.h0(setup))
+
       assert_in_delta Carburetion.compute_free_area(setup, Carburetion.h0(setup)),
-                      setup.low_jet.free_area_mm2,
+                      idle_effective + setup.low_jet.free_area_mm2,
                       1.0e-9
     end
 

@@ -7,13 +7,13 @@ defmodule Afinados.Seeds.CatalogSeedTest do
   test "seeding the catalog makes a known needle resolvable" do
     Needle.seed()
 
-    assert {:ok, %{part_number: "4D3"}} = Catalog.fetch_needle("4D3")
+    assert {:ok, %{part_number: "4D3"}} = Catalog.fetch_needle("mikuni", "4D3")
   end
 
   test "seeding the catalog makes a known needle jet resolvable" do
     NeedleJet.seed()
 
-    assert {:ok, %{code: "159-P-5"}} = Catalog.fetch_needle_jet("159-P-5")
+    assert {:ok, %{code: "159-P-5"}} = Catalog.fetch_needle_jet("mikuni", "159-P-5")
   end
 
   test "seeding twice stays idempotent" do

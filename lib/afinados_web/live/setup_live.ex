@@ -513,8 +513,8 @@ defmodule AfinadosWeb.SetupLive do
   defp fuel_map_for(params) do
     manufacturer = params["manufacturer"]
 
-    with {:ok, needle} <- Catalog.fetch_needle(params["part_number"]),
-         {:ok, needle_jet} <- Catalog.fetch_needle_jet(params["needle_jet_code"]),
+    with {:ok, needle} <- Catalog.fetch_needle(manufacturer, params["part_number"]),
+         {:ok, needle_jet} <- Catalog.fetch_needle_jet(manufacturer, params["needle_jet_code"]),
          {high_number, ""} when high_number > 0 <-
            Integer.parse(to_string(params["high_jet_number"])),
          {low_number, ""} when low_number > 0 <-

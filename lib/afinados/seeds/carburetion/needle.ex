@@ -90,7 +90,10 @@ defmodule Afinados.Seeds.Carburetion.Needle do
     Enum.each(data(), fn attrs ->
       %Catalog.Needle{}
       |> Catalog.Needle.changeset(attrs)
-      |> Repo.insert!(on_conflict: :nothing, conflict_target: :part_number)
+      |> Repo.insert!(
+        on_conflict: {:replace_all_except, [:id, :inserted_at]},
+        conflict_target: :part_number
+      )
     end)
   end
 end

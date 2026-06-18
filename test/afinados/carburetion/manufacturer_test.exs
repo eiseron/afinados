@@ -26,10 +26,20 @@ defmodule Afinados.Carburetion.ManufacturerTest do
   end
 
   describe "low_jet_area/2" do
-    test "is linear in the jet number for a manufacturer" do
+    test "for Mikuni grows linearly in the jet number (placeholder; pilot is proprietary flow)" do
       assert_in_delta Manufacturer.low_jet_area("mikuni", 50),
                       2 * Manufacturer.low_jet_area("mikuni", 25),
                       0.0001
+    end
+
+    test "for Keihin derives the area from the nominal diameter (n/100 mm)" do
+      assert_in_delta Manufacturer.low_jet_area("keihin", 45),
+                      :math.pi() / 4 * 0.45 * 0.45,
+                      0.0001
+    end
+
+    test "differs between Mikuni and Keihin for the same jet number" do
+      refute Manufacturer.low_jet_area("mikuni", 25) == Manufacturer.low_jet_area("keihin", 25)
     end
 
     test "falls back to the default parametrisation for an unknown manufacturer" do

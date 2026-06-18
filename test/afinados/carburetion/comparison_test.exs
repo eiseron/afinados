@@ -52,16 +52,14 @@ defmodule Afinados.Carburetion.ComparisonTest do
     assert Enum.all?(diffs, &(abs(&1 - 0.125) < 1.0e-9))
   end
 
-  test "the difference can change sign across the curve" do
-    a = %{base_setup() | low_jet: %LowJet{number: 30.0, free_area_mm2: 0.15}}
-
-    b = %{
+  test "a bigger main jet widens the difference as the throttle opens" do
+    bigger_main = %{
       base_setup()
       | high_jet: %HighJet{number: 400, free_area_mm2: :math.pi() / 4 * 4.0 * 4.0}
     }
 
-    diffs = Enum.map(diff(a, b), & &1.difference)
+    diffs = Enum.map(diff(base_setup(), bigger_main), & &1.difference)
 
-    assert Enum.any?(diffs, &(&1 < 0.0)) and Enum.any?(diffs, &(&1 > 0.0))
+    assert List.last(diffs) > List.first(diffs)
   end
 end

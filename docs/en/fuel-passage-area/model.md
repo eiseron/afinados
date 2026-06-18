@@ -9,14 +9,14 @@ The fuel-passage area tool computes **geometric area**, not flow rate. It is a c
 
 ## What is calculated
 
-The free fuel-passage area (mm²) across throttle, from:
+The free fuel-passage area (mm²) across throttle, as the **sum** of two parallel contributions:
 
-- the **needle profile** in the needle jet bore (the annular area between needle and bore);
-- the **main jet**, modeled as a restriction **in series** with the annular passage. The effective area tends toward the main jet but never reaches a hard ceiling.
-- the **pilot jet**, modeled as a constant **floor** present across the whole curve;
-- the **venturi**, which sets the needle stroke and therefore how far the curve goes. It does not change the shape of the shared section.
+- the **main circuit**: the annular passage between needle and needle jet **in series** with the main jet. The effective area tends toward the main jet but never reaches a hard ceiling;
+- the **pilot circuit**, added in parallel as a constant contribution present across the whole curve.
 
-The curve starts at idle, with the needle anchored at the start of its taper, and rises with throttle.
+The **venturi** sets the needle stroke and therefore how far the curve goes. It does not change the shape of the shared section.
+
+The curve starts at idle — with the main circuit's contribution at the idle position summed with the pilot — and rises with throttle as the needle lifts and the annular area opens.
 
 ## What is NOT calculated
 
@@ -25,8 +25,8 @@ The curve starts at idle, with the needle anchored at the start of its taper, an
 
 ## Known approximations
 
-- **Pilot jet** area is taken proportional to the jet number; the calibration constant is pending bench data.
-- **Main jet** is approximated by its nominal diameter.
+- **Pilot jet** Keihin area is derived from its nominal diameter (jets numbered in 1/100 mm). Mikuni's is taken proportional to the jet number as a placeholder; the calibration constant is pending bench data.
+- **Main jet** is approximated by its nominal diameter (modern round-head Mikuni and Keihin alike).
 - **Venturi** is approximated by the needle stroke.
 - Other carburetor brands (e.g. Keihin) are modeled from their own catalog data; cross-brand equivalence is approximate.
 

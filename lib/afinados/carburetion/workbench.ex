@@ -58,8 +58,8 @@ defmodule Afinados.Carburetion.Workbench do
         %Setup{carburetor: %Carburetor{venturi_mm: venturi_mm, manufacturer: manufacturer}} =
           setup
       ) do
-    with {:ok, needle} <- Catalog.fetch_needle(setup.needle_part_number),
-         {:ok, needle_jet} <- Catalog.fetch_needle_jet(setup.needle_jet_code) do
+    with {:ok, needle} <- Catalog.fetch_needle(manufacturer, setup.needle_part_number),
+         {:ok, needle_jet} <- Catalog.fetch_needle_jet(manufacturer, setup.needle_jet_code) do
       {:ok,
        %ResolvedSetup{
          needle: needle,

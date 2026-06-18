@@ -89,6 +89,44 @@ defmodule AfinadosWeb.SetupLiveTest do
     refute select =~ "rochester"
   end
 
+  test "offers keihin in the manufacturer select once its catalog is seeded", %{conn: conn} do
+    insert_needle("N427-OC-DBK", "keihin")
+
+    {:ok, _view, html} = live(conn, "/carburetion/setups")
+    [select] = Regex.run(~r{<select[^>]*manufacturer.*?</select>}s, html)
+
+    assert select =~ ~s(value="keihin")
+  end
+
+  test "computes a curve for a keihin setup", %{conn: conn} do
+    insert_needle("N427-OC-DBK", "keihin")
+
+    %Catalog.NeedleJet{}
+    |> Catalog.NeedleJet.changeset(%{
+      code: "FCR/PWK 2.9mm",
+      manufacturer: "keihin",
+      bore_um: 2900
+    })
+    |> Repo.insert!()
+
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
+
+    params = %{
+      "manufacturer" => "keihin",
+      "part_number" => "N427-OC-DBK",
+      "needle_jet_code" => "FCR/PWK 2.9mm",
+      "high_jet_number" => "150",
+      "low_jet_number" => "25",
+      "clip_position" => "3",
+      "shim_hundredths" => "0",
+      "venturi_mm" => "34"
+    }
+
+    html = render_change(view, "change", %{"setup" => params})
+
+    assert Regex.match?(~r/<polyline/, html)
+  end
+
   test "switching manufacturer reconciles a stale needle and jet selection", %{conn: conn} do
     insert_needle("90DT", "keihin")
 
