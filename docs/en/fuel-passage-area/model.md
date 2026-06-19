@@ -18,6 +18,8 @@ The **venturi** sets the needle stroke and therefore how far the curve goes. It 
 
 The curve starts at idle — with the main circuit's contribution at the idle position summed with the pilot — and rises with throttle as the needle lifts and the annular area opens.
 
+The catalog covers Mikuni and Keihin (FCR 28-41mm, PWK/PJ 34-39mm). Drop-in clones such as NIBBI, KOSO and OKO share the original geometry, so the same catalog applies to them.
+
 ## What is NOT calculated
 
 - **Flow rate (vazão).** Turning area into flow needs the discharge coefficient, fuel density and the pressure drop, which are out of scope here.
@@ -32,4 +34,5 @@ The curve starts at idle — with the main circuit's contribution at the idle po
 
 ## Sources
 
-- Catalog data (Mikuni needles, needle jets, jets) from [jetsrus.com](https://www.jetsrus.com/).
+- Catalog data (Mikuni and Keihin needles and needle jets) from [jetsrus.com](https://www.jetsrus.com/).
+- Keihin FCR/PWK jet-needle geometry from the official Keihin PDFs (keihin-na.com).

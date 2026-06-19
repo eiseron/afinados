@@ -10,11 +10,12 @@ alters the fuel passage, so you tune with method instead of guesswork.
 
 ## What it does
 
-Afinados models the free fuel-passage area of a Mikuni carburetor across throttle
-position. Build a setup from the catalog (needle, needle jet, high/low jets, clip,
-shim and venturi), read the resulting curve, and overlay two setups to see, with a
-signed difference, where one flows more or less than the other before touching the
-engine.
+Afinados models the free fuel-passage area of a Mikuni or Keihin carburetor across
+throttle position — including drop-in equivalents (NIBBI, KOSO, OKO and other
+clones that share the original geometry). Build a setup from the catalog
+(manufacturer, needle, needle jet, high/low jets, clip, shim and venturi), read the
+resulting curve, and overlay two setups to see, with a signed difference, where one
+flows more or less than the other before touching the engine.
 
 It produces geometric estimates, not measured flow. It does not replace bench, dyno
 or track testing.

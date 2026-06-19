@@ -11,7 +11,7 @@ O Afinados é um conjunto de ferramentas para apoiar o acerto de carburador. Cad
 
 ## Ferramentas
 
-- [Área de passagem de combustível](fuel-passage-area/index.md): estime e compare a área de passagem de combustível de um carburador Mikuni ao longo da posição do acelerador.
+- [Área de passagem de combustível](fuel-passage-area/index.md): estime e compare a área de passagem de combustível de um carburador Mikuni ou Keihin (incluindo cópias drop-in como NIBBI, KOSO e OKO) ao longo da posição do acelerador.
 
 Mais ferramentas a caminho.
 

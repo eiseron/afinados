@@ -11,7 +11,7 @@ Afinados is a set of tools to support carburetor tuning. Each tool has its own s
 
 ## Tools
 
-- [Fuel-passage area](fuel-passage-area/index.md): estimate and compare the fuel-passage area of a Mikuni carburetor across throttle position.
+- [Fuel-passage area](fuel-passage-area/index.md): estimate and compare the fuel-passage area of a Mikuni or Keihin carburetor (including drop-in clones such as NIBBI, KOSO and OKO) across throttle position.
 
 More tools are on the way.
 

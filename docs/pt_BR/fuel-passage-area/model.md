@@ -18,6 +18,8 @@ O **venturi** define o curso da agulha e, portanto, até onde a curva vai. Não 
 
 A curva começa na marcha lenta — já com a contribuição do circuito principal no ponto de idle somada à do gicle de baixa — e sobe com o acelerador conforme a agulha levanta e a área anular abre.
 
+O catálogo cobre Mikuni e Keihin (FCR 28-41mm, PWK/PJ 34-39mm). Cópias drop-in como NIBBI, KOSO e OKO compartilham as mesmas dimensões dos originais, então o mesmo catálogo se aplica a elas.
+
 ## O que NÃO é calculado
 
 - **Vazão.** Transformar área em vazão exige o coeficiente de descarga, a densidade do combustível e a queda de pressão, que estão fora do escopo aqui.
@@ -32,4 +34,5 @@ A curva começa na marcha lenta — já com a contribuição do circuito princip
 
 ## Fontes
 
-- Dados do catálogo (agulhas, difusores e gicles Mikuni) do [jetsrus.com](https://www.jetsrus.com/).
+- Dados do catálogo (agulhas e difusores Mikuni e Keihin) do [jetsrus.com](https://www.jetsrus.com/).
+- Geometria das agulhas Keihin FCR/PWK dos PDFs oficiais Keihin (keihin-na.com).
