@@ -15,6 +15,10 @@ O Afinados é um conjunto de ferramentas para apoiar o acerto de carburador. Cad
 
 Mais ferramentas a caminho.
 
+## Novidades
+
+- [Novidades da versão 0.2](releases.md): o que mudou na linha 0.2.
+
 ## Legal
 
 - [Política de Privacidade](legal/privacy.md)

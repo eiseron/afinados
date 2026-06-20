@@ -15,6 +15,10 @@ Afinados is a set of tools to support carburetor tuning. Each tool has its own s
 
 More tools are on the way.
 
+## What's new
+
+- [What's new in 0.2](releases.md): user-facing changes in the 0.2 line.
+
 ## Legal
 
 - [Privacy Policy](legal/privacy.md)
