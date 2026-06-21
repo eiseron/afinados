@@ -14,7 +14,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @vb_w 360
   @vb_h 242
   @pad_left 44
-  @pad_right 32
+  @pad_right 20
   @pad_top 22
   @pad_bottom 40
   @plot_w @vb_w - @pad_left - @pad_right
@@ -59,6 +59,16 @@ defmodule AfinadosWeb.IntakeSizingLive do
     <main class="intake-sizing">
       <section :if={@chart} class="chart-panel" aria-label={gettext("Efficiency zone")}>
         <svg viewBox={"0 0 #{@chart.vb_w} #{@chart.vb_h}"} width="100%" role="img" class="curve">
+          <defs>
+            <clipPath id="plot-clip">
+              <rect
+                x={@chart.x0}
+                y={@chart.y_top}
+                width={@chart.x1 - @chart.x0}
+                height={@chart.y_bottom - @chart.y_top}
+              />
+            </clipPath>
+          </defs>
           <line
             :for={tick <- @chart.x_ticks}
             x1={tick.x}
@@ -67,28 +77,11 @@ defmodule AfinadosWeb.IntakeSizingLive do
             y2={@chart.y_bottom}
             class="grid-line"
           />
-          <line
-            :for={tick <- @chart.y_ticks}
-            x1={@chart.x0}
-            y1={tick.y}
-            x2={@chart.x1}
-            y2={tick.y}
-            class="grid-line"
-          />
           <text
             :for={tick <- @chart.x_ticks}
             x={tick.x}
             y={@chart.y_bottom + 16}
             text-anchor="middle"
-            font-size="9"
-          >
-            {tick.label}
-          </text>
-          <text
-            :for={tick <- @chart.y_ticks}
-            x={@chart.x0 - 6}
-            y={tick.y + 3}
-            text-anchor="end"
             font-size="9"
           >
             {tick.label}
@@ -121,38 +114,40 @@ defmodule AfinadosWeb.IntakeSizingLive do
             class="axis-line"
           />
 
-          <line
-            :for={cl <- @chart.commercial_lines}
-            x1={@chart.x0}
-            y1={cl.y}
-            x2={@chart.x1}
-            y2={cl.y}
-            class="commercial-line"
-          />
-          <polygon points={@chart.envelope_polygon} class="envelope" />
-          <polyline points={@chart.curve_polyline} class="ve-curve" />
-          <line
-            :for={cl <- @chart.commercial_lines}
-            :if={cl.visible_window}
-            x1={cl.window_x1}
-            y1={cl.y}
-            x2={cl.window_x2}
-            y2={cl.y}
-            class="commercial-window"
-          />
-          <circle
-            :for={cl <- @chart.commercial_lines}
-            :if={cl.crossing_visible}
-            cx={cl.crossing_x}
-            cy={cl.y}
-            r="3"
-            class="commercial-crossing"
-          />
+          <g clip-path="url(#plot-clip)">
+            <line
+              :for={cl <- @chart.commercial_lines}
+              x1={@chart.x0}
+              y1={cl.y}
+              x2={@chart.x1}
+              y2={cl.y}
+              class="commercial-line"
+            />
+            <polygon points={@chart.envelope_polygon} class="envelope" />
+            <polyline points={@chart.curve_polyline} class="ve-curve" />
+            <line
+              :for={cl <- @chart.commercial_lines}
+              :if={cl.visible_window}
+              x1={cl.window_x1}
+              y1={cl.y}
+              x2={cl.window_x2}
+              y2={cl.y}
+              class="commercial-window"
+            />
+            <circle
+              :for={cl <- @chart.commercial_lines}
+              :if={cl.crossing_visible}
+              cx={cl.crossing_x}
+              cy={cl.y}
+              r="3"
+              class="commercial-crossing"
+            />
+          </g>
           <text
             :for={cl <- @chart.commercial_lines}
-            x={@chart.x1 + 2}
+            x={@chart.x0 - 6}
             y={cl.y + 3}
-            font-size="7"
+            text-anchor="end"
             class="commercial-label"
           >
             {cl.label}
@@ -307,9 +302,29 @@ defmodule AfinadosWeb.IntakeSizingLive do
       Enum.map(envelope.lower, & &1.diameter) ++
         Enum.map(envelope.upper, & &1.diameter)
 
-    d_max = Enum.max(all_diameters) * 1.1
-    d_min = max(0.0, Enum.min(all_diameters) * 0.9)
-    {rpm_min, rpm_max} = rpm_range(envelope.lower)
+    d_max =
+      min(
+        (List.last(lines).diameter + 2) * 1.0,
+        (div(ceil(Enum.max(all_diameters)) + 1, 2) * 2 + 2) * 1.0
+      )
+
+    d_min =
+      max(
+        (List.first(lines).diameter - 2) * 1.0,
+        (div(floor(Enum.min(all_diameters)), 2) * 2 - 2) * 1.0
+      )
+
+    visible_rpms =
+      envelope.lower
+      |> Enum.zip(envelope.upper)
+      |> Enum.filter(fn {lo, hi} -> lo.diameter <= d_max and hi.diameter >= d_min end)
+      |> Enum.map(fn {lo, _} -> lo.rpm end)
+
+    {rpm_min, rpm_max} =
+      case visible_rpms do
+        [] -> rpm_range(envelope.lower)
+        rpms -> {Enum.min(rpms), Enum.max(rpms)}
+      end
 
     scale = %{rpm_min: rpm_min, rpm_max: rpm_max, d_min: d_min, d_max: d_max}
 
@@ -323,8 +338,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
       envelope_polygon: envelope_polygon(envelope, scale),
       curve_polyline: points_polyline(curve, scale),
       commercial_lines: chart_commercial_lines(lines, ve, scale),
-      x_ticks: x_ticks(scale),
-      y_ticks: y_ticks(scale)
+      x_ticks: x_ticks(scale)
     }
   end
 
@@ -394,16 +408,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
     |> Enum.map(&%{x: round1(scale_x(&1, scale)), label: "#{round(&1)}"})
   end
 
-  defp y_ticks(%{d_min: d_min, d_max: d_max} = scale) do
-    step = tick_step(d_max - d_min, 5)
-    first = Float.ceil(d_min / step) * step
-
-    first
-    |> Stream.iterate(&(&1 + step))
-    |> Enum.take_while(&(&1 <= d_max))
-    |> Enum.map(&%{y: round1(scale_y(&1, scale)), label: format_diameter(&1)})
-  end
-
   defp tick_step(range, target_count) when range > 0 do
     raw = range / target_count
     magnitude = :math.pow(10, Float.floor(:math.log10(raw)))
@@ -424,7 +428,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
   defp tick_step(_range, _target), do: 1.0
 
   defp round1(value), do: Float.round(value * 1.0, 1)
-  defp format_diameter(value), do: :erlang.float_to_binary(value * 1.0, decimals: 1)
 
   defp vehicle_options do
     [
