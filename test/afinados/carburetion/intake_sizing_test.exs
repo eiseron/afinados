@@ -4,6 +4,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
   alias Afinados.Carburetion.IntakeSizing
 
   alias Afinados.Carburetion.IntakeSizing.{
+    CommercialSize,
     Displacement,
     EfficiencyZone,
     EngineConfig,
@@ -197,6 +198,56 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       zone_b = IntakeSizing.efficiency_zone(d, ve_b, @config)
 
       assert zone_a.envelope == zone_b.envelope
+    end
+  end
+
+  describe "commercial_lines/2" do
+    test "returns a non-empty list of CommercialSize structs" do
+      {:ok, displacement} = Displacement.new(600)
+
+      assert [%CommercialSize{} | _] = IntakeSizing.commercial_lines(displacement, @config)
+    end
+
+    test "every RPM window has rpm_low < rpm_high" do
+      {:ok, displacement} = Displacement.new(600)
+
+      assert Enum.all?(
+               IntakeSizing.commercial_lines(displacement, @config),
+               fn %CommercialSize{rpm_window: {lo, hi}} -> lo > 0 and hi > lo end
+             )
+    end
+
+    test "a larger diameter needs higher RPM to enter the envelope" do
+      {:ok, displacement} = Displacement.new(600)
+      lines = IntakeSizing.commercial_lines(displacement, @config)
+      windows = Enum.map(lines, fn %CommercialSize{rpm_window: {lo, _}} -> lo end)
+
+      assert windows == Enum.sort(windows)
+    end
+
+    test "the RPM window is the inverse of diameter_at" do
+      {:ok, displacement} = Displacement.new(250)
+      {:ok, config} = EngineConfig.new(%{k: 0.70, carbs: 1, cylinders: 1, boost: 0.0})
+
+      [%CommercialSize{diameter: d, rpm_window: {rpm_lo, rpm_hi}} | _] =
+        IntakeSizing.commercial_lines(displacement, config)
+
+      {:ok, ve_max} = VolumetricEfficiency.new(VolumetricEfficiency.ve_max())
+      {:ok, ve_min} = VolumetricEfficiency.new(VolumetricEfficiency.ve_min())
+
+      assert_in_delta IntakeSizing.diameter_at(displacement, ve_max, %{
+                        rpm: rpm_lo,
+                        config: config
+                      }),
+                      d * 1.0,
+                      1.0e-6
+
+      assert_in_delta IntakeSizing.diameter_at(displacement, ve_min, %{
+                        rpm: rpm_hi,
+                        config: config
+                      }),
+                      d * 1.0,
+                      1.0e-6
     end
   end
 end

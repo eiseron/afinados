@@ -1,11 +1,18 @@
 defmodule Afinados.Carburetion.IntakeSizing do
   @moduledoc "Pure intake sizing: diameter from volumetric efficiency, efficiency zone with envelope."
 
-  alias __MODULE__.{Displacement, EfficiencyZone, EngineConfig, VolumetricEfficiency}
+  alias __MODULE__.{
+    CommercialSize,
+    Displacement,
+    EfficiencyZone,
+    EngineConfig,
+    VolumetricEfficiency
+  }
 
   @rpm_min 2000
   @rpm_max 14_000
   @rpm_step 200
+  @commercial_diameters Enum.to_list(10..60//2)
 
   @spec diameter_at(Displacement.t(), VolumetricEfficiency.t(), %{
           rpm: number(),
@@ -36,6 +43,27 @@ defmodule Afinados.Carburetion.IntakeSizing do
     curve = Enum.map(rpms, &%{rpm: &1, diameter: diameter_raw(cc, {ve.value, &1}, config)})
 
     %EfficiencyZone{envelope: %{lower: lower, upper: upper}, curve: curve}
+  end
+
+  @spec commercial_lines(Displacement.t(), EngineConfig.t()) :: [CommercialSize.t()]
+  def commercial_lines(%Displacement{cc: cc}, %EngineConfig{} = config) do
+    ve_min = VolumetricEfficiency.ve_min()
+    ve_max = VolumetricEfficiency.ve_max()
+
+    Enum.map(@commercial_diameters, fn d ->
+      %CommercialSize{
+        diameter: d,
+        rpm_window: {
+          rpm_for_diameter(d, {cc, ve_max, config}),
+          rpm_for_diameter(d, {cc, ve_min, config})
+        }
+      }
+    end)
+  end
+
+  defp rpm_for_diameter(d, {cc, ve, %EngineConfig{k: k, carbs: c, cylinders: nc} = config}) do
+    p_abs = EngineConfig.p_abs(config)
+    d * d * c * 1000 * nc * p_abs / (k * k * cc * ve)
   end
 
   defp diameter_raw(vt, {ev, rpm}, %EngineConfig{} = config) do

@@ -100,4 +100,43 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       refute has_element?(view, ".envelope")
     end
   end
+
+  describe "commercial sizes" do
+    test "renders commercial size lines on mount", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      assert has_element?(view, ".commercial-line")
+      assert has_element?(view, ".commercial-label")
+    end
+
+    test "renders highlighted window segments within the envelope", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      assert has_element?(view, ".commercial-window")
+    end
+
+    test "commercial lines update when displacement changes", %{conn: conn} do
+      {:ok, view, html_before} = live(conn, "/carburetion/intake-sizing")
+
+      html_after =
+        view
+        |> element("form")
+        |> render_change(%{intake_sizing: %{@default_params | cc: "450"}})
+
+      labels_before = Regex.scan(~r/class="commercial-label"[^>]*>\s*(\d+)/, html_before)
+      labels_after = Regex.scan(~r/class="commercial-label"[^>]*>\s*(\d+)/, html_after)
+
+      refute labels_before == labels_after
+    end
+
+    test "hides commercial lines when the chart is empty", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      view
+      |> element("form")
+      |> render_change(%{intake_sizing: %{@default_params | cc: "0"}})
+
+      refute has_element?(view, ".commercial-line")
+    end
+  end
 end

@@ -4,6 +4,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   alias Afinados.Carburetion.IntakeSizing
 
   alias Afinados.Carburetion.IntakeSizing.{
+    CommercialSize,
     Displacement,
     EfficiencyZone,
     EngineConfig,
@@ -13,7 +14,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @vb_w 360
   @vb_h 242
   @pad_left 44
-  @pad_right 20
+  @pad_right 32
   @pad_top 22
   @pad_bottom 40
   @plot_w @vb_w - @pad_left - @pad_right
@@ -120,8 +121,42 @@ defmodule AfinadosWeb.IntakeSizingLive do
             class="axis-line"
           />
 
+          <line
+            :for={cl <- @chart.commercial_lines}
+            x1={@chart.x0}
+            y1={cl.y}
+            x2={@chart.x1}
+            y2={cl.y}
+            class="commercial-line"
+          />
           <polygon points={@chart.envelope_polygon} class="envelope" />
           <polyline points={@chart.curve_polyline} class="ve-curve" />
+          <line
+            :for={cl <- @chart.commercial_lines}
+            :if={cl.visible_window}
+            x1={cl.window_x1}
+            y1={cl.y}
+            x2={cl.window_x2}
+            y2={cl.y}
+            class="commercial-window"
+          />
+          <circle
+            :for={cl <- @chart.commercial_lines}
+            :if={cl.crossing_visible}
+            cx={cl.crossing_x}
+            cy={cl.y}
+            r="3"
+            class="commercial-crossing"
+          />
+          <text
+            :for={cl <- @chart.commercial_lines}
+            x={@chart.x1 + 2}
+            y={cl.y + 3}
+            font-size="7"
+            class="commercial-label"
+          >
+            {cl.label}
+          </text>
         </svg>
 
         <p class="ve-label">{@k_label} - {@ve_value}</p>
@@ -243,7 +278,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
     with {:ok, displacement} <- Displacement.new(cc),
          {:ok, vol_eff} <- VolumetricEfficiency.new(ve) do
       zone = IntakeSizing.efficiency_zone(displacement, vol_eff, config)
-      build_chart(zone)
+      lines = IntakeSizing.commercial_lines(displacement, config)
+      build_chart(zone, lines, ve)
     else
       _ -> nil
     end
@@ -266,7 +302,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     end
   end
 
-  defp build_chart(%EfficiencyZone{envelope: envelope, curve: curve}) do
+  defp build_chart(%EfficiencyZone{envelope: envelope, curve: curve}, lines, ve) do
     all_diameters =
       Enum.map(envelope.lower, & &1.diameter) ++
         Enum.map(envelope.upper, & &1.diameter)
@@ -286,9 +322,35 @@ defmodule AfinadosWeb.IntakeSizingLive do
       y_bottom: @y_bottom,
       envelope_polygon: envelope_polygon(envelope, scale),
       curve_polyline: points_polyline(curve, scale),
+      commercial_lines: chart_commercial_lines(lines, ve, scale),
       x_ticks: x_ticks(scale),
       y_ticks: y_ticks(scale)
     }
+  end
+
+  defp chart_commercial_lines(lines, ve, scale) do
+    ve_max = VolumetricEfficiency.ve_max()
+
+    lines
+    |> Enum.filter(fn %CommercialSize{diameter: d} ->
+      d * 1.0 >= scale.d_min and d * 1.0 <= scale.d_max
+    end)
+    |> Enum.map(fn %CommercialSize{diameter: d, rpm_window: {rpm_lo, rpm_hi}} ->
+      y = round1(scale_y(d * 1.0, scale))
+      window_visible = rpm_lo <= scale.rpm_max and rpm_hi >= scale.rpm_min
+      crossing_rpm = rpm_lo * ve_max / ve
+
+      %{
+        diameter: d,
+        y: y,
+        label: "#{d}",
+        window_x1: round1(scale_x(max(rpm_lo, scale.rpm_min), scale)),
+        window_x2: round1(scale_x(min(rpm_hi, scale.rpm_max), scale)),
+        visible_window: window_visible,
+        crossing_x: round1(scale_x(crossing_rpm, scale)),
+        crossing_visible: crossing_rpm >= scale.rpm_min and crossing_rpm <= scale.rpm_max
+      }
+    end)
   end
 
   defp rpm_range(points) do
