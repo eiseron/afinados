@@ -9,9 +9,9 @@ defmodule AfinadosWeb.HubLiveTest do
     assert html =~ ~s(href="/carburetion/setups")
   end
 
-  test "the hub shows the venturi sizing tool as coming soon", %{conn: conn} do
+  test "the hub links the intake sizing tool to its page", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/")
 
-    assert html =~ ~s(class="tool-card tool-card-soon")
+    assert html =~ ~s(href="/carburetion/intake-sizing")
   end
 end

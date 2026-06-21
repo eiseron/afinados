@@ -1,5 +1,5 @@
 defmodule Afinados.Carburetion.Workbench.Carburetor do
-  @moduledoc "Persisted carburetor body (the venturi lives here), owned by a garage."
+  @moduledoc "Persisted carburetor body, owned by a garage."
 
   use Ecto.Schema
 
@@ -20,6 +20,8 @@ defmodule Afinados.Carburetion.Workbench.Carburetor do
     timestamps()
   end
 
+  @type t :: %__MODULE__{}
+
   def changeset(carburetor, attrs) do
     carburetor
     |> cast(attrs, @fields)
@@ -27,6 +29,4 @@ defmodule Afinados.Carburetion.Workbench.Carburetor do
     |> validate_number(:venturi_mm, greater_than: 0)
     |> foreign_key_constraint(:garage_id)
   end
-
-  @type t :: %__MODULE__{}
 end

@@ -15,6 +15,8 @@ defmodule Afinados.Carburetion.Catalog.NeedleJet do
     timestamps()
   end
 
+  @type t :: %__MODULE__{}
+
   def changeset(needle_jet, attrs) do
     needle_jet
     |> cast(attrs, @fields)
@@ -22,6 +24,4 @@ defmodule Afinados.Carburetion.Catalog.NeedleJet do
     |> validate_number(:bore_um, greater_than: 0)
     |> unique_constraint(:code)
   end
-
-  @type t :: %__MODULE__{}
 end

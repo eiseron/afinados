@@ -49,6 +49,7 @@ defmodule AfinadosWeb.Router do
     live("/", HubLive)
     live("/carburetion/setups", SetupLive)
     live("/carburetion/setups/:id", SetupLive)
+    live("/carburetion/intake-sizing", IntakeSizingLive)
   end
 
   if Application.compile_env(:afinados, :dev_routes) do

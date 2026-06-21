@@ -51,7 +51,7 @@ defmodule Afinados.Carburetion.WorkbenchTest do
       assert Repo.get!(Workbench.Carburetor, setup.carburetor_id).manufacturer == "mikuni"
     end
 
-    test "rejects a non-positive venturi", ctx do
+    test "rejects a non-positive bore", ctx do
       assert {:error, _changeset} =
                Workbench.save_setup(ctx.garage, Map.put(valid_params(), "venturi_mm", "0"))
     end

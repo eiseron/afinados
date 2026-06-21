@@ -20,6 +20,7 @@
   --color-series-1: light-dark(#2563eb, #60a5fa);
   --color-diff-positive: light-dark(#16a34a, #4ade80);
   --color-diff-negative: light-dark(#dc2626, #f87171);
+  --color-envelope: light-dark(#2563eb, #60a5fa);
 
   /* Color — feedback */
   --color-accent: light-dark(#2563eb, #60a5fa);

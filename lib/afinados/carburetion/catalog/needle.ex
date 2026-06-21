@@ -29,6 +29,8 @@ defmodule Afinados.Carburetion.Catalog.Needle do
     timestamps()
   end
 
+  @type t :: %__MODULE__{}
+
   def changeset(needle, attrs) do
     needle
     |> cast(attrs, @fields)
@@ -38,6 +40,4 @@ defmodule Afinados.Carburetion.Catalog.Needle do
     |> validate_length(:station_diameters_um, min: 2)
     |> unique_constraint(:part_number)
   end
-
-  @type t :: %__MODULE__{}
 end

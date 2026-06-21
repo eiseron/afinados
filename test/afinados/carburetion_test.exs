@@ -36,7 +36,7 @@ defmodule Afinados.CarburetionTest do
       assert positions == Enum.to_list(0..100)
     end
 
-    test "the window spans h0 to h0 + venturi, anchored at the taper start", %{setup: setup} do
+    test "the window spans h0 to h0 + bore, anchored at the taper start", %{setup: setup} do
       map = Carburetion.build_fuel_map(setup)
 
       assert {Float.round(map.h0, 4), Float.round(map.h_max, 4)} == {28.3, 62.3}
@@ -66,7 +66,7 @@ defmodule Afinados.CarburetionTest do
       assert Carburetion.build_fuel_map(setup).unused_span == %{from: 0.0, to: 28.3}
     end
 
-    test "a bigger venturi extends the window's end, not its start", %{setup: setup} do
+    test "a bigger bore extends the window's end, not its start", %{setup: setup} do
       small = Carburetion.build_fuel_map(setup)
       big = Carburetion.build_fuel_map(%{setup | venturi: %Venturi{mm: 44.0}})
 

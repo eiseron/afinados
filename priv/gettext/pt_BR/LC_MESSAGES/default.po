@@ -202,8 +202,8 @@ msgstr "Estime o tamanho ideal do venturi do carburador."
 
 #: lib/afinados_web/live/hub_live.ex:32
 #, elixir-autogen, elixir-format
-msgid "Venturi sizing"
-msgstr "Dimensionamento de venturi"
+msgid "Intake sizing"
+msgstr "Dimensionamento de admissão"
 
 #: lib/afinados_web/components/layouts/root.html.heex:9
 #: lib/afinados_web/components/layouts/root.html.heex:19
@@ -222,3 +222,93 @@ msgstr "Afinados, ferramentas de cálculo para preparação de motocicletas"
 #, elixir-autogen, elixir-format
 msgid "Manufacturer"
 msgstr "Fabricante"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Efficiency zone"
+msgstr "Zona de eficiência"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Fill in the parameters to see the efficiency zone."
+msgstr "Preencha os parâmetros para ver a zona de eficiência."
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Sizing controls"
+msgstr "Controles de dimensionamento"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Parameters"
+msgstr "Parâmetros"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Displacement (cm³)"
+msgstr "Cilindrada (cm³)"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Number of cylinders"
+msgstr "Número de cilindros"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Number of carburetors"
+msgstr "Número de carburadores"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Application profile"
+msgstr "Perfil de aplicação"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Stock"
+msgstr "Original"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Sport"
+msgstr "Preparado"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Competition"
+msgstr "Competição"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Boost pressure (bar)"
+msgstr "Pressão de turbo (bar)"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Volumetric efficiency"
+msgstr "Eficiência volumétrica"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Engine type"
+msgstr "Tipo de motor"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Motorcycle"
+msgstr "Moto"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Car"
+msgstr "Carro"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Power tool"
+msgstr "Ferramenta motorizada"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Moped"
+msgstr "Ciclomotor"

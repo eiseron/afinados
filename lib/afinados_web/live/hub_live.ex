@@ -27,11 +27,10 @@ defmodule AfinadosWeb.HubLive do
             </.link>
           </li>
           <li>
-            <div class="tool-card tool-card-soon" aria-disabled="true">
-              <span class="badge">{gettext("Coming soon")}</span>
-              <h2>{gettext("Venturi sizing")}</h2>
+            <.link href={~p"/carburetion/intake-sizing"} class="tool-card">
+              <h2>{gettext("Intake sizing")}</h2>
               <p>{gettext("Estimate the ideal carburetor venturi size.")}</p>
-            </div>
+            </.link>
           </li>
         </ul>
       </div>

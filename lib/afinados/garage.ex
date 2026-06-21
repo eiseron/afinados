@@ -15,6 +15,8 @@ defmodule Afinados.Garage do
     timestamps()
   end
 
+  @type t :: %__MODULE__{}
+
   @spec default_for(User.t()) :: t()
   def default_for(%User{id: user_id}) do
     Repo.insert!(%__MODULE__{user_id: user_id},
@@ -29,6 +31,4 @@ defmodule Afinados.Garage do
   def list_for(%User{id: user_id}) do
     Repo.all(from g in __MODULE__, where: g.user_id == ^user_id, order_by: g.id)
   end
-
-  @type t :: %__MODULE__{}
 end

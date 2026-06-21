@@ -202,7 +202,7 @@ msgstr ""
 
 #: lib/afinados_web/live/hub_live.ex:32
 #, elixir-autogen, elixir-format
-msgid "Venturi sizing"
+msgid "Intake sizing"
 msgstr ""
 
 #: lib/afinados_web/components/layouts/root.html.heex:9

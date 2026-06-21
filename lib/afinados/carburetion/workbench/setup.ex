@@ -43,6 +43,8 @@ defmodule Afinados.Carburetion.Workbench.Setup do
     timestamps()
   end
 
+  @type t :: %__MODULE__{}
+
   def changeset(setup, attrs) do
     setup
     |> cast(attrs, @fields)
@@ -56,6 +58,4 @@ defmodule Afinados.Carburetion.Workbench.Setup do
     |> foreign_key_constraint(:carburetor_id)
     |> foreign_key_constraint(:garage_id)
   end
-
-  @type t :: %__MODULE__{}
 end

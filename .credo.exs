@@ -56,7 +56,7 @@
           {Credo.Check.Readability.StrictModuleLayout,
            [
              order:
-               ~w/moduledoc shortdoc behaviour use import alias require module_attribute public_fun callback_impl private_fun/a,
+               ~w/moduledoc shortdoc behaviour use import alias require module_attribute defstruct type public_fun callback_impl private_fun/a,
              ignore_module_attributes: ~w/doc tag moduletag/a
            ]},
           {Credo.Check.Refactor.Apply, []},
