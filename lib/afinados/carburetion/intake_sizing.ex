@@ -61,15 +61,17 @@ defmodule Afinados.Carburetion.IntakeSizing do
     end)
   end
 
-  defp rpm_for_diameter(d, {cc, ve, %EngineConfig{k: k, carbs: c, cylinders: nc} = config}) do
+  defp rpm_for_diameter(d, {cc, ve, %EngineConfig{k: k} = config}) do
+    n = EngineConfig.pulse_divisor(config)
     p_abs = EngineConfig.p_abs(config)
-    d * d * c * 1000 * nc * p_abs / (k * k * cc * ve)
+    d * d * n * 1000 * p_abs / (k * k * cc * ve)
   end
 
   defp diameter_raw(vt, {ev, rpm}, %EngineConfig{} = config) do
-    %EngineConfig{k: k, carbs: c, cylinders: nc} = config
+    %EngineConfig{k: k} = config
+    n = EngineConfig.pulse_divisor(config)
     p_abs = EngineConfig.p_abs(config)
-    k * :math.sqrt(vt * rpm * ev / (c * 1000 * nc * p_abs))
+    k * :math.sqrt(vt * rpm * ev / (n * 1000 * p_abs))
   end
 
   defp rpm_range, do: @rpm_min..@rpm_max//@rpm_step

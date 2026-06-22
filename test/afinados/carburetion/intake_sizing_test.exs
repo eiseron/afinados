@@ -11,7 +11,16 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
     VolumetricEfficiency
   }
 
-  {:ok, config} = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: 0.0})
+  {:ok, config} =
+    EngineConfig.new(%{
+      k: 0.55,
+      cylinders: 1,
+      carbs: 1,
+      barrels: 1,
+      firing_interval: 720,
+      boost: 0.0
+    })
+
   @config config
 
   describe "Displacement.new/1" do
@@ -57,32 +66,111 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
   describe "EngineConfig.new/1" do
     test "accepts valid parameters" do
       assert {:ok, %EngineConfig{}} =
-               EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: 0.0})
-    end
-
-    test "rejects zero carburetors" do
-      assert :error = EngineConfig.new(%{k: 0.55, carbs: 0, cylinders: 2, boost: 0.0})
+               EngineConfig.new(%{
+                 k: 0.55,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 boost: 0.0
+               })
     end
 
     test "rejects zero cylinders" do
-      assert :error = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 0, boost: 0.0})
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.55,
+                 cylinders: 0,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 boost: 0.0
+               })
+    end
+
+    test "rejects zero carburetors" do
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.55,
+                 cylinders: 1,
+                 carbs: 0,
+                 barrels: 1,
+                 firing_interval: 720,
+                 boost: 0.0
+               })
+    end
+
+    test "rejects invalid barrels" do
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.55,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 3,
+                 firing_interval: 720,
+                 boost: 0.0
+               })
+    end
+
+    test "rejects partial maps without raising" do
+      assert :error = EngineConfig.new(%{k: 0.55})
+    end
+
+    test "rejects empty map without raising" do
+      assert :error = EngineConfig.new(%{})
+    end
+
+    test "rejects nil input" do
+      assert :error = EngineConfig.new(nil)
+    end
+
+    test "rejects non-map input" do
+      assert :error = EngineConfig.new("string")
+    end
+
+    test "rejects firing interval out of range" do
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.55,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 800,
+                 boost: 0.0
+               })
     end
 
     test "rejects boost that zeroes p_abs" do
-      assert :error = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: -1.0})
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.55,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 boost: -1.0
+               })
     end
 
     test "rejects negative k" do
-      assert :error = EngineConfig.new(%{k: -0.1, carbs: 1, cylinders: 2, boost: 0.0})
+      assert :error =
+               EngineConfig.new(%{
+                 k: -0.1,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 boost: 0.0
+               })
     end
   end
 
   describe "diameter_at/4" do
-    test "implements D = K * sqrt(Vt * n * EV / (C * 1000 * Nc))" do
+    test "implements D = K * sqrt(Vt * n * EV / (V * 1000))" do
       {:ok, displacement} = Displacement.new(600)
       {:ok, ve} = VolumetricEfficiency.new(0.85)
 
-      expected = 0.55 * :math.sqrt(600 * 8000 * 0.85 / (1 * 1000 * 2))
+      expected = 0.55 * :math.sqrt(600 * 8000 * 0.85 / (1 * 1000))
 
       assert_in_delta IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: @config}),
                       expected,
@@ -106,34 +194,177 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                IntakeSizing.diameter_at(displacement, ve, %{rpm: 6000, config: @config})
     end
 
-    test "single-cylinder needs larger bore than 2-cylinder" do
-      {:ok, displacement} = Displacement.new(600)
-      {:ok, ve} = VolumetricEfficiency.new(0.85)
-
-      {:ok, config_1cyl} = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 1, boost: 0.0})
-      {:ok, config_2cyl} = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: 0.0})
-
-      assert IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: config_1cyl}) >
-               IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: config_2cyl})
-    end
-
     test "more carburetors produce smaller individual bore" do
       {:ok, displacement} = Displacement.new(600)
       {:ok, ve} = VolumetricEfficiency.new(0.85)
 
-      {:ok, config_1c} = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: 0.0})
-      {:ok, config_2c} = EngineConfig.new(%{k: 0.55, carbs: 2, cylinders: 2, boost: 0.0})
+      {:ok, config_1c} =
+        EngineConfig.new(%{
+          k: 0.55,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      {:ok, config_2c} =
+        EngineConfig.new(%{
+          k: 0.55,
+          cylinders: 1,
+          carbs: 2,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
 
       assert IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: config_1c}) >
                IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: config_2c})
+    end
+
+    test "dual barrels double the effective venturi count" do
+      {:ok, displacement} = Displacement.new(600)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, single} =
+        EngineConfig.new(%{
+          k: 0.55,
+          cylinders: 1,
+          carbs: 2,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      {:ok, dual} =
+        EngineConfig.new(%{
+          k: 0.55,
+          cylinders: 1,
+          carbs: 2,
+          barrels: 2,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      d_single = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: single})
+      d_dual = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: dual})
+
+      assert_in_delta d_dual, d_single / :math.sqrt(2), 1.0e-9
+    end
+
+    test "shared carb with non-overlapping pulses divides by cylinder count" do
+      {:ok, displacement} = Displacement.new(600)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, single} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      {:ok, twin_360} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 360,
+          boost: 0.0
+        })
+
+      d_single = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: single})
+      d_twin = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: twin_360})
+
+      assert_in_delta d_twin, d_single / :math.sqrt(2), 1.0e-9
+    end
+
+    test "tight firing interval increases peak via pulse overlap" do
+      {:ok, displacement} = Displacement.new(600)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, twin_360} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 360,
+          boost: 0.0
+        })
+
+      {:ok, twin_180} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      d_360 = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: twin_360})
+      d_180 = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: twin_180})
+
+      assert d_180 > d_360
+    end
+
+    test "firing interval has no effect when cylinders are not shared" do
+      {:ok, displacement} = Displacement.new(600)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, wide} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 2,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      {:ok, tight} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 2,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      d_wide = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: wide})
+      d_tight = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: tight})
+
+      assert_in_delta d_wide, d_tight, 1.0e-9
     end
 
     test "boost halves the effective flow when P_abs doubles" do
       {:ok, displacement} = Displacement.new(600)
       {:ok, ve} = VolumetricEfficiency.new(0.85)
 
-      {:ok, na} = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: 0.0})
-      {:ok, turbo} = EngineConfig.new(%{k: 0.55, carbs: 1, cylinders: 2, boost: 1.0})
+      {:ok, na} =
+        EngineConfig.new(%{
+          k: 0.55,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      {:ok, turbo} =
+        EngineConfig.new(%{
+          k: 0.55,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 1.0
+        })
 
       d_na = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: na})
       d_turbo = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: turbo})
@@ -156,7 +387,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
     test "the lower envelope bound uses Ve_min", %{displacement: d, ve: ve} do
       zone = IntakeSizing.efficiency_zone(d, ve, @config)
       lower_at_8k = Enum.find(zone.envelope.lower, &(&1.rpm == 8000))
-      expected = 0.55 * :math.sqrt(600 * 8000 * 0.5 / (1 * 1000 * 2))
+      expected = 0.55 * :math.sqrt(600 * 8000 * 0.5 / (1 * 1000))
 
       assert_in_delta lower_at_8k.diameter, expected, 1.0e-9
     end
@@ -164,7 +395,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
     test "the upper envelope bound uses Ve_max", %{displacement: d, ve: ve} do
       zone = IntakeSizing.efficiency_zone(d, ve, @config)
       upper_at_8k = Enum.find(zone.envelope.upper, &(&1.rpm == 8000))
-      expected = 0.55 * :math.sqrt(600 * 8000 * 1.3 / (1 * 1000 * 2))
+      expected = 0.55 * :math.sqrt(600 * 8000 * 1.3 / (1 * 1000))
 
       assert_in_delta upper_at_8k.diameter, expected, 1.0e-9
     end
@@ -227,7 +458,16 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
 
     test "the RPM window is the inverse of diameter_at" do
       {:ok, displacement} = Displacement.new(250)
-      {:ok, config} = EngineConfig.new(%{k: 0.70, carbs: 1, cylinders: 1, boost: 0.0})
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
 
       [%CommercialSize{diameter: d, rpm_window: {rpm_lo, rpm_hi}} | _] =
         IntakeSizing.commercial_lines(displacement, config)
@@ -248,6 +488,310 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                       }),
                       d * 1.0,
                       1.0e-6
+    end
+  end
+
+  describe "real-world reference cases — stock motorcycles (K=0.70, VE=0.85)" do
+    setup do
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      %{ve: ve, config: config}
+    end
+
+    test "Honda CG 125 — 125cc 4T single, 22mm Keihin", %{ve: ve, config: config} do
+      {:ok, displacement} = Displacement.new(125)
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 9000, config: config})
+
+      assert_in_delta diameter, 22.0, 2.0
+    end
+
+    test "Yamaha DT 180 — 180cc 2T single, 25mm Mikuni", %{ve: ve, config: config} do
+      {:ok, displacement} = Displacement.new(180)
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: config})
+
+      assert_in_delta diameter, 25.0, 2.0
+    end
+
+    test "Yamaha DT 200 — 200cc 2T single, 26mm", %{ve: ve, config: config} do
+      {:ok, displacement} = Displacement.new(200)
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8000, config: config})
+
+      assert_in_delta diameter, 26.0, 2.0
+    end
+
+    test "Yamaha TTR 230 — 223cc 4T trail, 26mm", %{ve: ve, config: config} do
+      {:ok, displacement} = Displacement.new(223)
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 7500, config: config})
+
+      assert_in_delta diameter, 26.0, 2.0
+    end
+  end
+
+  describe "real-world reference cases — competition motorcycles (K=0.75)" do
+    test "Honda CR 250R — 249cc 2T MX, 38mm Keihin PWK (VE=1.0)" do
+      {:ok, displacement} = Displacement.new(249)
+      {:ok, ve} = VolumetricEfficiency.new(1.0)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.75,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 10_500, config: config})
+
+      assert_in_delta diameter, 38.0, 3.0
+    end
+
+    test "Honda CRF 450R — 449cc 4T MX, 40mm Keihin FCR-MX (VE=0.85)" do
+      {:ok, displacement} = Displacement.new(449)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.75,
+          cylinders: 1,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 720,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 8500, config: config})
+
+      assert_in_delta diameter, 40.0, 3.0
+    end
+  end
+
+  describe "real-world reference cases — stock cars (K=0.60, VE=0.80)" do
+    setup do
+      {:ok, ve} = VolumetricEfficiency.new(0.80)
+      %{ve: ve}
+    end
+
+    test "VW Fusca 1600 — 1584cc flat-4, Solex H30/31 PIC ~24mm venturi", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(1584)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4000, config: config})
+
+      assert_in_delta diameter, 24.0, 3.0
+    end
+
+    test "Fiat Uno Mille — 1049cc inline-4, Weber 32 TLF ~22mm venturi", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(1049)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4500, config: config})
+
+      assert_in_delta diameter, 22.0, 3.0
+    end
+
+    test "Chevrolet Chevette 1.4 — 1398cc inline-4, Solex H30 PIC ~22mm venturi", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(1398)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4000, config: config})
+
+      assert_in_delta diameter, 22.0, 3.0
+    end
+
+    test "Chevrolet Opala 2.5 — 2491cc inline-4, Solex H40 EIS ~28mm primary", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(2491)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 2,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4000, config: config})
+
+      assert_in_delta diameter, 28.0, 3.0
+    end
+
+    test "Chevrolet Opala 4.1 — 4093cc inline-6, Solex 34 SEIE ~27mm primary", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(4093)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 6,
+          carbs: 1,
+          barrels: 2,
+          firing_interval: 120,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 3500, config: config})
+
+      assert_in_delta diameter, 27.0, 3.0
+    end
+
+    test "Ford Maverick V8 5.0 — 4949cc V8, Motorcraft 2150 ~27mm per barrel", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(4949)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 8,
+          carbs: 1,
+          barrels: 2,
+          firing_interval: 90,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 3500, config: config})
+
+      assert_in_delta diameter, 27.0, 3.0
+    end
+  end
+
+  describe "real-world reference cases — competition cars (K=0.70)" do
+    test "VW Fusca 1600 + twin Weber IDF 40 — 32mm chokes (VE=0.90, 6000 rpm)" do
+      {:ok, displacement} = Displacement.new(1584)
+      {:ok, ve} = VolumetricEfficiency.new(0.90)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 4,
+          carbs: 2,
+          barrels: 2,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 6000, config: config})
+
+      assert_in_delta diameter, 32.0, 3.0
+    end
+  end
+
+  describe "real-world reference cases — shared carb across cylinder phases" do
+    test "Harley Davidson Evo 1340 — V-twin 45°, single Keihin CV40 (uneven 315° firing)" do
+      {:ok, displacement} = Displacement.new(1340)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 315,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 5500, config: config})
+
+      assert_in_delta diameter, 40.0, 3.0
+    end
+
+    test "Ford Corcel II 1.4 — 1372cc inline-4, Weber 32 DMTR ~22mm primary" do
+      {:ok, displacement} = Displacement.new(1372)
+      {:ok, ve} = VolumetricEfficiency.new(0.80)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 2,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4000, config: config})
+
+      assert_in_delta diameter, 22.0, 3.0
+    end
+
+    test "Fiat 147 1050cc — inline-4, Weber 30 DIC single-barrel ~20mm venturi" do
+      {:ok, displacement} = Displacement.new(1049)
+      {:ok, ve} = VolumetricEfficiency.new(0.80)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4000, config: config})
+
+      assert_in_delta diameter, 20.0, 3.0
+    end
+
+    test "Classic BSA A50 500 — 360°-fire parallel twin, single Amal Concentric ~26mm" do
+      {:ok, displacement} = Displacement.new(499)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.70,
+          cylinders: 2,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 360,
+          boost: 0.0
+        })
+
+      diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 6500, config: config})
+
+      assert_in_delta diameter, 26.0, 3.0
     end
   end
 end

@@ -28,6 +28,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @default_cc "125"
   @default_cylinders "1"
   @default_carbs "1"
+  @default_barrels "1"
+  @default_firing_interval "180"
   @default_k "0.70"
   @default_boost "0"
   @default_ve "0.85"
@@ -39,6 +41,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
       "cc" => @default_cc,
       "cylinders" => @default_cylinders,
       "carbs" => @default_carbs,
+      "barrels" => @default_barrels,
+      "firing_interval" => @default_firing_interval,
       "k" => @default_k,
       "boost" => @default_boost,
       "ve" => @default_ve
@@ -186,8 +190,17 @@ defmodule AfinadosWeb.IntakeSizingLive do
               type="number"
               label={gettext("Number of cylinders")}
               min="1"
-              max="12"
+              max="16"
               step="1"
+            />
+            <.input
+              :if={@show_firing}
+              field={@form[:firing_interval]}
+              type="number"
+              label={gettext("Firing interval (crank degrees)")}
+              min="60"
+              max="720"
+              step="30"
             />
             <.input
               field={@form[:carbs]}
@@ -196,6 +209,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
               min="1"
               max="12"
               step="1"
+            />
+            <.input
+              field={@form[:barrels]}
+              type="select"
+              label={gettext("Barrels per carburetor")}
+              options={barrels_options()}
             />
             <.input
               field={@form[:k]}
@@ -233,7 +252,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp recompute(socket, params) do
     vehicle = params["vehicle"] || "motorcycle"
-    params = normalize_k(params, vehicle)
+    params = params |> normalize_k(vehicle) |> normalize_firing_interval()
     cc = parse_int(params["cc"])
     ve = parse_float(params["ve"])
     config = parse_config(params)
@@ -245,9 +264,24 @@ defmodule AfinadosWeb.IntakeSizingLive do
       form: to_form(params, as: :intake_sizing),
       chart: chart,
       vehicle: vehicle,
-      k_label: k_label(config && config.k),
-      ve_value: format_ve(ve)
+      k_label: k_label(vehicle, config && config.k),
+      ve_value: format_ve(ve),
+      show_firing: show_firing?(params)
     )
+  end
+
+  defp normalize_firing_interval(params) do
+    case parse_int(params["firing_interval"]) do
+      n when is_integer(n) and n >= 60 and n <= 720 -> params
+      _ -> Map.put(params, "firing_interval", @default_firing_interval)
+    end
+  end
+
+  defp show_firing?(params) do
+    cyl = parse_int(params["cylinders"]) || 1
+    carbs = parse_int(params["carbs"]) || 1
+    barrels = parse_int(params["barrels"]) || 1
+    cyl > carbs * barrels
   end
 
   defp normalize_k(params, vehicle) do
@@ -261,12 +295,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
   defp valid_k_values("motorcycle"), do: ~w(0.70 0.72 0.75)
   defp valid_k_values("moped"), do: ~w(0.78 0.83 0.88)
   defp valid_k_values("tool"), do: ~w(0.73 0.77 0.82)
-  defp valid_k_values(_vehicle), do: ~w(0.50 0.55 0.60)
+  defp valid_k_values(_vehicle), do: ~w(0.60 0.65 0.70)
 
   defp default_k("motorcycle"), do: "0.70"
   defp default_k("moped"), do: "0.78"
   defp default_k("tool"), do: "0.73"
-  defp default_k(_vehicle), do: "0.50"
+  defp default_k(_vehicle), do: "0.60"
 
   defp build_zone(cc, ve, %EngineConfig{} = config)
        when is_integer(cc) and cc > 0 and is_float(ve) do
@@ -284,13 +318,22 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp parse_config(params) do
     k = parse_float(params["k"])
+    cylinders = parse_int(params["cylinders"]) || 1
     carbs = parse_int(params["carbs"])
-    cylinders = parse_int(params["cylinders"])
+    barrels = parse_int(params["barrels"]) || 1
+    firing_interval = parse_int(params["firing_interval"])
     boost = parse_float(params["boost"]) || 0.0
 
-    with true <- k != nil and carbs != nil and cylinders != nil,
+    with true <- k != nil and carbs != nil and firing_interval != nil,
          {:ok, config} <-
-           EngineConfig.new(%{k: k, carbs: carbs, cylinders: cylinders, boost: boost}) do
+           EngineConfig.new(%{
+             k: k,
+             cylinders: cylinders,
+             carbs: carbs,
+             barrels: barrels,
+             firing_interval: firing_interval,
+             boost: boost
+           }) do
       config
     else
       _ -> nil
@@ -464,25 +507,30 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp k_options(_vehicle) do
     [
-      {gettext("Stock"), "0.50"},
-      {gettext("Sport"), "0.55"},
-      {gettext("Competition"), "0.60"}
+      {gettext("Stock"), "0.60"},
+      {gettext("Sport"), "0.65"},
+      {gettext("Competition"), "0.70"}
     ]
   end
 
-  defp k_label(0.5), do: gettext("Stock")
-  defp k_label(0.55), do: gettext("Sport")
-  defp k_label(0.6), do: gettext("Competition")
-  defp k_label(0.78), do: gettext("Stock")
-  defp k_label(0.83), do: gettext("Sport")
-  defp k_label(0.88), do: gettext("Competition")
-  defp k_label(0.73), do: gettext("Stock")
-  defp k_label(0.77), do: gettext("Sport")
-  defp k_label(0.82), do: gettext("Competition")
-  defp k_label(0.7), do: gettext("Stock")
-  defp k_label(0.72), do: gettext("Sport")
-  defp k_label(0.75), do: gettext("Competition")
-  defp k_label(_k), do: ""
+  defp barrels_options do
+    [
+      {gettext("Single"), "1"},
+      {gettext("Dual (DCOE, IDF, 2E)"), "2"}
+    ]
+  end
+
+  defp k_label(_vehicle, nil), do: ""
+
+  defp k_label(vehicle, k) do
+    case Enum.find(k_options(vehicle), fn {_label, v} ->
+           {f, _} = Float.parse(v)
+           f == k
+         end) do
+      {label, _} -> label
+      nil -> ""
+    end
+  end
 
   defp parse_int(value) when is_binary(value) do
     case Integer.parse(value) do

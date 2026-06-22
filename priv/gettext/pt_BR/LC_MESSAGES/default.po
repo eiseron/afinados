@@ -250,11 +250,6 @@ msgstr "Cilindrada (cm³)"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
-msgid "Number of cylinders"
-msgstr "Número de cilindros"
-
-#: lib/afinados_web/live/intake_sizing_live.ex
-#, elixir-autogen, elixir-format
 msgid "Number of carburetors"
 msgstr "Número de carburadores"
 
@@ -312,3 +307,28 @@ msgstr "Ferramenta motorizada"
 #, elixir-autogen, elixir-format
 msgid "Moped"
 msgstr "Ciclomotor"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Barrels per carburetor"
+msgstr "Corpos por carburador"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Single"
+msgstr "Simples"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Dual (DCOE, IDF, 2E)"
+msgstr "Duplo (DCOE, IDF, 2E)"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Number of cylinders"
+msgstr "Número de cilindros"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Firing interval (crank degrees)"
+msgstr "Intervalo entre explosões (graus do virabrequim)"

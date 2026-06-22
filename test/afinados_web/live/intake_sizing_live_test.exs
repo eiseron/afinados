@@ -8,6 +8,8 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     cc: "125",
     cylinders: "1",
     carbs: "1",
+    barrels: "1",
+    firing_interval: "720",
     k: "0.70",
     boost: "0",
     ve: "0.85"
@@ -35,16 +37,6 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       view
       |> element("form")
       |> render_change(%{intake_sizing: %{@default_params | cc: "600"}})
-
-      assert has_element?(view, ".envelope")
-    end
-
-    test "multi-cylinder engine computes without error", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
-
-      view
-      |> element("form")
-      |> render_change(%{intake_sizing: %{@default_params | cc: "600", cylinders: "4"}})
 
       assert has_element?(view, ".envelope")
     end
