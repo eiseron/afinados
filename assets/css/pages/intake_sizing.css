@@ -44,6 +44,39 @@
   gap: var(--space-3);
 }
 
+.intake-sizing .controls fieldset.advanced legend button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.intake-sizing .controls fieldset.advanced legend button::after {
+  content: " ▾";
+}
+
+.intake-sizing .controls fieldset.advanced legend button[aria-expanded="false"]::after {
+  content: " ▸";
+}
+
+.intake-sizing .controls .advanced-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.intake-sizing .controls .advanced-collapsed {
+  margin: calc(-1 * var(--space-3)) 0 0;
+  padding: 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  letter-spacing: 0.2em;
+  line-height: 1;
+}
+
 .intake-sizing .envelope {
   fill: var(--color-envelope);
   opacity: 0.25;

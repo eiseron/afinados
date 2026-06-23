@@ -48,12 +48,18 @@ defmodule AfinadosWeb.IntakeSizingLive do
       "ve" => @default_ve
     }
 
+    socket = assign(socket, advanced_open: false)
     {:ok, recompute(socket, params)}
   end
 
   @impl true
   def handle_event("change", %{"intake_sizing" => params}, socket) do
-    {:noreply, recompute(socket, params)}
+    merged = Map.merge(socket.assigns[:params] || %{}, params)
+    {:noreply, recompute(socket, merged)}
+  end
+
+  def handle_event("toggle-advanced", _params, socket) do
+    {:noreply, assign(socket, advanced_open: !socket.assigns.advanced_open)}
   end
 
   @impl true
@@ -169,7 +175,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
       <aside class="controls" aria-label={gettext("Sizing controls")}>
         <.form for={@form} phx-change="change">
-          <fieldset>
+          <fieldset class="basic">
             <legend>{gettext("Parameters")}</legend>
 
             <.input
@@ -194,15 +200,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
               step="1"
             />
             <.input
-              :if={@show_firing}
-              field={@form[:firing_interval]}
-              type="number"
-              label={gettext("Firing interval (crank degrees)")}
-              min="60"
-              max="720"
-              step="30"
-            />
-            <.input
               field={@form[:carbs]}
               type="number"
               label={gettext("Number of carburetors")}
@@ -211,37 +208,63 @@ defmodule AfinadosWeb.IntakeSizingLive do
               step="1"
             />
             <.input
-              field={@form[:barrels]}
-              type="select"
-              label={gettext("Barrels per carburetor")}
-              options={barrels_options()}
-            />
-            <.input
               field={@form[:k]}
               type="select"
               label={gettext("Application profile")}
               options={k_options(@vehicle)}
             />
-            <.input
-              field={@form[:boost]}
-              type="number"
-              label={gettext("Boost pressure (bar)")}
-              min="0"
-              max="3"
-              step="0.1"
-            />
-            <div class="ve-slider">
-              <label for={@form[:ve].id}>{gettext("Volumetric efficiency")}</label>
-              <input
-                type="range"
-                id={@form[:ve].id}
-                name={@form[:ve].name}
-                value={@form[:ve].value}
-                min={VolumetricEfficiency.ve_min()}
-                max={VolumetricEfficiency.ve_max()}
-                step="0.01"
+          </fieldset>
+
+          <fieldset class="advanced">
+            <legend>
+              <button
+                type="button"
+                phx-click="toggle-advanced"
+                aria-expanded={to_string(@advanced_open)}
+              >
+                {gettext("Advanced")}
+              </button>
+            </legend>
+
+            <p :if={!@advanced_open} class="advanced-collapsed" aria-hidden="true">…</p>
+
+            <div :if={@advanced_open} class="advanced-fields">
+              <.input
+                field={@form[:barrels]}
+                type="select"
+                label={gettext("Barrels per carburetor")}
+                options={barrels_options()}
               />
-              <output>{@ve_value}</output>
+              <.input
+                :if={@show_firing}
+                field={@form[:firing_interval]}
+                type="number"
+                label={gettext("Firing interval (crank degrees)")}
+                min="60"
+                max="720"
+                step="30"
+              />
+              <.input
+                field={@form[:boost]}
+                type="number"
+                label={gettext("Boost pressure (bar)")}
+                min="0"
+                max="3"
+                step="0.1"
+              />
+              <div class="ve-slider">
+                <label for={@form[:ve].id}>{gettext("Volumetric efficiency")}</label>
+                <input
+                  type="range"
+                  id={@form[:ve].id}
+                  name={@form[:ve].name}
+                  value={@form[:ve].value}
+                  min={VolumetricEfficiency.ve_min()}
+                  max={VolumetricEfficiency.ve_max()}
+                  step="0.01"
+                />
+                <output>{@ve_value}</output>
+              </div>
             </div>
           </fieldset>
         </.form>

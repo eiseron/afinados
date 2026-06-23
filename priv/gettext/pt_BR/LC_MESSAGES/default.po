@@ -332,3 +332,8 @@ msgstr "Número de cilindros"
 #, elixir-autogen, elixir-format
 msgid "Firing interval (crank degrees)"
 msgstr "Intervalo entre explosões (graus do virabrequim)"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Advanced"
+msgstr "Avançado"
