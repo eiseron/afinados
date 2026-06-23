@@ -19,7 +19,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     test "renders the efficiency zone with default parameters", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "no longer renders the Ve curve", %{conn: conn} do
@@ -34,10 +34,15 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       refute has_element?(view, ".commercial-crossing")
     end
 
-    test "shows the default Ve_max percentage", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+    test "exposes the default Ve_max value through the form", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
-      assert html =~ "95%"
+      html =
+        view
+        |> element("button[phx-click='toggle-advanced']")
+        |> render_click()
+
+      assert html =~ "value=\"0.95\""
     end
   end
 
@@ -49,7 +54,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       |> element("form")
       |> render_change(%{intake_sizing: %{@default_params | cc: "600"}})
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "multiple carburetors computes without error", %{conn: conn} do
@@ -59,7 +64,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       |> element("form")
       |> render_change(%{intake_sizing: %{@default_params | cc: "600", carbs: "2"}})
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "changing application profile recomputes the zone", %{conn: conn} do
@@ -69,7 +74,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       |> element("form")
       |> render_change(%{intake_sizing: %{@default_params | k: "0.75"}})
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "adding boost pressure recomputes the zone", %{conn: conn} do
@@ -79,7 +84,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       |> element("form")
       |> render_change(%{intake_sizing: %{@default_params | boost: "1.0"}})
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "switching vehicle type resets the application profile", %{conn: conn} do
@@ -89,7 +94,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       |> element("form")
       |> render_change(%{intake_sizing: %{@default_params | vehicle: "car"}})
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "invalid displacement hides the chart", %{conn: conn} do
@@ -100,7 +105,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       |> render_change(%{intake_sizing: %{@default_params | cc: "0"}})
 
       assert has_element?(view, ".chart-empty")
-      refute has_element?(view, ".envelope")
+      refute has_element?(view, ".chart-panel")
     end
   end
 
@@ -251,11 +256,16 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       assert basic =~ "intake_sizing[carbs]"
     end
 
-    test "application profile (K) lives in the basic section", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+    test "application profile (K) lives in the advanced section", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
-      [basic, _advanced] = String.split(html, ~r/<fieldset\b[^>]*class="advanced"/)
-      assert basic =~ "intake_sizing[k]"
+      html =
+        view
+        |> element("button[phx-click='toggle-advanced']")
+        |> render_click()
+
+      [_, advanced] = String.split(html, ~r/<fieldset\b[^>]*class="advanced"/)
+      assert advanced =~ "intake_sizing[k]"
     end
   end
 
@@ -276,7 +286,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
         }
       })
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "Chevrolet Opala 4.1 — shared 2-bbl carb requires advanced fields", %{conn: conn} do
@@ -297,7 +307,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
         }
       })
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "Ford Maverick V8 with 2-bbl Motorcraft 2150 renders without error", %{conn: conn} do
@@ -318,7 +328,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
         }
       })
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "Harley Davidson Evo 1340 with V-twin 315° firing renders", %{conn: conn} do
@@ -339,7 +349,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
         }
       })
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
     end
 
     test "Fusca with twin Weber IDF 40 — competition config renders", %{conn: conn} do
@@ -360,7 +370,96 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
         }
       })
 
-      assert has_element?(view, ".envelope")
+      assert has_element?(view, ".chart-panel")
+    end
+  end
+
+  describe "solid color per commercial line" do
+    test "no longer defines linearGradient elements", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      refute html =~ "<linearGradient"
+    end
+
+    test "commercial-window line carries a solid stroke color", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      assert html =~ ~r/class="commercial-window" stroke="hsl\(/
+    end
+
+    test "CG 125 with a 22mm venturi in band paints green", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      html =
+        view
+        |> element("form")
+        |> render_change(%{
+          intake_sizing: %{
+            @default_params
+            | vehicle: "motorcycle",
+              cc: "125",
+              cylinders: "1",
+              carbs: "1",
+              k: "0.70"
+          }
+        })
+
+      assert html =~ ~r/stroke="hsl\(125, /
+    end
+
+    test "Maverick V8 stock renders solid stroke colors without error", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      html =
+        view
+        |> element("form")
+        |> render_change(%{
+          intake_sizing: %{
+            @default_params
+            | vehicle: "car",
+              cc: "4949",
+              cylinders: "8",
+              carbs: "1",
+              barrels: "2",
+              firing_interval: "90",
+              k: "0.60"
+          }
+        })
+
+      assert html =~ ~r/class="commercial-window" stroke="hsl\(/
+    end
+  end
+
+  describe "color legend" do
+    test "renders the legend ul", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      assert has_element?(view, "ul.legend")
+    end
+
+    test "renders five legend items", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      item_count = Regex.scan(~r/<li>\s*<svg class="swatch"/, html) |> length()
+      assert item_count == 5
+    end
+
+    test "labels the ideal color", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      assert html =~ "Ideal"
+    end
+
+    test "labels the working regime row", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      assert html =~ "Regime de trabalho do motor"
+    end
+
+    test "labels the out-of-regime row", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      assert html =~ "Fora do regime de trabalho"
     end
   end
 

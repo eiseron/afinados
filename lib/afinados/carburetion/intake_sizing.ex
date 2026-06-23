@@ -66,6 +66,21 @@ defmodule Afinados.Carburetion.IntakeSizing do
     end)
   end
 
+  @spec gas_velocity(number(), number(), %{
+          displacement: Displacement.t(),
+          ve: VolumetricEfficiency.t(),
+          config: EngineConfig.t()
+        }) :: float()
+  def gas_velocity(diameter, rpm, %{
+        displacement: %Displacement{cc: cc},
+        ve: %VolumetricEfficiency{value: ev},
+        config: %EngineConfig{} = config
+      })
+      when is_number(diameter) and diameter > 0 and is_number(rpm) and rpm > 0 do
+    n = EngineConfig.pulse_divisor(config)
+    cc * ev * rpm / (10 * n * :math.pi() * diameter * diameter)
+  end
+
   defp rpm_for_diameter(d, {cc, ve, %EngineConfig{k: k} = config}) do
     n = EngineConfig.pulse_divisor(config)
     p_abs = EngineConfig.p_abs(config)

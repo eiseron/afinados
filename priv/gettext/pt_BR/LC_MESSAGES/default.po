@@ -315,6 +315,46 @@ msgstr "Ciclomotor"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
+msgid "Stationary"
+msgstr "Estacionário"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Steady state"
+msgstr "Regime constante"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Color legend"
+msgstr "Legenda das cores"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Ideal"
+msgstr "Ideal"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Engine's working regime"
+msgstr "Regime de trabalho do motor"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Outside the working regime"
+msgstr "Fora do regime de trabalho"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Low velocity"
+msgstr "Baixa velocidade"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Restrictive"
+msgstr "Restringe"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
 msgid "Barrels per carburetor"
 msgstr "Corpos por carburador"
 

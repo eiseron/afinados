@@ -8,6 +8,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
     Displacement,
     EfficiencyZone,
     EngineConfig,
+    RpmBand,
+    VelocityPalette,
     VolumetricEfficiency
   }
 
@@ -133,7 +135,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
               y2={cl.y}
               class="commercial-line"
             />
-            <polygon points={@chart.envelope_polygon} class="envelope" />
             <line
               :for={cl <- @chart.commercial_lines}
               :if={cl.visible_window}
@@ -142,6 +143,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
               x2={cl.window_x2}
               y2={cl.y}
               class="commercial-window"
+              stroke={cl.color}
+              stroke-width={cl.stroke_width}
             />
           </g>
           <text
@@ -155,7 +158,33 @@ defmodule AfinadosWeb.IntakeSizingLive do
           </text>
         </svg>
 
-        <p class="ve-label">{@k_label} - {@ve_value}</p>
+        <ul class="legend" aria-label={gettext("Color legend")}>
+          <li :for={item <- legend_items()}>
+            <svg class="swatch" width="20" height="14" aria-hidden="true">
+              <rect
+                :for={{color, i} <- Enum.with_index(item.colors)}
+                :if={length(item.colors) == 2}
+                x={i * 11}
+                width="9"
+                height="14"
+                rx="2"
+                fill={color}
+              />
+              <line
+                :for={{color, i} <- Enum.with_index(item.colors)}
+                :if={length(item.colors) == 3}
+                x1="0"
+                x2="20"
+                y1={3 + i * 4}
+                y2={3 + i * 4}
+                stroke={color}
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            {item.label}
+          </li>
+        </ul>
       </section>
 
       <p :if={!@chart} class="chart-empty">
@@ -198,12 +227,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
               max="12"
               step="1"
             />
-            <.input
-              field={@form[:k]}
-              type="select"
-              label={gettext("Application profile")}
-              options={k_options(@vehicle)}
-            />
           </fieldset>
 
           <fieldset class="advanced">
@@ -220,6 +243,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
             <p :if={!@advanced_open} class="advanced-collapsed" aria-hidden="true">…</p>
 
             <div :if={@advanced_open} class="advanced-fields">
+              <.input
+                field={@form[:k]}
+                type="select"
+                label={gettext("Application profile")}
+                options={k_options(@vehicle)}
+              />
               <.input
                 field={@form[:barrels]}
                 type="select"
@@ -271,7 +300,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     ve = parse_float(params["ve"])
     config = parse_config(params)
 
-    chart = build_zone(cc, ve, config)
+    chart = build_zone(%{cc: cc, ve: ve, config: config, vehicle: vehicle})
 
     assign(socket,
       params: params,
@@ -309,26 +338,29 @@ defmodule AfinadosWeb.IntakeSizingLive do
   defp valid_k_values("motorcycle"), do: ~w(0.70 0.72 0.75)
   defp valid_k_values("moped"), do: ~w(0.78 0.83 0.88)
   defp valid_k_values("tool"), do: ~w(0.73 0.77 0.82)
+  defp valid_k_values("stationary"), do: ~w(0.75)
   defp valid_k_values(_vehicle), do: ~w(0.60 0.65 0.70)
 
   defp default_k("motorcycle"), do: "0.70"
   defp default_k("moped"), do: "0.78"
   defp default_k("tool"), do: "0.73"
+  defp default_k("stationary"), do: "0.75"
   defp default_k(_vehicle), do: "0.60"
 
-  defp build_zone(cc, ve, %EngineConfig{} = config)
+  defp build_zone(%{cc: cc, ve: ve, config: %EngineConfig{} = config, vehicle: vehicle})
        when is_integer(cc) and cc > 0 and is_float(ve) do
     with {:ok, displacement} <- Displacement.new(cc),
          {:ok, vol_eff} <- VolumetricEfficiency.new(ve) do
       zone = IntakeSizing.efficiency_zone(displacement, vol_eff, config)
       lines = IntakeSizing.commercial_lines(displacement, vol_eff, config)
-      build_chart(zone, lines)
+      engine = %{displacement: displacement, ve: vol_eff, config: config, vehicle: vehicle}
+      build_chart(zone, lines, engine)
     else
       _ -> nil
     end
   end
 
-  defp build_zone(_cc, _ve, _config), do: nil
+  defp build_zone(_params), do: nil
 
   defp parse_config(params) do
     k = parse_float(params["k"])
@@ -354,7 +386,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     end
   end
 
-  defp build_chart(%EfficiencyZone{envelope: envelope}, lines) do
+  defp build_chart(%EfficiencyZone{envelope: envelope}, lines, engine) do
     all_diameters =
       Enum.map(envelope.lower, & &1.diameter) ++
         Enum.map(envelope.upper, & &1.diameter)
@@ -386,45 +418,50 @@ defmodule AfinadosWeb.IntakeSizingLive do
       x1: @x1,
       y_top: @y_top,
       y_bottom: @y_bottom,
-      envelope_polygon: envelope_polygon(envelope, scale),
-      commercial_lines: chart_commercial_lines(lines, scale),
+      commercial_lines: chart_commercial_lines(lines, scale, engine),
       x_ticks: x_ticks(scale)
     }
   end
 
-  defp chart_commercial_lines(lines, scale) do
+  defp chart_commercial_lines(lines, scale, engine) do
     lines
     |> Enum.filter(fn %CommercialSize{diameter: d} ->
       d * 1.0 >= scale.d_min and d * 1.0 <= scale.d_max
     end)
-    |> Enum.map(fn %CommercialSize{diameter: d, rpm_window: {rpm_lo, rpm_hi}} ->
-      y = round1(scale_y(d * 1.0, scale))
-      window_visible = rpm_lo <= scale.rpm_max and rpm_hi >= scale.rpm_min
-
-      %{
-        diameter: d,
-        y: y,
-        label: "#{d}",
-        window_x1: round1(scale_x(max(rpm_lo, scale.rpm_min), scale)),
-        window_x2: round1(scale_x(min(rpm_hi, scale.rpm_max), scale)),
-        visible_window: window_visible
-      }
+    |> Enum.map(fn %CommercialSize{diameter: d, rpm_window: window} ->
+      build_line(%{diameter: d, window: window, scale: scale, engine: engine})
     end)
+  end
+
+  defp build_line(%{diameter: d, window: {rpm_lo, rpm_hi} = window, scale: scale, engine: engine}) do
+    y = round1(scale_y(d * 1.0, scale))
+    window_visible = rpm_lo <= scale.rpm_max and rpm_hi >= scale.rpm_min
+    window_lo = max(rpm_lo, scale.rpm_min)
+    window_hi = min(rpm_hi, scale.rpm_max)
+    velocity = IntakeSizing.gas_velocity(d, RpmBand.center(engine.vehicle), engine)
+    in_band = RpmBand.overlaps?(engine.vehicle, window)
+    color = VelocityPalette.color_for(%{velocity: velocity, in_band: in_band})
+    ideal_at_center = center_velocity_ideal?(velocity)
+
+    %{
+      diameter: d,
+      y: y,
+      label: "#{d}",
+      window_x1: round1(scale_x(window_lo, scale)),
+      window_x2: round1(scale_x(window_hi, scale)),
+      visible_window: window_visible,
+      color: color,
+      stroke_width: if(ideal_at_center, do: 2.5, else: 1.2)
+    }
+  end
+
+  defp center_velocity_ideal?(v) do
+    v >= VelocityPalette.anemic_threshold() and v <= VelocityPalette.restriction_threshold()
   end
 
   defp rpm_range(points) do
     rpms = Enum.map(points, & &1.rpm)
     {Enum.min(rpms), Enum.max(rpms)}
-  end
-
-  defp envelope_polygon(%{lower: lower, upper: upper}, scale) do
-    upper_line = Enum.map_join(upper, " ", &point_str(&1, scale))
-    lower_line = lower |> Enum.reverse() |> Enum.map_join(" ", &point_str(&1, scale))
-    upper_line <> " " <> lower_line
-  end
-
-  defp point_str(%{rpm: rpm, diameter: d}, scale) do
-    "#{round1(scale_x(rpm, scale))},#{round1(scale_y(d, scale))}"
   end
 
   defp scale_x(rpm, %{rpm_min: rpm_min, rpm_max: rpm_max}) when rpm_max > rpm_min do
@@ -475,6 +512,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
       {gettext("Motorcycle"), "motorcycle"},
       {gettext("Car"), "car"},
       {gettext("Power tool"), "tool"},
+      {gettext("Stationary"), "stationary"},
       {gettext("Moped"), "moped"}
     ]
   end
@@ -503,11 +541,57 @@ defmodule AfinadosWeb.IntakeSizingLive do
     ]
   end
 
+  defp k_options("stationary") do
+    [{gettext("Steady state"), "0.75"}]
+  end
+
   defp k_options(_vehicle) do
     [
       {gettext("Stock"), "0.60"},
       {gettext("Sport"), "0.65"},
       {gettext("Competition"), "0.70"}
+    ]
+  end
+
+  defp legend_items do
+    [
+      %{
+        colors: [
+          VelocityPalette.color_for(%{velocity: 100, in_band: true}),
+          VelocityPalette.color_for(%{velocity: 100, in_band: false})
+        ],
+        label: gettext("Ideal")
+      },
+      %{
+        colors: [
+          VelocityPalette.color_for(%{velocity: 40, in_band: true}),
+          VelocityPalette.color_for(%{velocity: 40, in_band: false})
+        ],
+        label: gettext("Low velocity")
+      },
+      %{
+        colors: [
+          VelocityPalette.color_for(%{velocity: 200, in_band: true}),
+          VelocityPalette.color_for(%{velocity: 200, in_band: false})
+        ],
+        label: gettext("Restrictive")
+      },
+      %{
+        colors: [
+          VelocityPalette.color_for(%{velocity: 40, in_band: true}),
+          VelocityPalette.color_for(%{velocity: 100, in_band: true}),
+          VelocityPalette.color_for(%{velocity: 200, in_band: true})
+        ],
+        label: gettext("Engine's working regime")
+      },
+      %{
+        colors: [
+          VelocityPalette.color_for(%{velocity: 40, in_band: false}),
+          VelocityPalette.color_for(%{velocity: 100, in_band: false}),
+          VelocityPalette.color_for(%{velocity: 200, in_band: false})
+        ],
+        label: gettext("Outside the working regime")
+      }
     ]
   end
 

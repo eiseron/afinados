@@ -77,11 +77,6 @@
   line-height: 1;
 }
 
-.intake-sizing .envelope {
-  fill: var(--color-envelope);
-  opacity: 0.25;
-}
-
 .intake-sizing .ve-curve {
   fill: none;
   stroke: var(--color-series-1);
@@ -96,18 +91,33 @@
 }
 
 .intake-sizing .commercial-window {
-  stroke: var(--color-series-2, #ea580c);
-  stroke-width: 2;
-  opacity: 0.7;
-}
-
-.intake-sizing .commercial-crossing {
-  fill: var(--color-series-2, #ea580c);
+  opacity: 0.9;
 }
 
 .intake-sizing .commercial-label {
   fill: var(--color-text-muted);
   font-size: 9px;
+}
+
+.intake-sizing .legend {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-3) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.intake-sizing .legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.intake-sizing .legend .swatch {
+  flex-shrink: 0;
 }
 
 .intake-sizing .ve-label {

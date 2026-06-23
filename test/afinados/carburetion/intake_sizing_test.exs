@@ -513,6 +513,40 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
     end
   end
 
+  describe "gas_velocity/3" do
+    setup do
+      {:ok, displacement} = Displacement.new(125)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+      %{engine: %{displacement: displacement, ve: ve, config: @config}}
+    end
+
+    test "is inversely proportional to area (D squared)", %{engine: engine} do
+      v1 = IntakeSizing.gas_velocity(20, 9000, engine)
+      v2 = IntakeSizing.gas_velocity(40, 9000, engine)
+
+      assert_in_delta v1 / v2, 4.0, 1.0e-9
+    end
+
+    test "scales linearly with RPM", %{engine: engine} do
+      slow = IntakeSizing.gas_velocity(22, 5000, engine)
+      fast = IntakeSizing.gas_velocity(22, 10_000, engine)
+
+      assert_in_delta fast / slow, 2.0, 1.0e-9
+    end
+
+    test "CG 125 at 22mm and 9000 rpm lands above the anemic floor", %{engine: engine} do
+      velocity = IntakeSizing.gas_velocity(22, 9000, engine)
+
+      assert velocity >= 50.0
+    end
+
+    test "CG 125 at 22mm and 9000 rpm stays below the choke ceiling", %{engine: engine} do
+      velocity = IntakeSizing.gas_velocity(22, 9000, engine)
+
+      assert velocity <= 250.0
+    end
+  end
+
   describe "real-world reference cases — stock motorcycles (K=0.70, VE=0.85)" do
     setup do
       {:ok, ve} = VolumetricEfficiency.new(0.85)
