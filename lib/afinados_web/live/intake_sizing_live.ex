@@ -32,7 +32,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @default_firing_interval "180"
   @default_k "0.70"
   @default_boost "0"
-  @default_ve "0.85"
+  @default_ve "0.95"
 
   @impl true
   def mount(_params, _session, socket) do
@@ -134,7 +134,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
               class="commercial-line"
             />
             <polygon points={@chart.envelope_polygon} class="envelope" />
-            <polyline points={@chart.curve_polyline} class="ve-curve" />
             <line
               :for={cl <- @chart.commercial_lines}
               :if={cl.visible_window}
@@ -143,14 +142,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
               x2={cl.window_x2}
               y2={cl.y}
               class="commercial-window"
-            />
-            <circle
-              :for={cl <- @chart.commercial_lines}
-              :if={cl.crossing_visible}
-              cx={cl.crossing_x}
-              cy={cl.y}
-              r="3"
-              class="commercial-crossing"
             />
           </g>
           <text
@@ -253,7 +244,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
                 step="0.1"
               />
               <div class="ve-slider">
-                <label for={@form[:ve].id}>{gettext("Volumetric efficiency")}</label>
+                <label for={@form[:ve].id}>{gettext("Maximum volumetric efficiency")}</label>
                 <input
                   type="range"
                   id={@form[:ve].id}
@@ -330,8 +321,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
     with {:ok, displacement} <- Displacement.new(cc),
          {:ok, vol_eff} <- VolumetricEfficiency.new(ve) do
       zone = IntakeSizing.efficiency_zone(displacement, vol_eff, config)
-      lines = IntakeSizing.commercial_lines(displacement, config)
-      build_chart(zone, lines, ve)
+      lines = IntakeSizing.commercial_lines(displacement, vol_eff, config)
+      build_chart(zone, lines)
     else
       _ -> nil
     end
@@ -363,22 +354,16 @@ defmodule AfinadosWeb.IntakeSizingLive do
     end
   end
 
-  defp build_chart(%EfficiencyZone{envelope: envelope, curve: curve}, lines, ve) do
+  defp build_chart(%EfficiencyZone{envelope: envelope}, lines) do
     all_diameters =
       Enum.map(envelope.lower, & &1.diameter) ++
         Enum.map(envelope.upper, & &1.diameter)
 
-    d_max =
-      min(
-        (List.last(lines).diameter + 2) * 1.0,
-        (div(ceil(Enum.max(all_diameters)) + 1, 2) * 2 + 2) * 1.0
-      )
+    envelope_min_d = Enum.min(all_diameters)
+    envelope_max_d = Enum.max(all_diameters)
 
-    d_min =
-      max(
-        (List.first(lines).diameter - 2) * 1.0,
-        (div(floor(Enum.min(all_diameters)), 2) * 2 - 2) * 1.0
-      )
+    d_max = (div(ceil(envelope_max_d) + 1, 2) * 2 + 2) * 1.0
+    d_min = div(max(floor(envelope_min_d), 0), 2) * 2 * 1.0
 
     visible_rpms =
       envelope.lower
@@ -402,15 +387,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
       y_top: @y_top,
       y_bottom: @y_bottom,
       envelope_polygon: envelope_polygon(envelope, scale),
-      curve_polyline: points_polyline(curve, scale),
-      commercial_lines: chart_commercial_lines(lines, ve, scale),
+      commercial_lines: chart_commercial_lines(lines, scale),
       x_ticks: x_ticks(scale)
     }
   end
 
-  defp chart_commercial_lines(lines, ve, scale) do
-    ve_max = VolumetricEfficiency.ve_max()
-
+  defp chart_commercial_lines(lines, scale) do
     lines
     |> Enum.filter(fn %CommercialSize{diameter: d} ->
       d * 1.0 >= scale.d_min and d * 1.0 <= scale.d_max
@@ -418,7 +400,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
     |> Enum.map(fn %CommercialSize{diameter: d, rpm_window: {rpm_lo, rpm_hi}} ->
       y = round1(scale_y(d * 1.0, scale))
       window_visible = rpm_lo <= scale.rpm_max and rpm_hi >= scale.rpm_min
-      crossing_rpm = rpm_lo * ve_max / ve
 
       %{
         diameter: d,
@@ -426,9 +407,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
         label: "#{d}",
         window_x1: round1(scale_x(max(rpm_lo, scale.rpm_min), scale)),
         window_x2: round1(scale_x(min(rpm_hi, scale.rpm_max), scale)),
-        visible_window: window_visible,
-        crossing_x: round1(scale_x(crossing_rpm, scale)),
-        crossing_visible: crossing_rpm >= scale.rpm_min and crossing_rpm <= scale.rpm_max
+        visible_window: window_visible
       }
     end)
   end
@@ -442,10 +421,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
     upper_line = Enum.map_join(upper, " ", &point_str(&1, scale))
     lower_line = lower |> Enum.reverse() |> Enum.map_join(" ", &point_str(&1, scale))
     upper_line <> " " <> lower_line
-  end
-
-  defp points_polyline(points, scale) do
-    Enum.map_join(points, " ", &point_str(&1, scale))
   end
 
   defp point_str(%{rpm: rpm, diameter: d}, scale) do

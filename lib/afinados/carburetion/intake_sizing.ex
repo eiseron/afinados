@@ -34,21 +34,26 @@ defmodule Afinados.Carburetion.IntakeSizing do
         %EngineConfig{} = config
       ) do
     rpms = rpm_range()
-    ve_min = VolumetricEfficiency.ve_min()
-    ve_max = VolumetricEfficiency.ve_max()
+    ve_min = VolumetricEfficiency.envelope_min(ve)
+    ve_max = VolumetricEfficiency.envelope_max(ve)
     cc = displacement.cc
 
     lower = Enum.map(rpms, &%{rpm: &1, diameter: diameter_raw(cc, {ve_min, &1}, config)})
     upper = Enum.map(rpms, &%{rpm: &1, diameter: diameter_raw(cc, {ve_max, &1}, config)})
-    curve = Enum.map(rpms, &%{rpm: &1, diameter: diameter_raw(cc, {ve.value, &1}, config)})
 
-    %EfficiencyZone{envelope: %{lower: lower, upper: upper}, curve: curve}
+    %EfficiencyZone{envelope: %{lower: lower, upper: upper}}
   end
 
-  @spec commercial_lines(Displacement.t(), EngineConfig.t()) :: [CommercialSize.t()]
-  def commercial_lines(%Displacement{cc: cc}, %EngineConfig{} = config) do
-    ve_min = VolumetricEfficiency.ve_min()
-    ve_max = VolumetricEfficiency.ve_max()
+  @spec commercial_lines(Displacement.t(), VolumetricEfficiency.t(), EngineConfig.t()) :: [
+          CommercialSize.t()
+        ]
+  def commercial_lines(
+        %Displacement{cc: cc},
+        %VolumetricEfficiency{} = ve,
+        %EngineConfig{} = config
+      ) do
+    ve_min = VolumetricEfficiency.envelope_min(ve)
+    ve_max = VolumetricEfficiency.envelope_max(ve)
 
     Enum.map(@commercial_diameters, fn d ->
       %CommercialSize{

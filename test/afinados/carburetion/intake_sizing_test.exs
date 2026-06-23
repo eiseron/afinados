@@ -47,11 +47,11 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
     end
 
     test "accepts a value at the upper bound" do
-      assert {:ok, %VolumetricEfficiency{value: 1.3}} = VolumetricEfficiency.new(1.3)
+      assert {:ok, %VolumetricEfficiency{value: 1.15}} = VolumetricEfficiency.new(1.15)
     end
 
     test "accepts a value within the range" do
-      assert {:ok, %VolumetricEfficiency{value: 0.97}} = VolumetricEfficiency.new(0.97)
+      assert {:ok, %VolumetricEfficiency{value: 0.95}} = VolumetricEfficiency.new(0.95)
     end
 
     test "rejects a value below the range" do
@@ -59,7 +59,27 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
     end
 
     test "rejects a value above the range" do
-      assert :error = VolumetricEfficiency.new(1.31)
+      assert :error = VolumetricEfficiency.new(1.16)
+    end
+  end
+
+  describe "VolumetricEfficiency envelope" do
+    test "envelope_max returns the slider value" do
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
+
+      assert_in_delta VolumetricEfficiency.envelope_max(ve), 0.95, 1.0e-9
+    end
+
+    test "envelope_min subtracts 0.30 from the slider value" do
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
+
+      assert_in_delta VolumetricEfficiency.envelope_min(ve), 0.65, 1.0e-9
+    end
+
+    test "envelope_min always preserves the 30-point width from the slider value" do
+      {:ok, ve} = VolumetricEfficiency.new(0.5)
+
+      assert_in_delta VolumetricEfficiency.envelope_min(ve), 0.2, 1.0e-9
     end
   end
 
@@ -376,7 +396,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
   describe "efficiency_zone/3" do
     setup do
       {:ok, displacement} = Displacement.new(600)
-      {:ok, ve} = VolumetricEfficiency.new(0.97)
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
       %{displacement: displacement, ve: ve}
     end
 
@@ -384,73 +404,74 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       assert %EfficiencyZone{} = IntakeSizing.efficiency_zone(d, ve, @config)
     end
 
-    test "the lower envelope bound uses Ve_min", %{displacement: d, ve: ve} do
-      zone = IntakeSizing.efficiency_zone(d, ve, @config)
-      lower_at_8k = Enum.find(zone.envelope.lower, &(&1.rpm == 8000))
-      expected = 0.55 * :math.sqrt(600 * 8000 * 0.5 / (1 * 1000))
-
-      assert_in_delta lower_at_8k.diameter, expected, 1.0e-9
-    end
-
-    test "the upper envelope bound uses Ve_max", %{displacement: d, ve: ve} do
+    test "the upper envelope bound uses the slider value as Ve_max", %{displacement: d, ve: ve} do
       zone = IntakeSizing.efficiency_zone(d, ve, @config)
       upper_at_8k = Enum.find(zone.envelope.upper, &(&1.rpm == 8000))
-      expected = 0.55 * :math.sqrt(600 * 8000 * 1.3 / (1 * 1000))
+      expected = 0.55 * :math.sqrt(600 * 8000 * 0.95 / (1 * 1000))
 
       assert_in_delta upper_at_8k.diameter, expected, 1.0e-9
     end
 
-    test "the curve lives within the envelope at every rpm", %{displacement: d, ve: ve} do
+    test "the lower envelope bound is Ve_max minus 0.30", %{displacement: d, ve: ve} do
       zone = IntakeSizing.efficiency_zone(d, ve, @config)
+      lower_at_8k = Enum.find(zone.envelope.lower, &(&1.rpm == 8000))
+      expected = 0.55 * :math.sqrt(600 * 8000 * 0.65 / (1 * 1000))
 
-      assert Enum.zip([zone.envelope.lower, zone.envelope.upper, zone.curve])
-             |> Enum.all?(fn {lower, upper, curve} ->
-               curve.diameter >= lower.diameter - 1.0e-9 and
-                 curve.diameter <= upper.diameter + 1.0e-9
-             end)
+      assert_in_delta lower_at_8k.diameter, expected, 1.0e-9
     end
 
-    test "raising the Ve shifts the curve toward larger diameters", %{displacement: d} do
+    test "no longer exposes a curve field", %{displacement: d, ve: ve} do
+      zone = IntakeSizing.efficiency_zone(d, ve, @config)
+
+      refute Map.has_key?(zone, :curve)
+    end
+
+    test "raising Ve_max widens both envelope bounds", %{displacement: d} do
       {:ok, ve_low} = VolumetricEfficiency.new(0.85)
       {:ok, ve_high} = VolumetricEfficiency.new(1.10)
 
       zone_low = IntakeSizing.efficiency_zone(d, ve_low, @config)
       zone_high = IntakeSizing.efficiency_zone(d, ve_high, @config)
 
-      assert Enum.zip(zone_low.curve, zone_high.curve)
+      assert Enum.zip(zone_low.envelope.upper, zone_high.envelope.upper)
              |> Enum.all?(fn {low, high} -> high.diameter > low.diameter end)
     end
 
-    test "the envelope is the same regardless of the Ve chosen", %{displacement: d} do
-      {:ok, ve_a} = VolumetricEfficiency.new(0.85)
-      {:ok, ve_b} = VolumetricEfficiency.new(1.10)
+    test "envelope keeps 30-point width even at the slider minimum" do
+      {:ok, displacement} = Displacement.new(600)
+      {:ok, ve} = VolumetricEfficiency.new(0.5)
+      zone = IntakeSizing.efficiency_zone(displacement, ve, @config)
+      lower_at_8k = Enum.find(zone.envelope.lower, &(&1.rpm == 8000))
+      expected = 0.55 * :math.sqrt(600 * 8000 * 0.2 / (1 * 1000))
 
-      zone_a = IntakeSizing.efficiency_zone(d, ve_a, @config)
-      zone_b = IntakeSizing.efficiency_zone(d, ve_b, @config)
-
-      assert zone_a.envelope == zone_b.envelope
+      assert_in_delta lower_at_8k.diameter, expected, 1.0e-9
     end
   end
 
-  describe "commercial_lines/2" do
-    test "returns a non-empty list of CommercialSize structs" do
-      {:ok, displacement} = Displacement.new(600)
-
-      assert [%CommercialSize{} | _] = IntakeSizing.commercial_lines(displacement, @config)
+  describe "commercial_lines/3" do
+    setup do
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
+      %{ve: ve}
     end
 
-    test "every RPM window has rpm_low < rpm_high" do
+    test "returns a non-empty list of CommercialSize structs", %{ve: ve} do
+      {:ok, displacement} = Displacement.new(600)
+
+      assert [%CommercialSize{} | _] = IntakeSizing.commercial_lines(displacement, ve, @config)
+    end
+
+    test "every RPM window has rpm_low < rpm_high", %{ve: ve} do
       {:ok, displacement} = Displacement.new(600)
 
       assert Enum.all?(
-               IntakeSizing.commercial_lines(displacement, @config),
+               IntakeSizing.commercial_lines(displacement, ve, @config),
                fn %CommercialSize{rpm_window: {lo, hi}} -> lo > 0 and hi > lo end
              )
     end
 
-    test "a larger diameter needs higher RPM to enter the envelope" do
+    test "a larger diameter needs higher RPM to enter the envelope", %{ve: ve} do
       {:ok, displacement} = Displacement.new(600)
-      lines = IntakeSizing.commercial_lines(displacement, @config)
+      lines = IntakeSizing.commercial_lines(displacement, ve, @config)
       windows = Enum.map(lines, fn %CommercialSize{rpm_window: {lo, _}} -> lo end)
 
       assert windows == Enum.sort(windows)
@@ -458,6 +479,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
 
     test "the RPM window is the inverse of diameter_at" do
       {:ok, displacement} = Displacement.new(250)
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
 
       {:ok, config} =
         EngineConfig.new(%{
@@ -470,19 +492,19 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
         })
 
       [%CommercialSize{diameter: d, rpm_window: {rpm_lo, rpm_hi}} | _] =
-        IntakeSizing.commercial_lines(displacement, config)
+        IntakeSizing.commercial_lines(displacement, ve, config)
 
-      {:ok, ve_max} = VolumetricEfficiency.new(VolumetricEfficiency.ve_max())
-      {:ok, ve_min} = VolumetricEfficiency.new(VolumetricEfficiency.ve_min())
+      {:ok, ve_envelope_max} = VolumetricEfficiency.new(VolumetricEfficiency.envelope_max(ve))
+      {:ok, ve_envelope_min} = VolumetricEfficiency.new(VolumetricEfficiency.envelope_min(ve))
 
-      assert_in_delta IntakeSizing.diameter_at(displacement, ve_max, %{
+      assert_in_delta IntakeSizing.diameter_at(displacement, ve_envelope_max, %{
                         rpm: rpm_lo,
                         config: config
                       }),
                       d * 1.0,
                       1.0e-6
 
-      assert_in_delta IntakeSizing.diameter_at(displacement, ve_min, %{
+      assert_in_delta IntakeSizing.diameter_at(displacement, ve_envelope_min, %{
                         rpm: rpm_hi,
                         config: config
                       }),
@@ -773,6 +795,47 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       diameter = IntakeSizing.diameter_at(displacement, ve, %{rpm: 4000, config: config})
 
       assert_in_delta diameter, 20.0, 3.0
+    end
+
+    test "Envelope upper for Fusca 1600 matches stock 24mm carb at peak Ve_max" do
+      {:ok, displacement} = Displacement.new(1584)
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      zone = IntakeSizing.efficiency_zone(displacement, ve, config)
+      upper_at_4k = Enum.find(zone.envelope.upper, &(&1.rpm == 4000))
+
+      assert_in_delta upper_at_4k.diameter, 24.0, 3.0
+    end
+
+    test "Envelope lower for Fusca 1600 reflects 30-point Ve drop from Ve_max" do
+      {:ok, displacement} = Displacement.new(1584)
+      {:ok, ve} = VolumetricEfficiency.new(0.95)
+
+      {:ok, config} =
+        EngineConfig.new(%{
+          k: 0.60,
+          cylinders: 4,
+          carbs: 1,
+          barrels: 1,
+          firing_interval: 180,
+          boost: 0.0
+        })
+
+      zone = IntakeSizing.efficiency_zone(displacement, ve, config)
+      lower_at_4k = Enum.find(zone.envelope.lower, &(&1.rpm == 4000))
+      expected = 0.60 * :math.sqrt(1584 * 4000 * 0.65 / 3000)
+
+      assert_in_delta lower_at_4k.diameter, expected, 1.0e-9
     end
 
     test "Classic BSA A50 500 — 360°-fire parallel twin, single Amal Concentric ~26mm" do

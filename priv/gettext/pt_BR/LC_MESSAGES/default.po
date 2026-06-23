@@ -285,6 +285,11 @@ msgstr "Eficiência volumétrica"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
+msgid "Maximum volumetric efficiency"
+msgstr "Eficiência volumétrica máxima"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
 msgid "Engine type"
 msgstr "Tipo de motor"
 

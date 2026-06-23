@@ -12,7 +12,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     firing_interval: "720",
     k: "0.70",
     boost: "0",
-    ve: "0.85"
+    ve: "0.95"
   }
 
   describe "mount" do
@@ -20,13 +20,24 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
       assert has_element?(view, ".envelope")
-      assert has_element?(view, ".ve-curve")
     end
 
-    test "shows the Ve percentage for the default", %{conn: conn} do
+    test "no longer renders the Ve curve", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      refute has_element?(view, ".ve-curve")
+    end
+
+    test "no longer renders commercial crossing markers", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      refute has_element?(view, ".commercial-crossing")
+    end
+
+    test "shows the default Ve_max percentage", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
 
-      assert html =~ "85%"
+      assert html =~ "95%"
     end
   end
 
