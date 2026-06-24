@@ -12,7 +12,6 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     firing_interval: "720",
     manifold: "dedicated",
     induction: "carburetor",
-    fuel: "gasoline",
     k: "0.70",
     boost: "0",
     ve: "0.95"

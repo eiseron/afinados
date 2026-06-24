@@ -65,7 +65,6 @@ A slider for **maximum volumetric efficiency** lives in the advanced section. It
    - **Intake manifold**: *Dedicated* (DCOE pair, CB400 four, IDA in a V8) — each carb feeds its own subset of cylinders. *Shared* (single Weber feeding 4 cyl, Quadrijet, single Holley) — all carbs feed a common plenum; more carbs reduce per-carb peak velocity linearly.
    - **Firing interval**: crank degrees between cylinder firings. Active only when cylinders share a carburetor. Accounts for pulse overlap when multiple cylinders feed the same venturi.
    - **Boost pressure (bar)**: for blow-through turbo setups.
-   - **Fuel**: Gasoline (default), Ethanol, Methanol, Nitromethane or CNG. In injection mode, a sixth option **Flex** appears (~+3%, typical Brazilian gasoline-ethanol blend). Alcohol-class fuels evaporate endothermically and cool the intake charge, raising effective VE (~+5% ethanol, ~+10% methanol, ~+30% nitromethane). CNG is gaseous in the manifold so it doesn't cool the charge — instead, it slightly displaces intake air (factor ~0.95). The chart scales gas velocity by these factors.
    - **Maximum volumetric efficiency**: ranges from 50% (worn, very restrictive) to 115% (race with tuned intake/exhaust).
 
 ## Reading the results

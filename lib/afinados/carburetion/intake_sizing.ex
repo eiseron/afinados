@@ -26,8 +26,7 @@ defmodule Afinados.Carburetion.IntakeSizing do
       })
       when is_number(diameter) and diameter > 0 and is_number(rpm) and rpm > 0 do
     n = EngineConfig.pulse_divisor(config)
-    ff = EngineConfig.fuel_factor(config)
-    cc * ev * ff * rpm / (10 * n * :math.pi() * diameter * diameter)
+    cc * ev * rpm / (10 * n * :math.pi() * diameter * diameter)
   end
 
   @spec rpm_for_velocity(number(), number(), %{
@@ -42,7 +41,6 @@ defmodule Afinados.Carburetion.IntakeSizing do
       })
       when is_number(diameter) and diameter > 0 and is_number(velocity) and velocity > 0 do
     n = EngineConfig.pulse_divisor(config)
-    ff = EngineConfig.fuel_factor(config)
-    velocity * 10 * n * :math.pi() * diameter * diameter / (cc * ev * ff)
+    velocity * 10 * n * :math.pi() * diameter * diameter / (cc * ev)
   end
 end
