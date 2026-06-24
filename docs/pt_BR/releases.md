@@ -1,11 +1,15 @@
 ---
-title: Novidades da versão 0.2
-description: O que mudou para o usuário na linha 0.2 do Afinados.
+title: Novidades
+description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 ---
 
-# Novidades da versão 0.2
+# Novidades
 
-Registro das mudanças visíveis ao usuário na linha 0.2.x.
+Registro das mudanças visíveis ao usuário.
+
+## 0.3.0
+
+- **Ferramenta nova — Dimensionamento de admissão:** estima o venturi ideal para um motor e mostra como os tamanhos comerciais se encaixam na faixa de RPM. Cor por RPM (verde ideal, azul para velocidade baixa, amarelo para restrição), com trecho mais grosso sobre o regime de trabalho do motor. Suporta motos, carros, ciclomotores, ferramentas motorizadas e motores estacionários, com presets de K por veículo e seção avançada para turbo, corpos, intervalo entre explosões e VE máxima.
 
 ## 0.2.1
 

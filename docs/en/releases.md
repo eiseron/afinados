@@ -1,11 +1,15 @@
 ---
-title: What's new in 0.2
-description: User-facing changes in the Afinados 0.2 line.
+title: What's new
+description: User-facing changes across Afinados releases.
 ---
 
-# What's new in 0.2
+# What's new
 
-A log of user-facing changes in the 0.2.x line.
+A log of user-facing changes.
+
+## 0.3.0
+
+- **New tool — Intake sizing:** estimates the ideal venturi for an engine and plots how commercial sizes fit your RPM band. Color-coded per RPM (green ideal, blue for low velocity, yellow for restriction), with a thicker segment over the engine's working regime. Supports motorcycles, cars, mopeds, power tools and stationary engines, with per-vehicle K presets and an advanced section for boost, barrels, firing interval and Ve_max.
 
 ## 0.2.1
 
