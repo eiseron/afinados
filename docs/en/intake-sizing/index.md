@@ -42,7 +42,10 @@ The RPM band depends on the engine type you pick:
 
 - Motorcycle: 2.500–14.000 rpm
 - Moped: 3.000–10.000 rpm
-- Power tool (chainsaw, brush cutter): 6.000–13.000 rpm
+- Kart: 9.000–14.500 rpm
+- Jetski: 5.000–9.000 rpm
+- Outboard: 3.000–6.500 rpm
+- Chainsaw: 6.000–13.000 rpm
 - Stationary engine (generator, pump): 2.900–3.700 rpm
 - Car: 1.500–6.500 rpm
 

@@ -12,7 +12,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
   }
 
   @rpm_min 2000
-  @rpm_max 14_000
 
   @vb_w 360
   @vb_h 242
@@ -366,13 +365,19 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp valid_k_values("motorcycle"), do: ~w(0.70 0.72 0.75)
   defp valid_k_values("moped"), do: ~w(0.78 0.83 0.88)
-  defp valid_k_values("tool"), do: ~w(0.73 0.77 0.82)
+  defp valid_k_values("chainsaw"), do: ~w(0.73 0.77 0.82)
+  defp valid_k_values("jetski"), do: ~w(0.70 0.75 0.82)
+  defp valid_k_values("outboard"), do: ~w(0.62 0.66 0.72)
+  defp valid_k_values("kart"), do: ~w(0.72 0.78 0.85)
   defp valid_k_values("stationary"), do: ~w(0.75)
   defp valid_k_values(_vehicle), do: ~w(0.60 0.65 0.70)
 
   defp default_k("motorcycle"), do: "0.70"
   defp default_k("moped"), do: "0.78"
-  defp default_k("tool"), do: "0.73"
+  defp default_k("chainsaw"), do: "0.73"
+  defp default_k("jetski"), do: "0.70"
+  defp default_k("outboard"), do: "0.62"
+  defp default_k("kart"), do: "0.72"
   defp default_k("stationary"), do: "0.75"
   defp default_k(_vehicle), do: "0.60"
 
@@ -426,7 +431,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
   end
 
   defp build_chart(engine) do
-    rpm_window = %{rpm_min: @rpm_min, rpm_max: @rpm_max}
+    rpm_max = RpmBand.chart_max(engine.vehicle)
+    rpm_window = %{rpm_min: @rpm_min, rpm_max: rpm_max}
 
     visible =
       Enum.filter(IntakeSizing.commercial_diameters(), fn d ->
@@ -445,7 +451,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
         scale = %{
           rpm_min: @rpm_min,
-          rpm_max: @rpm_max,
+          rpm_max: rpm_max,
           d_min: d_min,
           d_max: d_max
         }
@@ -592,7 +598,10 @@ defmodule AfinadosWeb.IntakeSizingLive do
     [
       {gettext("Motorcycle"), "motorcycle"},
       {gettext("Car"), "car"},
-      {gettext("Power tool"), "tool"},
+      {gettext("Kart"), "kart"},
+      {gettext("Jetski"), "jetski"},
+      {gettext("Outboard"), "outboard"},
+      {gettext("Chainsaw"), "chainsaw"},
       {gettext("Stationary"), "stationary"},
       {gettext("Moped"), "moped"}
     ]
@@ -614,11 +623,35 @@ defmodule AfinadosWeb.IntakeSizingLive do
     ]
   end
 
-  defp k_options("tool") do
+  defp k_options("chainsaw") do
     [
       {gettext("Stock"), "0.73"},
       {gettext("Sport"), "0.77"},
       {gettext("Competition"), "0.82"}
+    ]
+  end
+
+  defp k_options("jetski") do
+    [
+      {gettext("Stock"), "0.70"},
+      {gettext("Sport"), "0.75"},
+      {gettext("Competition"), "0.82"}
+    ]
+  end
+
+  defp k_options("outboard") do
+    [
+      {gettext("Stock"), "0.62"},
+      {gettext("Sport"), "0.66"},
+      {gettext("Competition"), "0.72"}
+    ]
+  end
+
+  defp k_options("kart") do
+    [
+      {gettext("Stock"), "0.72"},
+      {gettext("Sport"), "0.78"},
+      {gettext("Competition"), "0.85"}
     ]
   end
 

@@ -315,8 +315,23 @@ msgstr "Carro"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
-msgid "Power tool"
-msgstr "Ferramenta motorizada"
+msgid "Chainsaw"
+msgstr "Motosserra"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Kart"
+msgstr "Kart"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Jetski"
+msgstr "Jet ski"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Outboard"
+msgstr "Motor de popa"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format

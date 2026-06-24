@@ -42,7 +42,10 @@ A faixa de RPM depende do tipo de motor escolhido:
 
 - Moto: 2.500–14.000 rpm
 - Ciclomotor: 3.000–10.000 rpm
-- Ferramenta motorizada (motosserra, roçadeira): 6.000–13.000 rpm
+- Kart: 9.000–14.500 rpm
+- Jet ski: 5.000–9.000 rpm
+- Motor de popa: 3.000–6.500 rpm
+- Motosserra: 6.000–13.000 rpm
 - Motor estacionário (gerador, bomba): 2.900–3.700 rpm
 - Carro: 1.500–6.500 rpm
 

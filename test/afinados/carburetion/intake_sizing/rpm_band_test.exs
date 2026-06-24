@@ -12,8 +12,8 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBandTest do
       assert RpmBand.range("moped") == {3000, 10_000}
     end
 
-    test "high-revving power tools span 6k to 13k RPM" do
-      assert RpmBand.range("tool") == {6000, 13_000}
+    test "chainsaws span 6k to 13k RPM" do
+      assert RpmBand.range("chainsaw") == {6000, 13_000}
     end
 
     test "stationary engines sit around the synchronous 3000-3600 rpm window" do
@@ -24,8 +24,30 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBandTest do
       assert RpmBand.range("car") == {1500, 6500}
     end
 
+    test "jetski engines span 5k to 9k RPM" do
+      assert RpmBand.range("jetski") == {5000, 9000}
+    end
+
+    test "outboard engines span 3k to 6.5k RPM" do
+      assert RpmBand.range("outboard") == {3000, 6500}
+    end
+
+    test "karts span 9k to 14.5k RPM" do
+      assert RpmBand.range("kart") == {9000, 14_500}
+    end
+
     test "falls back to a generic band for unknown vehicles" do
       assert RpmBand.range("unknown") == {2000, 8000}
+    end
+  end
+
+  describe "chart_max/1" do
+    test "defaults to 14k RPM for most vehicles" do
+      assert RpmBand.chart_max("motorcycle") == 14_000
+    end
+
+    test "extends to 17k RPM for karts (band reaches 14.5k)" do
+      assert RpmBand.chart_max("kart") == 17_000
     end
   end
 
