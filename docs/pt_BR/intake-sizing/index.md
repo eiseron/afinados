@@ -65,6 +65,7 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
    - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carb alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4cyl, Quadrajet, Holley single) — todos os carbs descarregam num coletor comum; mais carbs reduzem a velocidade de pico por carb linearmente.
    - **Defasagem do virabrequim**: graus entre explosões de cilindros consecutivos. Ativo só quando cilindros compartilham carburador. Considera a sobreposição de pulsos quando vários cilindros alimentam o mesmo venturi.
    - **Pressão de turbo (bar)**: para setups blow-through.
+   - **Combustível**: Gasolina (padrão), Etanol, Metanol, Nitrometano ou GNV. Em modo injeção aparece uma sexta opção, **Flex** (~+3%, mistura típica brasileira gasolina-etanol). Álcoois evaporam endotermicamente e esfriam a carga de admissão, aumentando a VE efetiva (~+5% etanol, ~+10% metanol, ~+30% nitrometano). GNV chega gasoso no coletor, então não esfria a carga — em vez disso, desloca um pouco do ar da admissão (fator ~0.95). O gráfico escala a velocidade dos gases por esses fatores.
    - **Eficiência volumétrica máxima**: vai de 50% (motor cansado, restritivo) a 115% (competição com admissão/escape ressonantes).
 
 ## Lendo os resultados

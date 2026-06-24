@@ -34,6 +34,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @default_firing_interval "180"
   @default_manifold "dedicated"
   @default_induction "carburetor"
+  @default_fuel "gasoline"
   @default_k "0.70"
   @default_boost "0"
   @default_ve "0.95"
@@ -49,6 +50,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
       "firing_interval" => @default_firing_interval,
       "manifold" => @default_manifold,
       "induction" => @default_induction,
+      "fuel" => @default_fuel,
       "k" => @default_k,
       "boost" => @default_boost,
       "ve" => @default_ve
@@ -302,6 +304,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
                 max="3"
                 step="0.1"
               />
+              <.input
+                field={@form[:fuel]}
+                type="select"
+                label={gettext("Fuel")}
+                options={fuel_options(@induction)}
+              />
               <div class="ve-slider">
                 <label for={@form[:ve].id}>{gettext("Maximum volumetric efficiency")}</label>
                 <input
@@ -325,7 +333,13 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp recompute(socket, params) do
     vehicle = params["vehicle"] || "motorcycle"
-    params = params |> normalize_k(vehicle) |> normalize_firing_interval()
+
+    params =
+      params
+      |> normalize_k(vehicle)
+      |> normalize_firing_interval()
+      |> normalize_fuel()
+
     cc = parse_int(params["cc"])
     ve = parse_float(params["ve"])
     config = parse_config(params)
@@ -348,6 +362,14 @@ defmodule AfinadosWeb.IntakeSizingLive do
     case parse_int(params["firing_interval"]) do
       n when is_integer(n) and n >= 60 and n <= 720 -> params
       _ -> Map.put(params, "firing_interval", @default_firing_interval)
+    end
+  end
+
+  defp normalize_fuel(params) do
+    if parse_induction(params["induction"]) == :carburetor and params["fuel"] == "flex" do
+      Map.put(params, "fuel", @default_fuel)
+    else
+      params
     end
   end
 
@@ -421,6 +443,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     firing_interval = parse_int(params["firing_interval"])
     manifold = parse_manifold(params["manifold"])
     induction = parse_induction(params["induction"])
+    fuel = parse_fuel(params["fuel"])
     boost = parse_float(params["boost"]) || 0.0
 
     with true <- k != nil and carbs != nil and firing_interval != nil,
@@ -433,6 +456,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
              firing_interval: firing_interval,
              manifold: manifold,
              induction: induction,
+             fuel: fuel,
              boost: boost
            }) do
       config
@@ -759,6 +783,34 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp parse_induction("injection"), do: :injection
   defp parse_induction(_), do: :carburetor
+
+  defp fuel_options(:injection) do
+    [
+      {gettext("Gasoline"), "gasoline"},
+      {gettext("Flex"), "flex"},
+      {gettext("Ethanol"), "ethanol"},
+      {gettext("Methanol"), "methanol"},
+      {gettext("Nitromethane"), "nitro"},
+      {gettext("CNG"), "cng"}
+    ]
+  end
+
+  defp fuel_options(_) do
+    [
+      {gettext("Gasoline"), "gasoline"},
+      {gettext("Ethanol"), "ethanol"},
+      {gettext("Methanol"), "methanol"},
+      {gettext("Nitromethane"), "nitro"},
+      {gettext("CNG"), "cng"}
+    ]
+  end
+
+  defp parse_fuel("flex"), do: :flex
+  defp parse_fuel("ethanol"), do: :ethanol
+  defp parse_fuel("methanol"), do: :methanol
+  defp parse_fuel("nitro"), do: :nitro
+  defp parse_fuel("cng"), do: :cng
+  defp parse_fuel(_), do: :gasoline
 
   defp parse_int(value) when is_binary(value) do
     case Integer.parse(value) do

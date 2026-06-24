@@ -18,6 +18,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       firing_interval: 720,
       manifold: :dedicated,
       induction: :carburetor,
+      fuel: :gasoline,
       boost: 0.0
     })
 
@@ -74,6 +75,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  firing_interval: 180,
                  manifold: :dedicated,
                  induction: :carburetor,
+                 fuel: :gasoline,
                  boost: 0.0
                })
     end
@@ -88,6 +90,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  firing_interval: 720,
                  manifold: :dedicated,
                  induction: :carburetor,
+                 fuel: :gasoline,
                  boost: 0.0
                })
     end
@@ -102,6 +105,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  firing_interval: 720,
                  manifold: :plenum,
                  induction: :carburetor,
+                 fuel: :gasoline,
                  boost: 0.0
                })
     end
@@ -116,8 +120,56 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  firing_interval: 720,
                  manifold: :dedicated,
                  induction: :diesel,
+                 fuel: :gasoline,
                  boost: 0.0
                })
+    end
+
+    test "rejects an unknown fuel type" do
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.70,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 manifold: :dedicated,
+                 induction: :carburetor,
+                 fuel: :hydrogen,
+                 boost: 0.0
+               })
+    end
+  end
+
+  describe "EngineConfig.fuel_factor/1" do
+    test "gasoline returns 1.0 (baseline)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated, fuel: :gasoline)
+      assert_in_delta EngineConfig.fuel_factor(c), 1.0, 1.0e-9
+    end
+
+    test "ethanol returns 1.05 (mild charge cooling)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated, fuel: :ethanol)
+      assert_in_delta EngineConfig.fuel_factor(c), 1.05, 1.0e-9
+    end
+
+    test "methanol returns 1.10 (significant charge cooling)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated, fuel: :methanol)
+      assert_in_delta EngineConfig.fuel_factor(c), 1.10, 1.0e-9
+    end
+
+    test "nitromethane returns 1.30 (large charge cooling)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated, fuel: :nitro)
+      assert_in_delta EngineConfig.fuel_factor(c), 1.30, 1.0e-9
+    end
+
+    test "CNG returns 0.95 (gaseous fuel displaces intake air, no liquid cooling)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated, fuel: :cng)
+      assert_in_delta EngineConfig.fuel_factor(c), 0.95, 1.0e-9
+    end
+
+    test "flex returns 1.03 (mid-blend of gasoline + ethanol)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated, fuel: :flex)
+      assert_in_delta EngineConfig.fuel_factor(c), 1.03, 1.0e-9
     end
   end
 
@@ -199,6 +251,27 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       {:ok, race} = with_k(0.75)
 
       assert IntakeSizing.target_velocity(race) < IntakeSizing.target_velocity(stock)
+    end
+  end
+
+  describe "gas_velocity/3 — fuel factor" do
+    test "methanol scales velocity by 1.10 vs gasoline at same D/RPM/Vt/VE" do
+      {:ok, displacement} = Displacement.new(125)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+      {:ok, gas} = with_carbs(1, manifold: :dedicated, fuel: :gasoline)
+      {:ok, methanol} = with_carbs(1, manifold: :dedicated, fuel: :methanol)
+
+      v_gas =
+        IntakeSizing.gas_velocity(22, 8000, %{displacement: displacement, ve: ve, config: gas})
+
+      v_meth =
+        IntakeSizing.gas_velocity(22, 8000, %{
+          displacement: displacement,
+          ve: ve,
+          config: methanol
+        })
+
+      assert_in_delta v_meth / v_gas, 1.10, 1.0e-9
     end
   end
 
@@ -293,19 +366,21 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       firing_interval: 720,
       manifold: :dedicated,
       induction: :carburetor,
+      fuel: :gasoline,
       boost: boost
     })
   end
 
-  defp with_carbs(carbs, manifold: manifold) do
+  defp with_carbs(carbs, opts) do
     EngineConfig.new(%{
       k: 0.70,
       cylinders: 4,
       carbs: carbs,
       barrels: 1,
       firing_interval: 180,
-      manifold: manifold,
+      manifold: Keyword.fetch!(opts, :manifold),
       induction: :carburetor,
+      fuel: Keyword.get(opts, :fuel, :gasoline),
       boost: 0.0
     })
   end
