@@ -10,6 +10,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     carbs: "1",
     barrels: "1",
     firing_interval: "720",
+    manifold: "dedicated",
     k: "0.70",
     boost: "0",
     ve: "0.95"
@@ -449,14 +450,19 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     end
   end
 
-  describe "firing interval visibility" do
-    test "stays hidden when 1 cylinder per venturi", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+  describe "firing interval availability" do
+    test "is disabled when 1 cylinder per venturi", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
-      refute html =~ "intake_sizing[firing_interval]"
+      html =
+        view
+        |> element("button[phx-click='toggle-advanced']")
+        |> render_click()
+
+      assert html =~ ~r/name="intake_sizing\[firing_interval\]"[^>]*disabled/
     end
 
-    test "appears in the advanced section when cylinders share a carburetor", %{conn: conn} do
+    test "is enabled when cylinders share a carburetor", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
       view
@@ -475,8 +481,50 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
         |> element("button[phx-click='toggle-advanced']")
         |> render_click()
 
-      [_, advanced] = String.split(html, ~r/<fieldset\b[^>]*class="advanced"/)
-      assert advanced =~ "intake_sizing[firing_interval]"
+      refute html =~ ~r/name="intake_sizing\[firing_interval\]"[^>]*disabled/
+    end
+  end
+
+  describe "intake manifold availability" do
+    test "is disabled with 1 cylinder", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      html =
+        view
+        |> element("button[phx-click='toggle-advanced']")
+        |> render_click()
+
+      assert html =~ ~r/name="intake_sizing\[manifold\]"[^>]*disabled/
+    end
+
+    test "is disabled with 1 carburetor", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      view
+      |> element("form")
+      |> render_change(%{intake_sizing: %{@default_params | cylinders: "4", carbs: "1"}})
+
+      html =
+        view
+        |> element("button[phx-click='toggle-advanced']")
+        |> render_click()
+
+      assert html =~ ~r/name="intake_sizing\[manifold\]"[^>]*disabled/
+    end
+
+    test "is enabled when both cylinders and carburetors are >1", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      view
+      |> element("form")
+      |> render_change(%{intake_sizing: %{@default_params | cylinders: "4", carbs: "2"}})
+
+      html =
+        view
+        |> element("button[phx-click='toggle-advanced']")
+        |> render_click()
+
+      refute html =~ ~r/name="intake_sizing\[manifold\]"[^>]*disabled/
     end
   end
 end

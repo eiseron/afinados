@@ -33,6 +33,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @default_carbs "1"
   @default_barrels "1"
   @default_firing_interval "180"
+  @default_manifold "dedicated"
   @default_k "0.70"
   @default_boost "0"
   @default_ve "0.95"
@@ -46,6 +47,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
       "carbs" => @default_carbs,
       "barrels" => @default_barrels,
       "firing_interval" => @default_firing_interval,
+      "manifold" => @default_manifold,
       "k" => @default_k,
       "boost" => @default_boost,
       "ve" => @default_ve
@@ -270,13 +272,20 @@ defmodule AfinadosWeb.IntakeSizingLive do
                 options={barrels_options()}
               />
               <.input
-                :if={@show_firing}
+                field={@form[:manifold]}
+                type="select"
+                label={gettext("Intake manifold")}
+                options={manifold_options()}
+                disabled={!@show_manifold}
+              />
+              <.input
                 field={@form[:firing_interval]}
                 type="number"
-                label={gettext("Firing interval (crank degrees)")}
+                label={gettext("Firing interval (°)")}
                 min="60"
                 max="720"
                 step="30"
+                disabled={!@show_firing}
               />
               <.input
                 field={@form[:boost]}
@@ -322,7 +331,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
       chart: chart,
       vehicle: vehicle,
       ve_value: format_ve(ve),
-      show_firing: show_firing?(params)
+      show_firing: show_firing?(params),
+      show_manifold: show_manifold?(params)
     )
   end
 
@@ -338,6 +348,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
     carbs = parse_int(params["carbs"]) || 1
     barrels = parse_int(params["barrels"]) || 1
     cyl > carbs * barrels
+  end
+
+  defp show_manifold?(params) do
+    cyl = parse_int(params["cylinders"]) || 1
+    carbs = parse_int(params["carbs"]) || 1
+    cyl > 1 and carbs > 1
   end
 
   defp normalize_k(params, vehicle) do
@@ -389,6 +405,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     carbs = parse_int(params["carbs"])
     barrels = parse_int(params["barrels"]) || 1
     firing_interval = parse_int(params["firing_interval"])
+    manifold = parse_manifold(params["manifold"])
     boost = parse_float(params["boost"]) || 0.0
 
     with true <- k != nil and carbs != nil and firing_interval != nil,
@@ -399,6 +416,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
              carbs: carbs,
              barrels: barrels,
              firing_interval: firing_interval,
+             manifold: manifold,
              boost: boost
            }) do
       config
@@ -664,6 +682,16 @@ defmodule AfinadosWeb.IntakeSizingLive do
       {gettext("Dual (DCOE, IDF, 2E)"), "2"}
     ]
   end
+
+  defp manifold_options do
+    [
+      {gettext("Dedicated"), "dedicated"},
+      {gettext("Shared"), "shared"}
+    ]
+  end
+
+  defp parse_manifold("shared"), do: :shared
+  defp parse_manifold(_), do: :dedicated
 
   defp parse_int(value) when is_binary(value) do
     case Integer.parse(value) do

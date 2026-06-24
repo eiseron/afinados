@@ -58,7 +58,8 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
 4. Abra **Avançado** pra ajustar:
    - **Perfil de aplicação**: K original, esportivo ou competição pra esse tipo de motor.
    - **Corpos por carburador**: 1 para motos típicas, 2 para Weber DCOE/IDF, 4 para Quadrajet/Holley 4-corpos.
-   - **Intervalo entre explosões (graus do virabrequim)**: só aparece quando cilindros compartilham carburador. Considera a sobreposição de pulsos quando vários cilindros alimentam o mesmo venturi.
+   - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carb alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4cyl, Quadrajet, Holley single) — todos os carbs descarregam num plenum comum; mais carbs reduzem a velocidade de pico por carb linearmente.
+   - **Defasagem do virabrequim**: graus entre explosões de cilindros consecutivos. Ativo só quando cilindros compartilham carburador. Considera a sobreposição de pulsos quando vários cilindros alimentam o mesmo venturi.
    - **Pressão de turbo (bar)**: para setups blow-through.
    - **Eficiência volumétrica máxima**: vai de 50% (motor cansado, restritivo) a 115% (race com admissão/escape ressonantes).
 

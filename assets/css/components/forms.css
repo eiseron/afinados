@@ -45,6 +45,18 @@ button:focus-visible {
   outline-offset: 1px;
 }
 
+input:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-surface);
+}
+
+label:has(+ input:disabled),
+label:has(+ select:disabled) {
+  opacity: 0.5;
+}
+
 button {
   min-height: var(--touch-target);
   padding: var(--space-2) var(--space-4);

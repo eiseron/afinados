@@ -16,6 +16,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       carbs: 1,
       barrels: 1,
       firing_interval: 720,
+      manifold: :dedicated,
       boost: 0.0
     })
 
@@ -70,6 +71,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  carbs: 1,
                  barrels: 2,
                  firing_interval: 180,
+                 manifold: :dedicated,
                  boost: 0.0
                })
     end
@@ -82,8 +84,64 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  carbs: 1,
                  barrels: 1,
                  firing_interval: 720,
+                 manifold: :dedicated,
                  boost: 0.0
                })
+    end
+
+    test "rejects an unknown manifold type" do
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.70,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 manifold: :plenum,
+                 boost: 0.0
+               })
+    end
+  end
+
+  describe "EngineConfig.pulse_divisor/1 — dedicated" do
+    test "1 carb / 4 cyl / 180° firing → N = 3 (single carb with pulse overlap)" do
+      {:ok, c} = with_carbs(1, manifold: :dedicated)
+      assert_in_delta EngineConfig.pulse_divisor(c), 3.0, 1.0e-9
+    end
+
+    test "2-3-4 carbs / 4 cyl / 180° firing all saturate at N = 4 (per-carb bottleneck)" do
+      {:ok, c2} = with_carbs(2, manifold: :dedicated)
+      {:ok, c3} = with_carbs(3, manifold: :dedicated)
+      {:ok, c4} = with_carbs(4, manifold: :dedicated)
+
+      assert {EngineConfig.pulse_divisor(c2), EngineConfig.pulse_divisor(c3),
+              EngineConfig.pulse_divisor(c4)} == {4.0, 4.0, 4.0}
+    end
+
+    test "5 carbs / 4 cyl bumps to N = 5 (venturi floor wins)" do
+      {:ok, c} = with_carbs(5, manifold: :dedicated)
+      assert_in_delta EngineConfig.pulse_divisor(c), 5.0, 1.0e-9
+    end
+  end
+
+  describe "EngineConfig.pulse_divisor/1 — shared plenum" do
+    test "1 carb shared matches dedicated (1 carb has to handle everything either way)" do
+      {:ok, ded} = with_carbs(1, manifold: :dedicated)
+      {:ok, sha} = with_carbs(1, manifold: :shared)
+      assert_in_delta EngineConfig.pulse_divisor(ded), EngineConfig.pulse_divisor(sha), 1.0e-9
+    end
+
+    test "N scales linearly with carb count under shared plenum (4 cyl 180°)" do
+      ns =
+        for v <- 1..4 do
+          {:ok, c} = with_carbs(v, manifold: :shared)
+          EngineConfig.pulse_divisor(c)
+        end
+
+      assert_in_delta hd(ns), 3.0, 1.0e-6
+      assert_in_delta Enum.at(ns, 1) / hd(ns), 2.0, 1.0e-6
+      assert_in_delta Enum.at(ns, 2) / hd(ns), 3.0, 1.0e-6
+      assert_in_delta Enum.at(ns, 3) / hd(ns), 4.0, 1.0e-6
     end
   end
 
@@ -215,7 +273,20 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       carbs: 1,
       barrels: 1,
       firing_interval: 720,
+      manifold: :dedicated,
       boost: boost
+    })
+  end
+
+  defp with_carbs(carbs, manifold: manifold) do
+    EngineConfig.new(%{
+      k: 0.70,
+      cylinders: 4,
+      carbs: carbs,
+      barrels: 1,
+      firing_interval: 180,
+      manifold: manifold,
+      boost: 0.0
     })
   end
 

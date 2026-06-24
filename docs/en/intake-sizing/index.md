@@ -58,7 +58,8 @@ A slider for **maximum volumetric efficiency** lives in the advanced section. It
 4. Open **Advanced** to tune:
    - **Application profile**: stock, sport or competition K factor for that engine type.
    - **Barrels per carburetor**: 1 for typical motorcycles, 2 for Weber DCOE/IDF, 4 for a Quadrijet/Holley 4-barrel.
-   - **Firing interval (crank degrees)**: only shown when cylinders share a carburetor. It accounts for pulse overlap when multiple cylinders feed the same venturi.
+   - **Intake manifold**: *Dedicated* (DCOE pair, CB400 four, IDA in a V8) — each carb feeds its own subset of cylinders. *Shared* (single Weber feeding 4 cyl, Quadrijet, single Holley) — all carbs feed a common plenum; more carbs reduce per-carb peak velocity linearly.
+   - **Firing interval**: crank degrees between cylinder firings. Active only when cylinders share a carburetor. Accounts for pulse overlap when multiple cylinders feed the same venturi.
    - **Boost pressure (bar)**: for blow-through turbo setups.
    - **Maximum volumetric efficiency**: ranges from 50% (worn, very restrictive) to 115% (race with tuned intake/exhaust).
 

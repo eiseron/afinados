@@ -370,13 +370,28 @@ msgstr "Duplo (DCOE, IDF, 2E)"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
+msgid "Intake manifold"
+msgstr "Coletor de admissão"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Dedicated"
+msgstr "Dedicado"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr "Compartilhado"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
 msgid "Number of cylinders"
 msgstr "Número de cilindros"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
-msgid "Firing interval (crank degrees)"
-msgstr "Intervalo entre explosões (graus do virabrequim)"
+msgid "Firing interval (°)"
+msgstr "Defasagem do virabrequim (°)"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format

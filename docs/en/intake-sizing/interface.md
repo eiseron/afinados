@@ -39,7 +39,7 @@ Open the **Advanced** section to fine-tune:
 
 - **Application profile** (K factor): stock, sport or competition variant for the chosen engine type. Higher K factors place the ideal venturi lower in the diameter range.
 - **Barrels per carburetor**: 1 (most carburetors), 2 (DCOE, IDF, 2E).
-- **Firing interval (crank degrees)**: only shown when cylinders share a carburetor — defines how RPM-spaced the firing pulses are. Defaults to 180° (4-cylinder even firing). Use 360° for a classic British twin, 90° for a V8, etc.
+- **Firing interval**: crank degrees between cylinder firings — active only when cylinders share a carburetor. Defaults to 180° (4-cylinder even firing). Use 360° for a classic British twin, 90° for a V8, etc.
 - **Boost pressure (bar)**: for blow-through turbo. 0 for naturally aspirated.
 - **Maximum volumetric efficiency**: slider from 50% to 115%. Lowering it shrinks the diameter spread the chart considers; raising it pushes the upper edge higher (more breathing).
 
