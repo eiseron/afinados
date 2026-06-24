@@ -200,6 +200,16 @@ msgstr "Em breve"
 msgid "Estimate the ideal carburetor venturi size."
 msgstr "Estime o tamanho ideal do venturi do carburador."
 
+#: lib/afinados_web/live/hub_live.ex
+#, elixir-autogen, elixir-format
+msgid "Two-stroke exhaust sizing"
+msgstr "Dimensionamento de escape 2 tempos"
+
+#: lib/afinados_web/live/hub_live.ex
+#, elixir-autogen, elixir-format
+msgid "Estimate the tuned exhaust geometry for a two-stroke engine."
+msgstr "Estime a geometria do escape ressonante para motor 2 tempos."
+
 #: lib/afinados_web/live/hub_live.ex:32
 #, elixir-autogen, elixir-format
 msgid "Intake sizing"

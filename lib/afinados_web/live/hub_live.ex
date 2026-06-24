@@ -32,6 +32,13 @@ defmodule AfinadosWeb.HubLive do
               <p>{gettext("Estimate the ideal carburetor venturi size.")}</p>
             </.link>
           </li>
+          <li>
+            <div class="tool-card tool-card-soon" aria-disabled="true">
+              <span class="badge">{gettext("Coming soon")}</span>
+              <h2>{gettext("Two-stroke exhaust sizing")}</h2>
+              <p>{gettext("Estimate the tuned exhaust geometry for a two-stroke engine.")}</p>
+            </div>
+          </li>
         </ul>
       </div>
     </main>

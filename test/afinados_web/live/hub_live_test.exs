@@ -14,4 +14,11 @@ defmodule AfinadosWeb.HubLiveTest do
 
     assert html =~ ~s(href="/carburetion/intake-sizing")
   end
+
+  test "the hub announces the two-stroke exhaust sizing tool as coming soon", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~ ~s(class="tool-card tool-card-soon")
+    assert html =~ "Dimensionamento de escape 2 tempos"
+  end
 end
