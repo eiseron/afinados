@@ -48,7 +48,7 @@ The RPM band depends on the engine type you pick:
 
 ### The slider
 
-A slider for **maximum volumetric efficiency** lives in the advanced section. The chart's vertical width (the range of diameters considered at each RPM) is derived from this single value: the upper edge uses VE_max, and the lower edge uses VE_max minus 30 percentage points (e.g. VE_max 95% → VE_min 65%). Moving the slider widens or narrows the spread of acceptable diameters at each RPM.
+A slider for **maximum volumetric efficiency** lives in the advanced section. It is the peak VE the engine reaches under load (typical street: ~85–95%; mildly tuned: ~95–105%; race with tuned intake/exhaust: ~105–115%). The chart evaluates each commercial venturi's gas velocity at this peak VE. Raising the slider increases the velocity every carb sees at every RPM, shifting the color picture toward restrictive (yellow) and away from anemic (blue).
 
 ## How to use
 

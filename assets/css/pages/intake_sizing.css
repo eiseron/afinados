@@ -117,14 +117,6 @@
   flex-shrink: 0;
 }
 
-.intake-sizing .ve-label {
-  margin: 0;
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
 .intake-sizing .ve-slider {
   display: flex;
   flex-direction: column;

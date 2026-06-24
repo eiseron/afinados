@@ -48,7 +48,7 @@ A faixa de RPM depende do tipo de motor escolhido:
 
 ### O slider
 
-Um slider de **eficiência volumétrica máxima** fica na seção avançada. A largura vertical do gráfico (a faixa de diâmetros considerada em cada RPM) é derivada desse único valor: a borda superior usa VE_max, e a inferior usa VE_max menos 30 pontos percentuais (por exemplo, VE_max 95% → VE_min 65%). Mover o slider alarga ou estreita o leque de diâmetros aceitáveis em cada RPM.
+Um slider de **eficiência volumétrica máxima** fica na seção avançada. É a VE de pico que o motor atinge sob carga (rua típico: ~85–95%; preparação leve: ~95–105%; competição com admissão/escape ressonantes: ~105–115%). O gráfico calcula a velocidade dos gases de cada venturi comercial nesse pico de VE. Subir o slider aumenta a velocidade que cada carburador vê em cada RPM, empurrando as cores pro lado restritivo (amarelo) e afastando do anêmico (azul).
 
 ## Como usar
 

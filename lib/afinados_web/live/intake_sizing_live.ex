@@ -4,14 +4,15 @@ defmodule AfinadosWeb.IntakeSizingLive do
   alias Afinados.Carburetion.IntakeSizing
 
   alias Afinados.Carburetion.IntakeSizing.{
-    CommercialSize,
     Displacement,
-    EfficiencyZone,
     EngineConfig,
     RpmBand,
     VelocityPalette,
     VolumetricEfficiency
   }
+
+  @rpm_min 2000
+  @rpm_max 14_000
 
   @vb_w 360
   @vb_h 242
@@ -320,7 +321,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
       form: to_form(params, as: :intake_sizing),
       chart: chart,
       vehicle: vehicle,
-      k_label: k_label(vehicle, config && config.k),
       ve_value: format_ve(ve),
       show_firing: show_firing?(params)
     )
@@ -364,10 +364,18 @@ defmodule AfinadosWeb.IntakeSizingLive do
        when is_integer(cc) and cc > 0 and is_float(ve) do
     with {:ok, displacement} <- Displacement.new(cc),
          {:ok, vol_eff} <- VolumetricEfficiency.new(ve) do
-      zone = IntakeSizing.efficiency_zone(displacement, vol_eff, config)
-      lines = IntakeSizing.commercial_lines(displacement, vol_eff, config)
-      engine = %{displacement: displacement, ve: vol_eff, config: config, vehicle: vehicle}
-      build_chart(zone, lines, engine)
+      target_v = IntakeSizing.target_velocity(config)
+      thresholds = VelocityPalette.thresholds(target_v)
+
+      engine = %{
+        displacement: displacement,
+        ve: vol_eff,
+        config: config,
+        vehicle: vehicle,
+        thresholds: thresholds
+      }
+
+      build_chart(engine)
     else
       _ -> nil
     end
@@ -399,51 +407,52 @@ defmodule AfinadosWeb.IntakeSizingLive do
     end
   end
 
-  defp build_chart(%EfficiencyZone{envelope: envelope}, lines, engine) do
-    all_diameters =
-      Enum.map(envelope.lower, & &1.diameter) ++
-        Enum.map(envelope.upper, & &1.diameter)
+  defp build_chart(engine) do
+    rpm_window = %{rpm_min: @rpm_min, rpm_max: @rpm_max}
 
-    envelope_min_d = Enum.min(all_diameters)
-    envelope_max_d = Enum.max(all_diameters)
+    visible =
+      Enum.filter(IntakeSizing.commercial_diameters(), fn d ->
+        ideal_segment_in_window?(d, rpm_window, engine)
+      end)
 
-    d_max = (div(ceil(envelope_max_d) + 1, 2) * 2 + 2) * 1.0
-    d_min = div(max(floor(envelope_min_d), 0), 2) * 2 * 1.0
+    case visible do
+      [] ->
+        nil
 
-    visible_rpms =
-      envelope.lower
-      |> Enum.zip(envelope.upper)
-      |> Enum.filter(fn {lo, hi} -> lo.diameter <= d_max and hi.diameter >= d_min end)
-      |> Enum.map(fn {lo, _} -> lo.rpm end)
+      diameters ->
+        [catalog_min | _] = catalog = IntakeSizing.commercial_diameters()
+        catalog_max = List.last(catalog)
+        d_min = max(catalog_min * 1.0, Enum.min(diameters) - 2.0)
+        d_max = min(catalog_max * 1.0, Enum.max(diameters) + 2.0)
 
-    {rpm_min, rpm_max} =
-      case visible_rpms do
-        [] -> rpm_range(envelope.lower)
-        rpms -> {Enum.min(rpms), Enum.max(rpms)}
-      end
+        scale = %{
+          rpm_min: @rpm_min,
+          rpm_max: @rpm_max,
+          d_min: d_min,
+          d_max: d_max
+        }
 
-    scale = %{rpm_min: rpm_min, rpm_max: rpm_max, d_min: d_min, d_max: d_max}
-
-    %{
-      vb_w: @vb_w,
-      vb_h: @vb_h,
-      x0: @x0,
-      x1: @x1,
-      y_top: @y_top,
-      y_bottom: @y_bottom,
-      commercial_lines: chart_commercial_lines(lines, scale, engine),
-      x_ticks: x_ticks(scale)
-    }
+        %{
+          vb_w: @vb_w,
+          vb_h: @vb_h,
+          x0: @x0,
+          x1: @x1,
+          y_top: @y_top,
+          y_bottom: @y_bottom,
+          commercial_lines:
+            Enum.map(diameters, fn d ->
+              build_line(%{diameter: d, scale: scale, engine: engine})
+            end),
+          x_ticks: x_ticks(scale)
+        }
+    end
   end
 
-  defp chart_commercial_lines(lines, scale, engine) do
-    lines
-    |> Enum.filter(fn %CommercialSize{diameter: d} ->
-      d * 1.0 >= scale.d_min and d * 1.0 <= scale.d_max
-    end)
-    |> Enum.map(fn %CommercialSize{diameter: d} ->
-      build_line(%{diameter: d, scale: scale, engine: engine})
-    end)
+  defp ideal_segment_in_window?(diameter, scale, engine) do
+    {anemic, restriction} = engine.thresholds
+    rpm_at_anemic = IntakeSizing.rpm_for_velocity(diameter, anemic, engine)
+    rpm_at_restriction = IntakeSizing.rpm_for_velocity(diameter, restriction, engine)
+    rpm_at_anemic < scale.rpm_max and rpm_at_restriction > scale.rpm_min
   end
 
   defp build_line(%{diameter: d, scale: scale, engine: engine}) do
@@ -460,13 +469,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
   end
 
   defp ideal_segment(diameter, scale, engine) do
-    rpm_at_anemic = rpm_for_velocity(diameter, VelocityPalette.anemic_threshold(), engine)
+    {anemic, restriction} = engine.thresholds
+    rpm_at_anemic = IntakeSizing.rpm_for_velocity(diameter, anemic, engine)
+    rpm_at_restriction = IntakeSizing.rpm_for_velocity(diameter, restriction, engine)
 
-    rpm_at_restriction =
-      rpm_for_velocity(diameter, VelocityPalette.restriction_threshold(), engine)
-
-    lo = Enum.max([rpm_at_anemic, scale.rpm_min])
-    hi = Enum.min([rpm_at_restriction, scale.rpm_max])
+    lo = Enum.max([rpm_at_anemic, scale.rpm_min]) * 1.0
+    hi = Enum.min([rpm_at_restriction, scale.rpm_max]) * 1.0
 
     if hi > lo do
       %{visible: true, x1: round1(scale_x(lo, scale)), x2: round1(scale_x(hi, scale))}
@@ -476,10 +484,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
   end
 
   defp gradient_stops(diameter, {rpm_lo, rpm_hi}, engine) when rpm_hi > rpm_lo do
+    {anemic, restriction} = engine.thresholds
+
     transitions =
       [
-        rpm_for_velocity(diameter, VelocityPalette.anemic_threshold(), engine),
-        rpm_for_velocity(diameter, VelocityPalette.restriction_threshold(), engine),
+        IntakeSizing.rpm_for_velocity(diameter, anemic, engine),
+        IntakeSizing.rpm_for_velocity(diameter, restriction, engine),
         elem(RpmBand.range(engine.vehicle), 0),
         elem(RpmBand.range(engine.vehicle), 1)
       ]
@@ -491,7 +501,14 @@ defmodule AfinadosWeb.IntakeSizingLive do
     Enum.map(samples, fn rpm ->
       velocity = IntakeSizing.gas_velocity(diameter, rpm, engine)
       in_band = rpm_in_band?(engine.vehicle, rpm)
-      color = VelocityPalette.color_for(%{velocity: velocity, in_band: in_band})
+
+      color =
+        VelocityPalette.color_for(%{
+          velocity: velocity,
+          in_band: in_band,
+          thresholds: engine.thresholds
+        })
+
       offset = Float.round((rpm - rpm_lo) / (rpm_hi - rpm_lo) * 100, 2)
       %{offset: offset, color: color}
     end)
@@ -505,20 +522,9 @@ defmodule AfinadosWeb.IntakeSizingLive do
     end)
   end
 
-  defp rpm_for_velocity(diameter, velocity, engine) do
-    %{displacement: %{cc: cc}, ve: %{value: ev}, config: config} = engine
-    n = EngineConfig.pulse_divisor(config)
-    velocity * 10 * n * :math.pi() * diameter * diameter / (cc * ev)
-  end
-
   defp rpm_in_band?(vehicle, rpm) do
     {lo, hi} = RpmBand.range(vehicle)
     rpm >= lo and rpm <= hi
-  end
-
-  defp rpm_range(points) do
-    rpms = Enum.map(points, & &1.rpm)
-    {Enum.min(rpms), Enum.max(rpms)}
   end
 
   defp scale_x(rpm, %{rpm_min: rpm_min, rpm_max: rpm_max}) when rpm_max > rpm_min do
@@ -614,38 +620,38 @@ defmodule AfinadosWeb.IntakeSizingLive do
     [
       %{
         colors: [
-          VelocityPalette.color_for(%{velocity: 100, in_band: true}),
-          VelocityPalette.color_for(%{velocity: 100, in_band: false})
+          VelocityPalette.sufficient_color(true),
+          VelocityPalette.sufficient_color(false)
         ],
         label: gettext("Ideal")
       },
       %{
         colors: [
-          VelocityPalette.color_for(%{velocity: 40, in_band: true}),
-          VelocityPalette.color_for(%{velocity: 40, in_band: false})
+          VelocityPalette.anemic_color(true),
+          VelocityPalette.anemic_color(false)
         ],
         label: gettext("Low velocity")
       },
       %{
         colors: [
-          VelocityPalette.color_for(%{velocity: 200, in_band: true}),
-          VelocityPalette.color_for(%{velocity: 200, in_band: false})
+          VelocityPalette.restriction_color(true),
+          VelocityPalette.restriction_color(false)
         ],
         label: gettext("Restrictive")
       },
       %{
         colors: [
-          VelocityPalette.color_for(%{velocity: 40, in_band: true}),
-          VelocityPalette.color_for(%{velocity: 100, in_band: true}),
-          VelocityPalette.color_for(%{velocity: 200, in_band: true})
+          VelocityPalette.anemic_color(true),
+          VelocityPalette.sufficient_color(true),
+          VelocityPalette.restriction_color(true)
         ],
         label: gettext("Engine's working regime")
       },
       %{
         colors: [
-          VelocityPalette.color_for(%{velocity: 40, in_band: false}),
-          VelocityPalette.color_for(%{velocity: 100, in_band: false}),
-          VelocityPalette.color_for(%{velocity: 200, in_band: false})
+          VelocityPalette.anemic_color(false),
+          VelocityPalette.sufficient_color(false),
+          VelocityPalette.restriction_color(false)
         ],
         label: gettext("Outside the working regime")
       }
@@ -657,18 +663,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
       {gettext("Single"), "1"},
       {gettext("Dual (DCOE, IDF, 2E)"), "2"}
     ]
-  end
-
-  defp k_label(_vehicle, nil), do: ""
-
-  defp k_label(vehicle, k) do
-    case Enum.find(k_options(vehicle), fn {_label, v} ->
-           {f, _} = Float.parse(v)
-           f == k
-         end) do
-      {label, _} -> label
-      nil -> ""
-    end
   end
 
   defp parse_int(value) when is_binary(value) do

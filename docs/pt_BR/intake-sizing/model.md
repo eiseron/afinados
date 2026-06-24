@@ -5,69 +5,77 @@ description: O que a ferramenta calcula, a fórmula, as aproximações conhecida
 
 # O modelo
 
-A ferramenta dá uma **estimativa geométrica** do diâmetro de venturi que atende à demanda de ar do motor. É uma ferramenta comparativa para apoiar a escolha do carburador, não uma recomendação validada de gicleagem. Faça acerto por sua conta e risco.
+A ferramenta dá uma **estimativa geométrica** de quão bem cada venturi comercial respira pra um motor, calculando a velocidade de pico dos gases no estrangulamento. É uma ferramenta comparativa pra apoiar a escolha do carburador, não uma recomendação validada de gicleagem. Acerte por sua conta e risco.
 
-## A fórmula
+## A velocidade dos gases é o sinal primário
 
-O diâmetro é calculado a partir de uma equação de dimensionamento derivada de Bernoulli:
-
-```
-D = K × √(Vt × RPM × VE / (N × 1000 × P_abs))
-```
-
-Onde:
-
-- **D** — diâmetro do venturi (mm)
-- **Vt** — cilindrada total (cm³)
-- **RPM** — rotação do motor
-- **VE** — eficiência volumétrica (0,5 a 1,15)
-- **N** — *divisor de pulsos*, em função de cilindros, gargantas, corpos e intervalo de explosões (ver abaixo)
-- **P_abs** — pressão absoluta (1 + turbo em bar)
-- **K** — constante do perfil de aplicação (0,50–0,88, conforme o tipo de motor)
-
-O fator K codifica implicitamente a velocidade-alvo dos gases no venturi. K maior mira velocidade menor, o que dá um carburador menor para o mesmo motor; K menor mira velocidade maior (preparação de competição).
-
-## O divisor de pulsos
-
-Para cada diâmetro comercial o gráfico desenha uma janela de RPM. O limite depende de quantos cilindros alimentam cada venturi:
-
-```
-N = max(gargantas, cilindros / concurrent)
-concurrent = max(1, 240 / (intervalo × gargantas))
-```
-
-O fator `concurrent` cuida da **sobreposição de pulsos** quando vários cilindros compartilham o carburador. Se o intervalo de explosões por garganta é menor que a duração da admissão (~240° do virabrequim), os pulsos se sobrepõem e o pico efetivo de demanda sobe.
-
-Em setups típicos com 1 carb por cilindro, `N = gargantas = carbs × corpos`.
-
-## Velocidade dos gases para a cor
-
-Cada linha comercial é colorida pela **velocidade pico dos gases** na rotação típica do motor:
+Para qualquer diâmetro comercial em qualquer RPM, a velocidade de pico é:
 
 ```
 v = Vt × VE × RPM / (10 × N × π × D²)   (m/s)
 ```
 
-Limites:
+Onde:
 
-- **< 60 m/s**: velocidade baixa — combustível não atomiza bem, o carburador é grande demais pra essa rotação.
-- **60–130 m/s**: suficiente — faixa saudável de operação.
-- **> 130 m/s**: restringe — o venturi vira gargalo.
+- **v** — velocidade de pico no estrangulamento do venturi (m/s)
+- **Vt** — cilindrada total (cm³)
+- **VE** — eficiência volumétrica de pico (0,5 a 1,15)
+- **RPM** — rotação do motor
+- **N** — *divisor de pulso*, função de cilindros, carburadores, corpos e intervalo entre explosões (ver abaixo)
+- **D** — diâmetro do venturi (mm)
+
+Dois extremos importam:
+
+- **Muito baixa** → combustível atomiza mal, a distribuição da mistura piora.
+- **Muito alta** → o próprio venturi restringe a vazão e o motor não respira em cima.
+
+Cada linha comercial no gráfico é colorida pela velocidade que ela entrega em cada RPM.
+
+## Velocidade-alvo via perfil de aplicação (K)
+
+O **perfil de aplicação** (original, esportivo, competição — uma constante K por opção) codifica qual velocidade de pico a montagem está mirando. Substituindo a clássica fórmula de dimensionamento via Bernoulli na fórmula de velocidade, todas as variáveis do motor se cancelam e sobra uma relação limpa:
+
+```
+v_target = 100 × P_abs / (π × K²)   (m/s)
+```
+
+Onde **P_abs** = 1 + turbo (bar). Ou seja, K é, na prática, um seletor de velocidade-alvo:
+
+- Moto original (K=0,70): ~65 m/s
+- Moto esportiva (K=0,72): ~61 m/s
+- Moto competição (K=0,75): ~57 m/s
+- Carro original (K=0,60): ~88 m/s
+- Carro competição (K=0,70): ~65 m/s
+
+A faixa saudável do gráfico fica centrada na **v_target** com meia-largura fixa de ±30 m/s. Trocar o perfil de aplicação desloca a faixa e re-pinta o gráfico.
+
+## O divisor de pulso
+
+O divisor `N` converte a demanda total do motor na demanda de pico que um venturi vê:
+
+```
+N = max(venturis, cilindros / concurrent)
+concurrent = max(1, 240 / (intervalo_entre_explosões × venturis))
+```
+
+O fator `concurrent` cuida da **sobreposição de pulsos** quando múltiplos cilindros dividem um carburador. Se o intervalo entre explosões por venturi é menor que a duração da admissão (~240° de virabrequim), os pulsos se sobrepõem e a demanda efetiva de pico sobe.
+
+Para setups típicos de 1 carb por cilindro, `N = venturis = carburadores × corpos`.
 
 ## O que NÃO é calculado
 
-- **Vazão** efetivamente medida em banco de fluxo. A fórmula usa hipóteses geométricas e de respiração, não coeficientes de descarga.
+- **Vazão** medida em banco de fluxo. A fórmula usa hipóteses geométricas e de respiração, não coeficientes de descarga.
 - Efeitos transientes (inércia dos gases no coletor, ressonância da admissão).
-- Qualidade de atomização do combustível, distribuição da mistura ou AFR.
-- Perdas no corpo do carburador fora do venturi (corte da gaveta, geometria da garganta).
+- Qualidade da atomização, distribuição da mistura ou AFR.
+- Perdas no corpo do carburador fora do venturi (cutaway, formato da garganta).
 
 ## Aproximações conhecidas
 
-- **Duração da admissão** assumida em ~240° do virabrequim. Cames reais variam de 200° a 280°.
-- **Sobreposição de pulsos** modelada com escala linear simples — pulsos sobrepostos dividem o carburador proporcionalmente à duração da sobreposição. Motores reais têm ondas de pressão mais complexas.
-- **Ordem de explosão** assume firing par (`720° ÷ cilindros`). Motores de firing ímpar (paralela 270°, V8 cross-plane) podem ser aproximados ajustando o intervalo manualmente.
-- **VE_min** é derivada de VE_max menos 30 pontos percentuais, uma queda típica ao longo da faixa de rotação. Motores muito preparados seguram VE por mais tempo (queda menor); setups restritivos caem mais.
+- **Duração da admissão** assumida em ~240° de virabrequim. Comandos reais variam de 200° a 280°.
+- **Sobreposição de pulsos** modelada com escala linear simples — pulsos sobrepostos dividem o carb proporcionalmente à sobreposição. Motores reais têm ondas de pressão mais complexas.
+- **Padrão de explosão** padrão é uniforme (`720° ÷ cilindros`). Motores de explosão desigual (twins 270°, V8 cross-plane) podem ser aproximados ajustando o intervalo manualmente.
+- **VE** é o valor de *pico* (slider único). O gráfico avalia velocidade neste pico; motores reais veem VE menor fora da rotação de pico.
 
 ## Fontes
 
-Os presets de K e as velocidades-alvo vêm de literatura comum de carburação: David Vizard, Graham Bell, e os guias oficiais Dellorto. Os tamanhos reais de carburador usados pra validar o modelo (Honda CG 125, VW Fusca, Ford Maverick V8, Harley-Davidson Evo 1340, entre outros) vêm dos manuais de fábrica e referências de preparação.
+Os presets de K vêm da literatura comum de carburação: David Vizard, Graham Bell, guias oficiais da Dellorto. Tamanhos reais de carburador usados pra validar o modelo (Honda CG 125, VW Fusca, Ford Maverick V8, Harley-Davidson Evo 1340, entre outros) vêm de manuais de serviço dos fabricantes e referências de competição.
