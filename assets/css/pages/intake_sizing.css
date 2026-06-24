@@ -84,14 +84,11 @@
 }
 
 .intake-sizing .commercial-line {
-  stroke: var(--color-text-muted);
-  stroke-width: 0.5;
-  stroke-dasharray: 3 3;
-  opacity: 0.4;
+  opacity: 0.85;
 }
 
-.intake-sizing .commercial-window {
-  opacity: 0.9;
+.intake-sizing .commercial-line-ideal {
+  opacity: 0.95;
 }
 
 .intake-sizing .commercial-label {

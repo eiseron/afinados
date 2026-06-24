@@ -80,6 +80,17 @@ defmodule AfinadosWeb.IntakeSizingLive do
                 height={@chart.y_bottom - @chart.y_top}
               />
             </clipPath>
+            <linearGradient
+              :for={cl <- @chart.commercial_lines}
+              id={cl.gradient_id}
+              x1={@chart.x0}
+              x2={@chart.x1}
+              y1={cl.y}
+              y2={cl.y}
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop :for={s <- cl.gradient_stops} offset={"#{s.offset}%"} stop-color={s.color} />
+            </linearGradient>
           </defs>
           <line
             :for={tick <- @chart.x_ticks}
@@ -134,17 +145,19 @@ defmodule AfinadosWeb.IntakeSizingLive do
               x2={@chart.x1}
               y2={cl.y}
               class="commercial-line"
+              stroke={"url(##{cl.gradient_id})"}
+              stroke-width="1.2"
             />
             <line
               :for={cl <- @chart.commercial_lines}
-              :if={cl.visible_window}
-              x1={cl.window_x1}
+              :if={cl.ideal_segment.visible}
+              x1={cl.ideal_segment.x1}
               y1={cl.y}
-              x2={cl.window_x2}
+              x2={cl.ideal_segment.x2}
               y2={cl.y}
-              class="commercial-window"
-              stroke={cl.color}
-              stroke-width={cl.stroke_width}
+              class="commercial-line-ideal"
+              stroke={"url(##{cl.gradient_id})"}
+              stroke-width="3"
             />
           </g>
           <text
@@ -428,35 +441,79 @@ defmodule AfinadosWeb.IntakeSizingLive do
     |> Enum.filter(fn %CommercialSize{diameter: d} ->
       d * 1.0 >= scale.d_min and d * 1.0 <= scale.d_max
     end)
-    |> Enum.map(fn %CommercialSize{diameter: d, rpm_window: window} ->
-      build_line(%{diameter: d, window: window, scale: scale, engine: engine})
+    |> Enum.map(fn %CommercialSize{diameter: d} ->
+      build_line(%{diameter: d, scale: scale, engine: engine})
     end)
   end
 
-  defp build_line(%{diameter: d, window: {rpm_lo, rpm_hi} = window, scale: scale, engine: engine}) do
+  defp build_line(%{diameter: d, scale: scale, engine: engine}) do
     y = round1(scale_y(d * 1.0, scale))
-    window_visible = rpm_lo <= scale.rpm_max and rpm_hi >= scale.rpm_min
-    window_lo = max(rpm_lo, scale.rpm_min)
-    window_hi = min(rpm_hi, scale.rpm_max)
-    velocity = IntakeSizing.gas_velocity(d, RpmBand.center(engine.vehicle), engine)
-    in_band = RpmBand.overlaps?(engine.vehicle, window)
-    color = VelocityPalette.color_for(%{velocity: velocity, in_band: in_band})
-    ideal_at_center = center_velocity_ideal?(velocity)
 
     %{
       diameter: d,
       y: y,
       label: "#{d}",
-      window_x1: round1(scale_x(window_lo, scale)),
-      window_x2: round1(scale_x(window_hi, scale)),
-      visible_window: window_visible,
-      color: color,
-      stroke_width: if(ideal_at_center, do: 2.5, else: 1.2)
+      gradient_id: "vel-grad-#{d}",
+      gradient_stops: gradient_stops(d, {scale.rpm_min, scale.rpm_max}, engine),
+      ideal_segment: ideal_segment(d, scale, engine)
     }
   end
 
-  defp center_velocity_ideal?(v) do
-    v >= VelocityPalette.anemic_threshold() and v <= VelocityPalette.restriction_threshold()
+  defp ideal_segment(diameter, scale, engine) do
+    rpm_at_anemic = rpm_for_velocity(diameter, VelocityPalette.anemic_threshold(), engine)
+
+    rpm_at_restriction =
+      rpm_for_velocity(diameter, VelocityPalette.restriction_threshold(), engine)
+
+    lo = Enum.max([rpm_at_anemic, scale.rpm_min])
+    hi = Enum.min([rpm_at_restriction, scale.rpm_max])
+
+    if hi > lo do
+      %{visible: true, x1: round1(scale_x(lo, scale)), x2: round1(scale_x(hi, scale))}
+    else
+      %{visible: false, x1: 0.0, x2: 0.0}
+    end
+  end
+
+  defp gradient_stops(diameter, {rpm_lo, rpm_hi}, engine) when rpm_hi > rpm_lo do
+    transitions =
+      [
+        rpm_for_velocity(diameter, VelocityPalette.anemic_threshold(), engine),
+        rpm_for_velocity(diameter, VelocityPalette.restriction_threshold(), engine),
+        elem(RpmBand.range(engine.vehicle), 0),
+        elem(RpmBand.range(engine.vehicle), 1)
+      ]
+      |> Enum.filter(&(&1 > rpm_lo and &1 < rpm_hi))
+      |> Enum.sort()
+
+    samples = [rpm_lo] ++ flank_transitions(transitions) ++ [rpm_hi]
+
+    Enum.map(samples, fn rpm ->
+      velocity = IntakeSizing.gas_velocity(diameter, rpm, engine)
+      in_band = rpm_in_band?(engine.vehicle, rpm)
+      color = VelocityPalette.color_for(%{velocity: velocity, in_band: in_band})
+      offset = Float.round((rpm - rpm_lo) / (rpm_hi - rpm_lo) * 100, 2)
+      %{offset: offset, color: color}
+    end)
+  end
+
+  defp flank_transitions(transitions) do
+    epsilon = 0.5
+
+    Enum.flat_map(transitions, fn rpm ->
+      [rpm - epsilon, rpm + epsilon]
+    end)
+  end
+
+  defp rpm_for_velocity(diameter, velocity, engine) do
+    %{displacement: %{cc: cc}, ve: %{value: ev}, config: config} = engine
+    n = EngineConfig.pulse_divisor(config)
+    velocity * 10 * n * :math.pi() * diameter * diameter / (cc * ev)
+  end
+
+  defp rpm_in_band?(vehicle, rpm) do
+    {lo, hi} = RpmBand.range(vehicle)
+    rpm >= lo and rpm <= hi
   end
 
   defp rpm_range(points) do

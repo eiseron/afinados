@@ -117,10 +117,10 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       assert has_element?(view, ".commercial-label")
     end
 
-    test "renders highlighted window segments within the envelope", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+    test "commercial line uses a gradient stroke", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
 
-      assert has_element?(view, ".commercial-window")
+      assert html =~ ~r/class="commercial-line" stroke="url\(#vel-grad-/
     end
 
     test "commercial lines update when displacement changes", %{conn: conn} do
@@ -374,40 +374,26 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
     end
   end
 
-  describe "solid color per commercial line" do
-    test "no longer defines linearGradient elements", %{conn: conn} do
+  describe "gradient transitions on commercial lines" do
+    test "defines a linearGradient per commercial line", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
 
-      refute html =~ "<linearGradient"
+      assert html =~ ~r/<linearGradient id="vel-grad-\d+"/
     end
 
-    test "commercial-window line carries a solid stroke color", %{conn: conn} do
+    test "gradient stops carry HSL stop colors", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
 
-      assert html =~ ~r/class="commercial-window" stroke="hsl\(/
+      assert html =~ ~r/<stop offset="[\d.]+%" stop-color="hsl\(/
     end
 
-    test "CG 125 with a 22mm venturi in band paints green", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+    test "commercial line strokes from its gradient", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
 
-      html =
-        view
-        |> element("form")
-        |> render_change(%{
-          intake_sizing: %{
-            @default_params
-            | vehicle: "motorcycle",
-              cc: "125",
-              cylinders: "1",
-              carbs: "1",
-              k: "0.70"
-          }
-        })
-
-      assert html =~ ~r/stroke="hsl\(125, /
+      assert html =~ ~r/class="commercial-line" stroke="url\(#vel-grad-\d+\)"/
     end
 
-    test "Maverick V8 stock renders solid stroke colors without error", %{conn: conn} do
+    test "Maverick V8 stock renders gradients without crashing", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
 
       html =
@@ -426,7 +412,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
           }
         })
 
-      assert html =~ ~r/class="commercial-window" stroke="hsl\(/
+      assert html =~ ~r/<linearGradient id="vel-grad-\d+"/
     end
   end
 
