@@ -1,13 +1,24 @@
 defmodule Afinados.Carburetion.IntakeSizing.EngineConfig do
-  @moduledoc "Engine configuration: gas velocity constant, carburetors, manifold topology, and boost."
+  @moduledoc "Engine configuration: gas velocity constant, carburetors, manifold topology, induction, and boost."
 
   @intake_duration_deg 240
   @manifolds [:dedicated, :shared]
+  @inductions [:carburetor, :injection]
 
-  @enforce_keys [:k, :cylinders, :carbs, :barrels, :firing_interval, :manifold, :boost]
+  @enforce_keys [
+    :k,
+    :cylinders,
+    :carbs,
+    :barrels,
+    :firing_interval,
+    :manifold,
+    :induction,
+    :boost
+  ]
   defstruct @enforce_keys
 
   @type manifold :: :dedicated | :shared
+  @type induction :: :carburetor | :injection
 
   @type t :: %__MODULE__{
           k: float(),
@@ -16,11 +27,15 @@ defmodule Afinados.Carburetion.IntakeSizing.EngineConfig do
           barrels: pos_integer(),
           firing_interval: pos_integer(),
           manifold: manifold(),
+          induction: induction(),
           boost: float()
         }
 
   @spec manifolds() :: [manifold()]
   def manifolds, do: @manifolds
+
+  @spec inductions() :: [induction()]
+  def inductions, do: @inductions
 
   @spec new(map()) :: {:ok, t()} | :error
   def new(params) when is_map(params) do
@@ -60,11 +75,12 @@ defmodule Afinados.Carburetion.IntakeSizing.EngineConfig do
          barrels: barrels,
          firing_interval: firing_interval,
          manifold: manifold,
+         induction: induction,
          boost: boost
        }) do
     valid_k?(k) and valid_count?(cylinders) and valid_count?(carbs) and
       barrels in [1, 2] and valid_interval?(firing_interval) and
-      manifold in @manifolds and valid_boost?(boost)
+      manifold in @manifolds and induction in @inductions and valid_boost?(boost)
   end
 
   defp valid_params?(_params), do: false
@@ -76,6 +92,7 @@ defmodule Afinados.Carburetion.IntakeSizing.EngineConfig do
          barrels: barrels,
          firing_interval: firing_interval,
          manifold: manifold,
+         induction: induction,
          boost: boost
        }) do
     {:ok,
@@ -86,6 +103,7 @@ defmodule Afinados.Carburetion.IntakeSizing.EngineConfig do
        barrels: barrels,
        firing_interval: firing_interval,
        manifold: manifold,
+       induction: induction,
        boost: boost * 1.0
      }}
   end

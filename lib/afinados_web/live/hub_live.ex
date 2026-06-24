@@ -13,8 +13,9 @@ defmodule AfinadosWeb.HubLive do
       <div class="hub-inner">
         <section class="hub-intro">
           <h1>Afinados</h1>
-          <p class="tagline">{gettext("Tools for carburetor tuning.")}</p>
-          <p class="disclaimer">{gettext("Comparative estimate only, not jetting advice.")}</p>
+          <p class="tagline">
+            {gettext("Tools for tuning and preparing internal combustion engines.")}
+          </p>
         </section>
 
         <ul class="tools">
@@ -29,7 +30,7 @@ defmodule AfinadosWeb.HubLive do
           <li>
             <.link href={~p"/carburetion/intake-sizing"} class="tool-card">
               <h2>{gettext("Intake sizing")}</h2>
-              <p>{gettext("Estimate the ideal carburetor venturi size.")}</p>
+              <p>{gettext("Estimate the ideal carburetor or throttle body size for an engine.")}</p>
             </.link>
           </li>
           <li>

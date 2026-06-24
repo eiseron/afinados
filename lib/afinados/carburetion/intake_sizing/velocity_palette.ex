@@ -10,14 +10,25 @@ defmodule Afinados.Carburetion.IntakeSizing.VelocityPalette do
   in `IntakeSizing.target_velocity/1`).
   """
 
-  @band_half_width 30.0
+  @band_half_width_up 30.0
+  @band_half_width_down_carb 30.0
+  @band_half_width_down_efi 40.0
 
   @spec band_half_width() :: float()
-  def band_half_width, do: @band_half_width
+  def band_half_width, do: @band_half_width_up
 
   @spec thresholds(number()) :: {float(), float()}
-  def thresholds(target_velocity) when is_number(target_velocity) and target_velocity > 0 do
-    {target_velocity - @band_half_width, target_velocity + @band_half_width}
+  def thresholds(target_velocity), do: thresholds(target_velocity, :carburetor)
+
+  @spec thresholds(number(), :carburetor | :injection) :: {float(), float()}
+  def thresholds(target_velocity, :carburetor)
+      when is_number(target_velocity) and target_velocity > 0 do
+    {target_velocity - @band_half_width_down_carb, target_velocity + @band_half_width_up}
+  end
+
+  def thresholds(target_velocity, :injection)
+      when is_number(target_velocity) and target_velocity > 0 do
+    {target_velocity - @band_half_width_down_efi, target_velocity + @band_half_width_up}
   end
 
   @spec color_for(%{

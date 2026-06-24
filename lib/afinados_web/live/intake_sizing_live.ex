@@ -33,6 +33,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @default_barrels "1"
   @default_firing_interval "180"
   @default_manifold "dedicated"
+  @default_induction "carburetor"
   @default_k "0.70"
   @default_boost "0"
   @default_ve "0.95"
@@ -47,6 +48,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
       "barrels" => @default_barrels,
       "firing_interval" => @default_firing_interval,
       "manifold" => @default_manifold,
+      "induction" => @default_induction,
       "k" => @default_k,
       "boost" => @default_boost,
       "ve" => @default_ve
@@ -220,6 +222,12 @@ defmodule AfinadosWeb.IntakeSizingLive do
               options={vehicle_options()}
             />
             <.input
+              field={@form[:induction]}
+              type="select"
+              label={gettext("Induction")}
+              options={induction_options()}
+            />
+            <.input
               field={@form[:cc]}
               type="number"
               label={gettext("Displacement (cm³)")}
@@ -237,7 +245,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
             <.input
               field={@form[:carbs]}
               type="number"
-              label={gettext("Number of carburetors")}
+              label={carbs_label(@induction)}
               min="1"
               max="12"
               step="1"
@@ -267,8 +275,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
               <.input
                 field={@form[:barrels]}
                 type="select"
-                label={gettext("Barrels per carburetor")}
-                options={barrels_options()}
+                label={barrels_label(@induction)}
+                options={barrels_options(@induction)}
               />
               <.input
                 field={@form[:manifold]}
@@ -329,6 +337,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
       form: to_form(params, as: :intake_sizing),
       chart: chart,
       vehicle: vehicle,
+      induction: parse_induction(params["induction"]),
       ve_value: format_ve(ve),
       show_firing: show_firing?(params),
       show_manifold: show_manifold?(params)
@@ -386,7 +395,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     with {:ok, displacement} <- Displacement.new(cc),
          {:ok, vol_eff} <- VolumetricEfficiency.new(ve) do
       target_v = IntakeSizing.target_velocity(config)
-      thresholds = VelocityPalette.thresholds(target_v)
+      thresholds = VelocityPalette.thresholds(target_v, config.induction)
 
       engine = %{
         displacement: displacement,
@@ -411,6 +420,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
     barrels = parse_int(params["barrels"]) || 1
     firing_interval = parse_int(params["firing_interval"])
     manifold = parse_manifold(params["manifold"])
+    induction = parse_induction(params["induction"])
     boost = parse_float(params["boost"]) || 0.0
 
     with true <- k != nil and carbs != nil and firing_interval != nil,
@@ -422,6 +432,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
              barrels: barrels,
              firing_interval: firing_interval,
              manifold: manifold,
+             induction: induction,
              boost: boost
            }) do
       config
@@ -709,7 +720,20 @@ defmodule AfinadosWeb.IntakeSizingLive do
     ]
   end
 
-  defp barrels_options do
+  defp carbs_label(:injection), do: gettext("Number of throttle bodies")
+  defp carbs_label(_), do: gettext("Number of carburetors")
+
+  defp barrels_label(:injection), do: gettext("Throttle plates per body")
+  defp barrels_label(_), do: gettext("Barrels per carburetor")
+
+  defp barrels_options(:injection) do
+    [
+      {gettext("Single"), "1"},
+      {gettext("Dual"), "2"}
+    ]
+  end
+
+  defp barrels_options(_) do
     [
       {gettext("Single"), "1"},
       {gettext("Dual (DCOE, IDF, 2E)"), "2"}
@@ -725,6 +749,16 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp parse_manifold("shared"), do: :shared
   defp parse_manifold(_), do: :dedicated
+
+  defp induction_options do
+    [
+      {gettext("Carburetor"), "carburetor"},
+      {gettext("Injection"), "injection"}
+    ]
+  end
+
+  defp parse_induction("injection"), do: :injection
+  defp parse_induction(_), do: :carburetor
 
   defp parse_int(value) when is_binary(value) do
     case Integer.parse(value) do

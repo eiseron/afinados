@@ -176,7 +176,7 @@ msgstr ""
 
 #: lib/afinados_web/live/hub_live.ex:16
 #, elixir-autogen, elixir-format
-msgid "Tools for carburetor tuning."
+msgid "Tools for tuning and preparing internal combustion engines."
 msgstr ""
 
 #: lib/afinados_web/live/hub_live.ex:23
@@ -197,7 +197,7 @@ msgstr ""
 
 #: lib/afinados_web/live/hub_live.ex:33
 #, elixir-autogen, elixir-format
-msgid "Estimate the ideal carburetor venturi size."
+msgid "Estimate the ideal carburetor or throttle body size for an engine."
 msgstr ""
 
 #: lib/afinados_web/live/hub_live.ex:32

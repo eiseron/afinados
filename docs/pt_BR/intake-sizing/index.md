@@ -5,7 +5,7 @@ description: O que a ferramenta faz, os conceitos principais e como usar.
 
 # Dimensionamento de admissão
 
-Esta ferramenta estima o **tamanho ideal de venturi** do carburador para um motor e mostra como os tamanhos comerciais se encaixam na faixa de RPM em que o motor trabalha. Ela traça o diâmetro do venturi em função da rotação e colore cada diâmetro comercial conforme a velocidade dos gases que ele entregaria no RPM típico do motor.
+Esta ferramenta estima o **tamanho ideal do venturi do carburador ou da borboleta de injeção** para um motor e mostra como os tamanhos comerciais se encaixam na faixa de RPM em que o motor trabalha. Ela traça o diâmetro da garganta em função da rotação e colore cada diâmetro comercial conforme a velocidade dos gases que ele entregaria no RPM típico do motor. Funciona pra carburação e injeção — o campo **Sistema de admissão** no avançado diz ao modelo qual dos dois você está dimensionando.
 
 Veja [Usando a interface](interface.md) para um tour pelos controles, e [O modelo](model.md) para a fórmula e as aproximações conhecidas.
 
@@ -56,15 +56,16 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
 ## Como usar
 
 1. Escolha o **tipo de motor** (moto, carro, etc.). Isso define a faixa de RPM usada pra colorir o gráfico.
-2. Informe **cilindrada (cm³)**, **número de cilindros** e **número de carburadores**.
-3. Leia o gráfico: procure os tamanhos de venturi cujas linhas estão **verde vivo e grossas** dentro do seu RPM típico. Esses são os venturis que respiram bem na faixa de trabalho do motor.
-4. Abra **Avançado** pra ajustar:
+2. Escolha o **sistema de admissão**: *Carburador* (padrão) ou *Injeção Eletrônica*. Carburador precisa de velocidade do ar pra atomizar combustível no venturi via Bernoulli, então a faixa saudável tem piso significativo (~alvo − 30 m/s). Injeção (TBI, MPFI, corpos individuais) injeta combustível depois da borboleta, então atomização não depende da velocidade na garganta e o piso cai (~alvo − 40 m/s). Teto de restrição fica igual — o limite físico de vazão não muda.
+3. Informe **cilindrada (cm³)**, **número de cilindros** e **número de carburadores**.
+4. Leia o gráfico: procure os tamanhos cujas linhas estão **verde vivo e grossas** dentro do seu RPM típico. Esses são os venturis que respiram bem na faixa de trabalho do motor.
+5. Abra **Avançado** pra ajustar:
    - **Perfil de aplicação**: K original, esportivo ou competição pra esse tipo de motor.
    - **Corpos por carburador**: 1 para motos típicas, 2 para Weber DCOE/IDF, 4 para Quadrajet/Holley 4-corpos.
-   - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carb alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4cyl, Quadrajet, Holley single) — todos os carbs descarregam num plenum comum; mais carbs reduzem a velocidade de pico por carb linearmente.
+   - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carb alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4cyl, Quadrajet, Holley single) — todos os carbs descarregam num coletor comum; mais carbs reduzem a velocidade de pico por carb linearmente.
    - **Defasagem do virabrequim**: graus entre explosões de cilindros consecutivos. Ativo só quando cilindros compartilham carburador. Considera a sobreposição de pulsos quando vários cilindros alimentam o mesmo venturi.
    - **Pressão de turbo (bar)**: para setups blow-through.
-   - **Eficiência volumétrica máxima**: vai de 50% (motor cansado, restritivo) a 115% (race com admissão/escape ressonantes).
+   - **Eficiência volumétrica máxima**: vai de 50% (motor cansado, restritivo) a 115% (competição com admissão/escape ressonantes).
 
 ## Lendo os resultados
 

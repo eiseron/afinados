@@ -17,6 +17,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       barrels: 1,
       firing_interval: 720,
       manifold: :dedicated,
+      induction: :carburetor,
       boost: 0.0
     })
 
@@ -72,6 +73,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  barrels: 2,
                  firing_interval: 180,
                  manifold: :dedicated,
+                 induction: :carburetor,
                  boost: 0.0
                })
     end
@@ -85,6 +87,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  barrels: 1,
                  firing_interval: 720,
                  manifold: :dedicated,
+                 induction: :carburetor,
                  boost: 0.0
                })
     end
@@ -98,6 +101,21 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
                  barrels: 1,
                  firing_interval: 720,
                  manifold: :plenum,
+                 induction: :carburetor,
+                 boost: 0.0
+               })
+    end
+
+    test "rejects an unknown induction type" do
+      assert :error =
+               EngineConfig.new(%{
+                 k: 0.70,
+                 cylinders: 1,
+                 carbs: 1,
+                 barrels: 1,
+                 firing_interval: 720,
+                 manifold: :dedicated,
+                 induction: :diesel,
                  boost: 0.0
                })
     end
@@ -274,6 +292,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       barrels: 1,
       firing_interval: 720,
       manifold: :dedicated,
+      induction: :carburetor,
       boost: boost
     })
   end
@@ -286,6 +305,7 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
       barrels: 1,
       firing_interval: 180,
       manifold: manifold,
+      induction: :carburetor,
       boost: 0.0
     })
   end

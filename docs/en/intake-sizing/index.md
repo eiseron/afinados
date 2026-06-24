@@ -5,7 +5,7 @@ description: What the intake-sizing tool does, the key concepts, and how to use 
 
 # Intake sizing
 
-This tool estimates the **ideal carburetor venturi size** for an engine and shows how the commercial sizes fit your specific RPM band. It plots venturi diameter against engine speed and color-codes each commercial diameter according to the gas velocity it would deliver at the engine's typical operating RPM.
+This tool estimates the **ideal carburetor venturi or throttle body size** for an engine and shows how the commercial sizes fit your specific RPM band. It plots throat diameter against engine speed and color-codes each commercial diameter according to the gas velocity it would deliver at the engine's typical operating RPM. Works for carbureted and EFI setups — the **Induction** field in advanced tells the model which one you're sizing.
 
 See [Using the interface](interface.md) for a tour of the controls, and [The model](model.md) for the formula and known approximations.
 
@@ -56,9 +56,10 @@ A slider for **maximum volumetric efficiency** lives in the advanced section. It
 ## How to use
 
 1. Pick the **engine type** (motorcycle, car, etc.). This sets the RPM band used to color-code the chart.
-2. Enter **displacement (cm³)**, **number of cylinders**, and **number of carburetors**.
-3. Read the chart: look for the venturi sizes whose lines run **vivid green and thick** through your typical RPM. Those are the venturis that breathe well at your engine's working speed.
-4. Open **Advanced** to tune:
+2. Pick the **induction**: *Carburetor* (default) or *Injection*. Carburetors need gas velocity to atomize fuel through the venturi, so the healthy band has a meaningful floor (~target − 30 m/s). Injection (TBI, MPFI, ITBs) injects fuel after the throttle body, so atomization is independent of throat velocity and the floor drops (~target − 40 m/s). Restriction ceiling stays the same — the physical flow limit doesn't change.
+3. Enter **displacement (cm³)**, **number of cylinders**, and **number of carburetors**.
+4. Read the chart: look for the sizes whose lines run **vivid green and thick** through your typical RPM. Those are the throats that breathe well at your engine's working speed.
+5. Open **Advanced** to tune:
    - **Application profile**: stock, sport or competition K factor for that engine type.
    - **Barrels per carburetor**: 1 for typical motorcycles, 2 for Weber DCOE/IDF, 4 for a Quadrijet/Holley 4-barrel.
    - **Intake manifold**: *Dedicated* (DCOE pair, CB400 four, IDA in a V8) — each carb feeds its own subset of cylinders. *Shared* (single Weber feeding 4 cyl, Quadrijet, single Holley) — all carbs feed a common plenum; more carbs reduce per-carb peak velocity linearly.

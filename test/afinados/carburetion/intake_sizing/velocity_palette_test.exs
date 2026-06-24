@@ -94,4 +94,33 @@ defmodule Afinados.Carburetion.IntakeSizing.VelocityPaletteTest do
                "hsl(125, 75%, 45%)"
     end
   end
+
+  describe "thresholds/2 — induction-aware" do
+    test "injection widens the band on the low end (atomization is irrelevant)" do
+      target = 95.0
+      {anemic_carb, _} = VelocityPalette.thresholds(target, :carburetor)
+      {anemic_efi, _} = VelocityPalette.thresholds(target, :injection)
+
+      assert anemic_efi < anemic_carb
+    end
+
+    test "injection keeps the same restriction edge (same physical flow limit)" do
+      target = 95.0
+      {_, restriction_carb} = VelocityPalette.thresholds(target, :carburetor)
+      {_, restriction_efi} = VelocityPalette.thresholds(target, :injection)
+
+      assert_in_delta restriction_efi, restriction_carb, 1.0e-9
+    end
+
+    test "injection band is 70 m/s wide (vs 60 m/s for carburetor)" do
+      target = 95.0
+      {anemic_efi, restriction_efi} = VelocityPalette.thresholds(target, :injection)
+
+      assert_in_delta restriction_efi - anemic_efi, 70.0, 1.0e-9
+    end
+
+    test "default (no induction arg) matches :carburetor" do
+      assert VelocityPalette.thresholds(95.0) == VelocityPalette.thresholds(95.0, :carburetor)
+    end
+  end
 end

@@ -176,8 +176,8 @@ msgstr "Acerto não encontrado, redirecionando."
 
 #: lib/afinados_web/live/hub_live.ex:16
 #, elixir-autogen, elixir-format
-msgid "Tools for carburetor tuning."
-msgstr "Ferramentas para acerto de carburador."
+msgid "Tools for tuning and preparing internal combustion engines."
+msgstr "Ferramentas para acerto e preparação de motores a combustão interna."
 
 #: lib/afinados_web/live/hub_live.ex:23
 #: lib/afinados_web/live/setup_live.ex:218
@@ -197,8 +197,8 @@ msgstr "Em breve"
 
 #: lib/afinados_web/live/hub_live.ex:33
 #, elixir-autogen, elixir-format
-msgid "Estimate the ideal carburetor venturi size."
-msgstr "Estime o tamanho ideal do venturi do carburador."
+msgid "Estimate the ideal carburetor or throttle body size for an engine."
+msgstr "Estime o tamanho ideal do carburador ou borboleta de injeção para um motor."
 
 #: lib/afinados_web/live/hub_live.ex
 #, elixir-autogen, elixir-format
@@ -407,6 +407,36 @@ msgstr "Dedicado"
 #, elixir-autogen, elixir-format
 msgid "Shared"
 msgstr "Compartilhado"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Induction"
+msgstr "Sistema de admissão"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Carburetor"
+msgstr "Carburador"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Injection"
+msgstr "Injeção Eletrônica"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Number of throttle bodies"
+msgstr "Número de corpos de borboleta"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Throttle plates per body"
+msgstr "Borboletas por corpo"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Dual"
+msgstr "Duplo"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
