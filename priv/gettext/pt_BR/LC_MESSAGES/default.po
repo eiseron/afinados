@@ -452,3 +452,98 @@ msgstr "Defasagem do virabrequim (°)"
 #, elixir-autogen, elixir-format
 msgid "Advanced"
 msgstr "Avançado"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Application"
+msgstr "Aplicação"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Cruiser"
+msgstr "Rodovia"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Urban"
+msgstr "Urbano"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Highway"
+msgstr "Rodovia"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Sporty"
+msgstr "Esportivo"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Track"
+msgstr "Pista"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Off-road"
+msgstr "Off-road"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Hard enduro"
+msgstr "Hard enduro"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Motocross"
+msgstr "Motocross"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Drag"
+msgstr "Arrancada"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Street race"
+msgstr "Racha de rua"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Rally"
+msgstr "Rali"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Work"
+msgstr "Trabalho"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Race"
+msgstr "Corrida"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Leisure"
+msgstr "Lazer"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Fishing"
+msgstr "Pesca"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Light"
+msgstr "Leve"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Commute"
+msgstr "Urbano"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
+msgid "Synchronous"
+msgstr "Síncrono"

@@ -38,16 +38,16 @@ A linha fica **mais grossa** nas rotações onde o venturi é ideal e **mais fin
 
 As mesmas cores aparecem em duas tonalidades. As vivas (verde vivo, azul claro, amarelo) cobrem a faixa de RPM onde o motor realmente trabalha — sua faixa típica de operação. As escuras (verde escuro, azul escuro, amarelo escuro) cobrem RPMs fora dessa faixa, pra você ainda ver a tendência mas sem dar o mesmo peso.
 
-A faixa de RPM depende do tipo de motor escolhido:
+A faixa de RPM depende do **tipo de motor** *e* da **aplicação**. Uma Harley cruiser e uma Yamaha R1 são as duas "moto", mas a cruiser trabalha em torno de 2,5k–5,5k otimizada pra torque de rodovia, e a esportiva puxa de 7k a 14k. O campo Aplicação refina a faixa dentro do tipo:
 
-- Moto: 2.500–14.000 rpm
-- Ciclomotor: 3.000–10.000 rpm
-- Kart: 9.000–14.500 rpm
-- Jet ski: 5.000–9.000 rpm
-- Motor de popa: 3.000–6.500 rpm
-- Motosserra: 6.000–13.000 rpm
-- Motor estacionário (gerador, bomba): 2.900–3.700 rpm
-- Carro: 1.500–6.500 rpm
+- Moto — urbano (CG, dia a dia), cruiser (Harley, rodovia em torque), esportivo (R1 na rua), pista (circuito fechado), off-road, hard enduro, motocross, rali (Dakar / adventure), arrancada, racha de rua, trabalho (carga / motofrete)
+- Carro — urbano (cidade), rodovia, esportivo, pista, arrancada, racha de rua, off-road (4x4), rali, trabalho (utilitário / carga)
+- Kart — corrida, off-road (kart cross), lazer
+- Jet ski — corrida, lazer
+- Motor de popa — pesca, esportivo, trabalho
+- Motosserra — trabalho, leve
+- Ciclomotor — urbano, esportivo
+- Estacionário — síncrono (faixa única canônica: 2,9k–3,7k rpm)
 
 ### O slider
 
@@ -55,11 +55,12 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
 
 ## Como usar
 
-1. Escolha o **tipo de motor** (moto, carro, etc.). Isso define a faixa de RPM usada pra colorir o gráfico.
-2. Escolha o **sistema de admissão**: *Carburador* (padrão) ou *Injeção Eletrônica*. Carburador precisa de velocidade do ar pra atomizar combustível no venturi via Bernoulli, então a faixa saudável tem piso significativo (~alvo − 30 m/s). Injeção (TBI, MPFI, corpos individuais) injeta combustível depois da borboleta, então atomização não depende da velocidade na garganta e o piso cai (~alvo − 40 m/s). Teto de restrição fica igual — o limite físico de vazão não muda.
-3. Informe **cilindrada (cm³)**, **número de cilindros** e **número de carburadores**.
-4. Leia o gráfico: procure os tamanhos cujas linhas estão **verde vivo e grossas** dentro do seu RPM típico. Esses são os venturis que respiram bem na faixa de trabalho do motor.
-5. Abra **Avançado** pra ajustar:
+1. Escolha o **tipo de motor** (moto, carro, etc.). Isso define o contexto amplo de RPM usado pra colorir o gráfico.
+2. Escolha a **aplicação**: como o motor vai ser usado de verdade (urbano, cruiser, motocross, arrancada, …). As opções são por aplicação — não por estilo — e a maioria é compartilhada entre moto e carro (urbano, esportivo, pista, off-road, rali, arrancada, racha de rua, trabalho). Algumas são específicas: *cruiser*, *hard enduro* e *motocross* só em moto; *rodovia* só em carro (cruiser é justamente a "rodovia" da moto, então o label PT é o mesmo). Fica desabilitado quando o tipo tem uma única aplicação canônica (ex.: estacionário → síncrono).
+3. Escolha o **sistema de admissão**: *Carburador* (padrão) ou *Injeção Eletrônica*. Carburador precisa de velocidade do ar pra atomizar combustível no venturi via Bernoulli, então a faixa saudável tem piso significativo (~alvo − 30 m/s). Injeção (TBI, MPFI, corpos individuais) injeta combustível depois da borboleta, então atomização não depende da velocidade na garganta e o piso cai (~alvo − 40 m/s). Teto de restrição fica igual — o limite físico de vazão não muda.
+4. Informe **cilindrada (cm³)**, **número de cilindros** e **número de carburadores / corpos de borboleta**.
+5. Leia o gráfico: procure os tamanhos cujas linhas estão **verde vivo e grossas** dentro do seu RPM típico. Esses são os venturis que respiram bem na faixa de trabalho do motor.
+6. Abra **Avançado** pra ajustar:
    - **Perfil de aplicação**: K original, esportivo ou competição pra esse tipo de motor.
    - **Corpos por carburador**: 1 para motos típicas, 2 para Weber DCOE/IDF, 4 para Quadrajet/Holley 4-corpos.
    - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carb alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4cyl, Quadrajet, Holley single) — todos os carbs descarregam num coletor comum; mais carbs reduzem a velocidade de pico por carb linearmente.

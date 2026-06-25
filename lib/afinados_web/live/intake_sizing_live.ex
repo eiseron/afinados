@@ -27,6 +27,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   @y_top @pad_top
 
   @default_vehicle "motorcycle"
+  @default_purpose "urban"
   @default_cc "125"
   @default_cylinders "1"
   @default_carbs "1"
@@ -42,6 +43,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
   def mount(_params, _session, socket) do
     params = %{
       "vehicle" => @default_vehicle,
+      "purpose" => @default_purpose,
       "cc" => @default_cc,
       "cylinders" => @default_cylinders,
       "carbs" => @default_carbs,
@@ -222,6 +224,13 @@ defmodule AfinadosWeb.IntakeSizingLive do
               options={vehicle_options()}
             />
             <.input
+              field={@form[:purpose]}
+              type="select"
+              label={gettext("Application")}
+              options={purpose_options(@vehicle)}
+              disabled={!@purpose_selectable}
+            />
+            <.input
               field={@form[:induction]}
               type="select"
               label={gettext("Induction")}
@@ -325,12 +334,20 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp recompute(socket, params) do
     vehicle = params["vehicle"] || "motorcycle"
-    params = params |> normalize_k(vehicle) |> normalize_firing_interval()
+
+    params =
+      params
+      |> normalize_k(vehicle)
+      |> normalize_firing_interval()
+      |> normalize_purpose(vehicle)
+
+    purpose = params["purpose"]
     cc = parse_int(params["cc"])
     ve = parse_float(params["ve"])
     config = parse_config(params)
 
-    chart = build_zone(%{cc: cc, ve: ve, config: config, vehicle: vehicle})
+    chart =
+      build_zone(%{cc: cc, ve: ve, config: config, vehicle: vehicle, purpose: purpose})
 
     assign(socket,
       params: params,
@@ -340,7 +357,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
       induction: parse_induction(params["induction"]),
       ve_value: format_ve(ve),
       show_firing: show_firing?(params),
-      show_manifold: show_manifold?(params)
+      show_manifold: show_manifold?(params),
+      purpose_selectable: purpose_selectable?(vehicle)
     )
   end
 
@@ -349,6 +367,18 @@ defmodule AfinadosWeb.IntakeSizingLive do
       n when is_integer(n) and n >= 60 and n <= 720 -> params
       _ -> Map.put(params, "firing_interval", @default_firing_interval)
     end
+  end
+
+  defp normalize_purpose(params, vehicle) do
+    if params["purpose"] in RpmBand.purposes(vehicle) do
+      params
+    else
+      Map.put(params, "purpose", RpmBand.default_purpose(vehicle))
+    end
+  end
+
+  defp purpose_selectable?(vehicle) do
+    length(RpmBand.purposes(vehicle)) > 1
   end
 
   defp show_firing?(params) do
@@ -390,7 +420,13 @@ defmodule AfinadosWeb.IntakeSizingLive do
   defp default_k("stationary"), do: "0.75"
   defp default_k(_vehicle), do: "0.60"
 
-  defp build_zone(%{cc: cc, ve: ve, config: %EngineConfig{} = config, vehicle: vehicle})
+  defp build_zone(%{
+         cc: cc,
+         ve: ve,
+         config: %EngineConfig{} = config,
+         vehicle: vehicle,
+         purpose: purpose
+       })
        when is_integer(cc) and cc > 0 and is_float(ve) do
     with {:ok, displacement} <- Displacement.new(cc),
          {:ok, vol_eff} <- VolumetricEfficiency.new(ve) do
@@ -402,6 +438,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
         ve: vol_eff,
         config: config,
         vehicle: vehicle,
+        purpose: purpose,
         thresholds: thresholds
       }
 
@@ -525,8 +562,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
       [
         IntakeSizing.rpm_for_velocity(diameter, anemic, engine),
         IntakeSizing.rpm_for_velocity(diameter, restriction, engine),
-        elem(RpmBand.range(engine.vehicle), 0),
-        elem(RpmBand.range(engine.vehicle), 1)
+        elem(RpmBand.range(engine.vehicle, engine.purpose), 0),
+        elem(RpmBand.range(engine.vehicle, engine.purpose), 1)
       ]
       |> Enum.filter(&(&1 > rpm_lo and &1 < rpm_hi))
       |> Enum.sort()
@@ -535,7 +572,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
     Enum.map(samples, fn rpm ->
       velocity = IntakeSizing.gas_velocity(diameter, rpm, engine)
-      in_band = rpm_in_band?(engine.vehicle, rpm)
+      in_band = rpm_in_band?(engine, rpm)
 
       color =
         VelocityPalette.color_for(%{
@@ -557,8 +594,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
     end)
   end
 
-  defp rpm_in_band?(vehicle, rpm) do
-    {lo, hi} = RpmBand.range(vehicle)
+  defp rpm_in_band?(engine, rpm) do
+    {lo, hi} = RpmBand.range(engine.vehicle, engine.purpose)
     rpm >= lo and rpm <= hi
   end
 
@@ -617,6 +654,32 @@ defmodule AfinadosWeb.IntakeSizingLive do
       {gettext("Moped"), "moped"}
     ]
   end
+
+  defp purpose_options(vehicle) do
+    Enum.map(RpmBand.purposes(vehicle), fn purpose ->
+      {purpose_label(purpose), purpose}
+    end)
+  end
+
+  defp purpose_label("urban"), do: gettext("Urban")
+  defp purpose_label("cruiser"), do: gettext("Cruiser")
+  defp purpose_label("sport"), do: gettext("Sporty")
+  defp purpose_label("track"), do: gettext("Track")
+  defp purpose_label("off_road"), do: gettext("Off-road")
+  defp purpose_label("hard_enduro"), do: gettext("Hard enduro")
+  defp purpose_label("motocross"), do: gettext("Motocross")
+  defp purpose_label("drag"), do: gettext("Drag")
+  defp purpose_label("street_race"), do: gettext("Street race")
+  defp purpose_label("highway"), do: gettext("Highway")
+  defp purpose_label("rally"), do: gettext("Rally")
+  defp purpose_label("work"), do: gettext("Work")
+  defp purpose_label("race"), do: gettext("Race")
+  defp purpose_label("leisure"), do: gettext("Leisure")
+  defp purpose_label("fishing"), do: gettext("Fishing")
+  defp purpose_label("light"), do: gettext("Light")
+  defp purpose_label("commute"), do: gettext("Commute")
+  defp purpose_label("synchronous"), do: gettext("Synchronous")
+  defp purpose_label(_), do: gettext("Urban")
 
   defp k_options("motorcycle") do
     [

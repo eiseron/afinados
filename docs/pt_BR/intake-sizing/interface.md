@@ -28,10 +28,12 @@ O formulário fica do lado do gráfico (barra lateral à esquerda no desktop, ab
 
 ### Básica
 
-- **Tipo de motor**: moto, carro, ferramenta motorizada, estacionário ou ciclomotor. Define a faixa de RPM que o gráfico usa pra colorir as linhas.
+- **Tipo de motor**: moto, carro, motosserra, estacionário ou ciclomotor. Define o contexto amplo de RPM que o gráfico usa pra colorir as linhas.
+- **Aplicação**: como o motor vai ser usado de verdade, não o estilo do veículo. Uma CG é *urbana*, não "naked"; uma Harley é *cruiser* (rodovia, otimizada pra torque); uma R1 é *esportiva* na rua e *pista* num circuito. A maioria das opções é compartilhada entre moto e carro; algumas são específicas (cruiser, hard enduro e motocross só em moto; rodovia só em carro — mesmo conceito do cruiser, label diferente por convenção). Fica desabilitado (não some) quando o tipo tem uma única aplicação canônica (ex.: estacionário → síncrono).
+- **Sistema de admissão**: carburador ou injeção eletrônica. Ajusta a tolerância de velocidade e os rótulos dos campos relacionados.
 - **Cilindrada (cm³)**: cilindrada total do motor.
 - **Número de cilindros**.
-- **Número de carburadores**: total de corpos de carburador. Num 4-cilindros com um único Weber, é 1.
+- **Número de carburadores / corpos de borboleta**: total de corpos. Num 4-cilindros com um único Weber, é 1.
 
 ### Avançado (recolhido por padrão)
 

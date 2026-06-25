@@ -5,6 +5,7 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
 
   @default_params %{
     vehicle: "motorcycle",
+    purpose: "urban",
     cc: "125",
     cylinders: "1",
     carbs: "1",
@@ -268,6 +269,53 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
 
       [_, advanced] = String.split(html, ~r/<fieldset\b[^>]*class="advanced"/)
       assert advanced =~ "intake_sizing[k]"
+    end
+
+    test "purpose field lives in the basic section for multi-purpose vehicles",
+         %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      [basic, _advanced] = String.split(html, ~r/<fieldset\b[^>]*class="advanced"/)
+      assert basic =~ "intake_sizing[purpose]"
+    end
+
+    test "purpose field stays visible but disabled for stationary engines", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      html =
+        view
+        |> element("form")
+        |> render_change(%{intake_sizing: %{@default_params | vehicle: "stationary"}})
+
+      assert html =~ "intake_sizing[purpose]"
+      assert html =~ ~r/name="intake_sizing\[purpose\]"[^>]*disabled/
+    end
+  end
+
+  describe "purpose select" do
+    test "selecting a sport motorcycle still renders the chart", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      view
+      |> element("form")
+      |> render_change(%{intake_sizing: %{@default_params | purpose: "sport"}})
+
+      assert has_element?(view, ".chart-panel")
+    end
+
+    test "switching vehicle falls back to the new vehicle's default purpose",
+         %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+      html =
+        view
+        |> element("form")
+        |> render_change(%{
+          intake_sizing: %{@default_params | vehicle: "car", purpose: "sport"}
+        })
+
+      assert has_element?(view, ".chart-panel")
+      assert html =~ "intake_sizing[purpose]"
     end
   end
 

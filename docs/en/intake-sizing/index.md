@@ -38,16 +38,16 @@ The line is **thicker** through the RPMs where the venturi is ideal and **thinne
 
 The same colors appear in two tones. The vivid ones (bright green, light blue, yellow) cover the RPM band where the engine actually works — its typical operating range. The dark variants (dark green, dark blue, dark yellow) cover RPMs outside that band, so you can still see the trend without giving it the same weight.
 
-The RPM band depends on the engine type you pick:
+The RPM band depends on the **engine type** *and* the **application**. A Harley cruiser and a Yamaha R1 are both motorcycles, but a cruiser works around 2.5k–5.5k while a sport bike pulls 7k–14k. The Application field narrows the band:
 
-- Motorcycle: 2.500–14.000 rpm
-- Moped: 3.000–10.000 rpm
-- Kart: 9.000–14.500 rpm
-- Jetski: 5.000–9.000 rpm
-- Outboard: 3.000–6.500 rpm
-- Chainsaw: 6.000–13.000 rpm
-- Stationary engine (generator, pump): 2.900–3.700 rpm
-- Car: 1.500–6.500 rpm
+- Motorcycle — urban (CG, daily commute), cruiser (Harley, highway torque), sporty (R1 on the road), track (closed circuit), off-road, hard enduro, motocross, rally (Dakar / adventure), drag, street race, work (cargo / delivery)
+- Car — urban (city), highway (freeway cruise), sporty, track, drag, street race, off-road (4x4), rally, work (utility / cargo)
+- Kart — race, off-road (kart cross), leisure
+- Jetski — race, leisure
+- Outboard — fishing, sporty, work
+- Chainsaw — work, light
+- Moped — commute, sporty
+- Stationary — synchronous (single canonical band: 2.9k–3.7k rpm)
 
 ### The slider
 
@@ -55,11 +55,12 @@ A slider for **maximum volumetric efficiency** lives in the advanced section. It
 
 ## How to use
 
-1. Pick the **engine type** (motorcycle, car, etc.). This sets the RPM band used to color-code the chart.
-2. Pick the **induction**: *Carburetor* (default) or *Injection*. Carburetors need gas velocity to atomize fuel through the venturi, so the healthy band has a meaningful floor (~target − 30 m/s). Injection (TBI, MPFI, ITBs) injects fuel after the throttle body, so atomization is independent of throat velocity and the floor drops (~target − 40 m/s). Restriction ceiling stays the same — the physical flow limit doesn't change.
-3. Enter **displacement (cm³)**, **number of cylinders**, and **number of carburetors**.
-4. Read the chart: look for the sizes whose lines run **vivid green and thick** through your typical RPM. Those are the throats that breathe well at your engine's working speed.
-5. Open **Advanced** to tune:
+1. Pick the **engine type** (motorcycle, car, etc.). This sets the broad RPM context used to color-code the chart.
+2. Pick the **application**: how the engine will actually be used (urban, cruiser, motocross, drag, …). The options are application-focused, not vehicle-style, and most are shared across motorcycle and car (urban, sporty, track, off-road, rally, drag, street race, work). A few are vehicle-specific: *cruiser*, *hard enduro* and *motocross* on motorcycle; *highway* on car (a cruiser is a "rodovia" bike, so PT shows the same label for both). Disabled when the type has a single canonical application (e.g. stationary → synchronous).
+3. Pick the **induction**: *Carburetor* (default) or *Injection*. Carburetors need gas velocity to atomize fuel through the venturi, so the healthy band has a meaningful floor (~target − 30 m/s). Injection (TBI, MPFI, ITBs) injects fuel after the throttle body, so atomization is independent of throat velocity and the floor drops (~target − 40 m/s). Restriction ceiling stays the same — the physical flow limit doesn't change.
+4. Enter **displacement (cm³)**, **number of cylinders**, and **number of carburetors / throttle bodies**.
+5. Read the chart: look for the sizes whose lines run **vivid green and thick** through your typical RPM. Those are the throats that breathe well at your engine's working speed.
+6. Open **Advanced** to tune:
    - **Application profile**: stock, sport or competition K factor for that engine type.
    - **Barrels per carburetor**: 1 for typical motorcycles, 2 for Weber DCOE/IDF, 4 for a Quadrijet/Holley 4-barrel.
    - **Intake manifold**: *Dedicated* (DCOE pair, CB400 four, IDA in a V8) — each carb feeds its own subset of cylinders. *Shared* (single Weber feeding 4 cyl, Quadrijet, single Holley) — all carbs feed a common plenum; more carbs reduce per-carb peak velocity linearly.
