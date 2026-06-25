@@ -669,7 +669,6 @@ defmodule AfinadosWeb.IntakeSizingLive do
   defp purpose_label("hard_enduro"), do: gettext("Hard enduro")
   defp purpose_label("motocross"), do: gettext("Motocross")
   defp purpose_label("drag"), do: gettext("Drag")
-  defp purpose_label("street_race"), do: gettext("Street race")
   defp purpose_label("highway"), do: gettext("Highway")
   defp purpose_label("rally"), do: gettext("Rally")
   defp purpose_label("work"), do: gettext("Work")

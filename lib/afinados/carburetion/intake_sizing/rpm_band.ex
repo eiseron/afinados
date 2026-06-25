@@ -10,7 +10,6 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBand do
   def range("motorcycle", "motocross"), do: {7000, 13_000}
   def range("motorcycle", "rally"), do: {4000, 10_000}
   def range("motorcycle", "drag"), do: {10_000, 14_000}
-  def range("motorcycle", "street_race"), do: {6000, 12_000}
   def range("motorcycle", "work"), do: {3000, 6000}
 
   def range("car", "urban"), do: {1500, 4000}
@@ -18,7 +17,6 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBand do
   def range("car", "sport"), do: {3500, 6500}
   def range("car", "track"), do: {4000, 7000}
   def range("car", "drag"), do: {4500, 7000}
-  def range("car", "street_race"), do: {3500, 6500}
   def range("car", "off_road"), do: {1500, 3500}
   def range("car", "rally"), do: {3000, 6500}
   def range("car", "work"), do: {1500, 3000}
@@ -68,10 +66,10 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBand do
 
   @spec purposes(String.t()) :: [String.t()]
   def purposes("motorcycle"),
-    do: ~w(urban cruiser sport track off_road hard_enduro motocross rally drag street_race work)
+    do: ~w(urban cruiser sport track off_road hard_enduro motocross rally drag work)
 
   def purposes("car"),
-    do: ~w(urban highway sport track drag street_race off_road rally work)
+    do: ~w(urban highway sport track drag off_road rally work)
 
   def purposes("kart"), do: ~w(race off_road leisure)
   def purposes("jetski"), do: ~w(race leisure)

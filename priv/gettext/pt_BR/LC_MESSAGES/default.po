@@ -505,11 +505,6 @@ msgstr "Arrancada"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
-msgid "Street race"
-msgstr "Racha de rua"
-
-#: lib/afinados_web/live/intake_sizing_live.ex
-#, elixir-autogen, elixir-format
 msgid "Rally"
 msgstr "Rali"
 

@@ -40,8 +40,9 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBandTest do
       assert RpmBand.range("motorcycle", "motocross") == {7000, 13_000}
     end
 
-    test "street race targets the high-mid pull — 6k–12k" do
-      assert RpmBand.range("motorcycle", "street_race") == {6000, 12_000}
+    test "unknown purpose for a known vehicle falls back to its default" do
+      assert RpmBand.range("motorcycle", "street_race") ==
+               RpmBand.range("motorcycle", "urban")
     end
   end
 
@@ -64,10 +65,6 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBandTest do
 
     test "drag widens for launch through peak — 4.5k–7k" do
       assert RpmBand.range("car", "drag") == {4500, 7000}
-    end
-
-    test "street race matches sport with extra headroom — 3.5k–6.5k" do
-      assert RpmBand.range("car", "street_race") == {3500, 6500}
     end
 
     test "off-road (4x4, low gearing) stays low for torque — 1.5k–3.5k" do
@@ -136,12 +133,12 @@ defmodule Afinados.Carburetion.IntakeSizing.RpmBandTest do
   describe "purposes/1" do
     test "motorcycle covers all car-symmetric purposes plus moto-only ones" do
       assert RpmBand.purposes("motorcycle") ==
-               ~w(urban cruiser sport track off_road hard_enduro motocross rally drag street_race work)
+               ~w(urban cruiser sport track off_road hard_enduro motocross rally drag work)
     end
 
-    test "car lists 9 application-focused purposes (no shared moto naming)" do
+    test "car lists application-focused purposes (no shared moto naming)" do
       assert RpmBand.purposes("car") ==
-               ~w(urban highway sport track drag street_race off_road rally work)
+               ~w(urban highway sport track drag off_road rally work)
     end
 
     test "kart adds off-road (kart cross) to race and leisure" do

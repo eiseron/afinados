@@ -40,8 +40,8 @@ As mesmas cores aparecem em duas tonalidades. As vivas (verde vivo, azul claro, 
 
 A faixa de RPM depende do **tipo de motor** *e* da **aplicação**. Uma Harley cruiser e uma Yamaha R1 são as duas "moto", mas a cruiser trabalha em torno de 2,5k–5,5k otimizada pra torque de rodovia, e a esportiva puxa de 7k a 14k. O campo Aplicação refina a faixa dentro do tipo:
 
-- Moto — urbano (CG, dia a dia), cruiser (Harley, rodovia em torque), esportivo (R1 na rua), pista (circuito fechado), off-road, hard enduro, motocross, rali (Dakar / adventure), arrancada, racha de rua, trabalho (carga / motofrete)
-- Carro — urbano (cidade), rodovia, esportivo, pista, arrancada, racha de rua, off-road (4x4), rali, trabalho (utilitário / carga)
+- Moto — urbano (CG, dia a dia), cruiser (Harley, rodovia em torque), esportivo (R1 na rua), pista (circuito fechado), off-road, hard enduro, motocross, rali (Dakar / adventure), arrancada, trabalho (carga / motofrete)
+- Carro — urbano (cidade), rodovia, esportivo, pista, arrancada, off-road (4x4), rali, trabalho (utilitário / carga)
 - Kart — corrida, off-road (kart cross), lazer
 - Jet ski — corrida, lazer
 - Motor de popa — pesca, esportivo, trabalho
@@ -56,7 +56,7 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
 ## Como usar
 
 1. Escolha o **tipo de motor** (moto, carro, etc.). Isso define o contexto amplo de RPM usado pra colorir o gráfico.
-2. Escolha a **aplicação**: como o motor vai ser usado de verdade (urbano, cruiser, motocross, arrancada, …). As opções são por aplicação — não por estilo — e a maioria é compartilhada entre moto e carro (urbano, esportivo, pista, off-road, rali, arrancada, racha de rua, trabalho). Algumas são específicas: *cruiser*, *hard enduro* e *motocross* só em moto; *rodovia* só em carro (cruiser é justamente a "rodovia" da moto, então o label PT é o mesmo). Fica desabilitado quando o tipo tem uma única aplicação canônica (ex.: estacionário → síncrono).
+2. Escolha a **aplicação**: como o motor vai ser usado de verdade (urbano, cruiser, motocross, arrancada, …). As opções são por aplicação — não por estilo — e a maioria é compartilhada entre moto e carro (urbano, esportivo, pista, off-road, rali, arrancada, trabalho). Algumas são específicas: *cruiser*, *hard enduro* e *motocross* só em moto; *rodovia* só em carro (cruiser é justamente a "rodovia" da moto, então o label PT é o mesmo). Fica desabilitado quando o tipo tem uma única aplicação canônica (ex.: estacionário → síncrono).
 3. Escolha o **sistema de admissão**: *Carburador* (padrão) ou *Injeção Eletrônica*. Carburador precisa de velocidade do ar pra atomizar combustível no venturi via Bernoulli, então a faixa saudável tem piso significativo (~alvo − 30 m/s). Injeção (TBI, MPFI, corpos individuais) injeta combustível depois da borboleta, então atomização não depende da velocidade na garganta e o piso cai (~alvo − 40 m/s). Teto de restrição fica igual — o limite físico de vazão não muda.
 4. Informe **cilindrada (cm³)**, **número de cilindros** e **número de carburadores / corpos de borboleta**.
 5. Leia o gráfico: procure os tamanhos cujas linhas estão **verde vivo e grossas** dentro do seu RPM típico. Esses são os venturis que respiram bem na faixa de trabalho do motor.
