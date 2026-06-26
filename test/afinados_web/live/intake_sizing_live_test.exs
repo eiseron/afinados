@@ -473,11 +473,17 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       assert has_element?(view, "ul.legend")
     end
 
-    test "renders five legend items", %{conn: conn} do
+    test "renders six legend items", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
 
       item_count = Regex.scan(~r/<li>\s*<svg class="swatch"/, html) |> length()
-      assert item_count == 5
+      assert item_count == 6
+    end
+
+    test "labels the fragile-ideal (cyan) row", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/carburetion/intake-sizing")
+
+      assert html =~ "Aceitável"
     end
 
     test "labels the ideal color", %{conn: conn} do

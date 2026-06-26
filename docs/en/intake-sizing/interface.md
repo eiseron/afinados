@@ -11,10 +11,10 @@ The chart fills the main area. The horizontal axis is engine speed (RPM); the ve
 
 Along each line, the **color changes by RPM**:
 
-- **vivid green**: ideal at that RPM, inside the engine's working band;
-- **dark green**: ideal velocity but the engine doesn't usually run there;
-- **light blue / dark blue**: low gas velocity at that RPM (carb too big);
-- **yellow / dark yellow**: restrictive at that RPM (carb too small).
+- **vivid green / dark green**: ideal — velocity sits inside the healthy band with margin from both edges (dark variant = outside the working band);
+- **cyan / dark cyan** (carburetor only): *acceptable* — velocity is just above anemic and below ~60 m/s, the classical lower bound for solid carburetor signal. Injection has no cyan zone since atomization is injector-driven (dark variant = outside the working band);
+- **light blue / dark blue**: low gas velocity at that RPM (carburetor too big);
+- **yellow / dark yellow**: restrictive at that RPM (carburetor too small).
 
 The line is **thicker** through the ideal RPMs and **thinner** through the rest, so the eye picks up the green segments first.
 

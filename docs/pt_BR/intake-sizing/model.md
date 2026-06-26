@@ -60,7 +60,7 @@ concurrent = max(1, 240 / (intervalo_entre_explosões × venturis))
 
 O fator `concurrent` cuida da **sobreposição de pulsos** quando múltiplos cilindros dividem um carburador. Se o intervalo entre explosões por venturi é menor que a duração da admissão (~240° de virabrequim), os pulsos se sobrepõem e a demanda efetiva de pico sobe.
 
-Para setups típicos de 1 carb por cilindro, `N = venturis = carburadores × corpos`.
+Para setups típicos de 1 carburador por cilindro, `N = venturis = carburadores × corpos`.
 
 ## O que NÃO é calculado
 
@@ -72,7 +72,7 @@ Para setups típicos de 1 carb por cilindro, `N = venturis = carburadores × cor
 ## Aproximações conhecidas
 
 - **Duração da admissão** assumida em ~240° de virabrequim. Comandos reais variam de 200° a 280°.
-- **Sobreposição de pulsos** modelada com escala linear simples — pulsos sobrepostos dividem o carb proporcionalmente à sobreposição. Motores reais têm ondas de pressão mais complexas.
+- **Sobreposição de pulsos** modelada com escala linear simples — pulsos sobrepostos dividem o carburador proporcionalmente à sobreposição. Motores reais têm ondas de pressão mais complexas.
 - **Padrão de explosão** padrão é uniforme (`720° ÷ cilindros`). Motores de explosão desigual (twins 270°, V8 cross-plane) podem ser aproximados ajustando o intervalo manualmente.
 - **VE** é o valor de *pico* (slider único). O gráfico avalia velocidade neste pico; motores reais veem VE menor fora da rotação de pico.
 

@@ -11,10 +11,10 @@ O gráfico ocupa a área principal. O eixo horizontal é a rotação do motor (R
 
 Ao longo de cada linha, a **cor muda conforme o RPM**:
 
-- **verde vivo**: ideal nessa rotação, dentro da faixa de trabalho do motor;
-- **verde escuro**: velocidade ideal mas o motor normalmente não trabalha aí;
-- **azul claro / azul escuro**: velocidade baixa nessa rotação (carb grande demais);
-- **amarelo / amarelo escuro**: restringe nessa rotação (carb pequeno demais).
+- **verde vivo / verde escuro**: ideal — velocidade fica dentro da faixa saudável com folga das duas bordas (escuro = fora da faixa de trabalho);
+- **ciano / ciano escuro** (só carburador): *aceitável* — velocidade está logo acima do anêmico e abaixo de ~60 m/s, a fronteira clássica pra sinal de carburador firme. Injeção não tem ciano porque atomização vem do bico (escuro = fora da faixa de trabalho);
+- **azul claro / azul escuro**: velocidade baixa nessa rotação (carburador grande demais);
+- **amarelo / amarelo escuro**: restringe nessa rotação (carburador pequeno demais).
 
 A linha fica **mais grossa** nas rotações ideais e **mais fina** no resto, pra o olho pegar os trechos verdes primeiro.
 

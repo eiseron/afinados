@@ -28,9 +28,10 @@ Air demand scales with **displacement × RPM × volumetric efficiency** and inve
 
 Each horizontal line on the chart is a commercial venturi size (in mm). The line's color along the X axis (RPM) tells you how that venturi performs at that engine speed:
 
-- **green**: ideal — gas velocity sits in the healthy band (60–130 m/s);
-- **light blue**: low velocity (carb too big for that RPM, fuel won't atomize well);
-- **yellow**: restrictive (carb too small for that RPM, becomes a flow bottleneck).
+- **green**: ideal — velocity sits comfortably inside the healthy band with margin before going anemic or restrictive;
+- **cyan** (carburetor only): *acceptable* — gas velocity is just above the anemic floor and below ~60 m/s, the classical lower bound for solid carburetor signal. The engine runs fine there; throttle response and atomization are softer than in the green band. Injection has no cyan zone: the injector handles atomization, so low intake velocity isn't a fuel concern there;
+- **light blue**: low velocity (carburetor too big for that RPM, fuel won't atomize well);
+- **yellow**: restrictive (carburetor too small for that RPM, becomes a flow bottleneck).
 
 The line is **thicker** through the RPMs where the venturi is ideal and **thinner** elsewhere.
 
@@ -51,7 +52,7 @@ The RPM band depends on the **engine type** *and* the **application**. A Harley 
 
 ### The slider
 
-A slider for **maximum volumetric efficiency** lives in the advanced section. It is the peak VE the engine reaches under load (typical street: ~85–95%; mildly tuned: ~95–105%; race with tuned intake/exhaust: ~105–115%). The chart evaluates each commercial venturi's gas velocity at this peak VE. Raising the slider increases the velocity every carb sees at every RPM, shifting the color picture toward restrictive (yellow) and away from anemic (blue).
+A slider for **maximum volumetric efficiency** lives in the advanced section. It is the peak VE the engine reaches under load (typical street: ~85–95%; mildly tuned: ~95–105%; race with tuned intake/exhaust: ~105–115%). The chart evaluates each commercial venturi's gas velocity at this peak VE. Raising the slider increases the velocity every carburetor sees at every RPM, shifting the color picture toward restrictive (yellow) and away from anemic (blue).
 
 ## How to use
 
@@ -63,7 +64,7 @@ A slider for **maximum volumetric efficiency** lives in the advanced section. It
 6. Open **Advanced** to tune:
    - **Application profile**: stock, sport or competition K factor for that engine type.
    - **Barrels per carburetor**: 1 for typical motorcycles, 2 for Weber DCOE/IDF, 4 for a Quadrijet/Holley 4-barrel.
-   - **Intake manifold**: *Dedicated* (DCOE pair, CB400 four, IDA in a V8) — each carb feeds its own subset of cylinders. *Shared* (single Weber feeding 4 cyl, Quadrijet, single Holley) — all carbs feed a common plenum; more carbs reduce per-carb peak velocity linearly.
+   - **Intake manifold**: *Dedicated* (DCOE pair, CB400 four, IDA in a V8) — each carburetor feeds its own subset of cylinders. *Shared* (single Weber feeding 4 cylinders, Quadrijet, single Holley) — all carburetors feed a common plenum; more carburetors reduce per-carburetor peak velocity linearly.
    - **Firing interval**: crank degrees between cylinder firings. Active only when cylinders share a carburetor. Accounts for pulse overlap when multiple cylinders feed the same venturi.
    - **Boost pressure (bar)**: for blow-through turbo setups.
    - **Maximum volumetric efficiency**: ranges from 50% (worn, very restrictive) to 115% (race with tuned intake/exhaust).

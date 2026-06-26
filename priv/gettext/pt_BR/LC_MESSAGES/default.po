@@ -360,6 +360,11 @@ msgstr "Ideal"
 
 #: lib/afinados_web/live/intake_sizing_live.ex
 #, elixir-autogen, elixir-format
+msgid "Acceptable"
+msgstr "Aceitável"
+
+#: lib/afinados_web/live/intake_sizing_live.ex
+#, elixir-autogen, elixir-format
 msgid "Engine's working regime"
 msgstr "Regime de trabalho do motor"
 

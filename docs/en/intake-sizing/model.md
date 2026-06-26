@@ -60,7 +60,7 @@ concurrent = max(1, 240 / (firing_interval × venturis))
 
 The `concurrent` factor handles **pulse overlap** when multiple cylinders share a carburetor. If the firing interval per venturi is shorter than the intake duration (~240° of crank rotation), pulses overlap and the effective peak demand rises.
 
-For typical 1-carb-per-cylinder setups, `N = venturis = carbs × barrels`.
+For typical 1-carburetor-per-cylinder setups, `N = venturis = carburetors × barrels`.
 
 ## What is NOT calculated
 
@@ -72,7 +72,7 @@ For typical 1-carb-per-cylinder setups, `N = venturis = carbs × barrels`.
 ## Known approximations
 
 - **Intake duration** is assumed to be ~240° of crank rotation. Real cams vary from 200° to 280°.
-- **Pulse overlap** is modeled with a simple linear scaling — overlapping pulses share the carb proportionally to their duration overlap. Real engines have more complex pressure waves.
+- **Pulse overlap** is modeled with a simple linear scaling — overlapping pulses share the carburetor proportionally to their duration overlap. Real engines have more complex pressure waves.
 - **Firing pattern** defaults to even firing (`720° ÷ cylinders`). Uneven-firing engines (270° twins, V8 with cross-plane crank) can be approximated by setting the firing interval manually.
 - **VE** is taken as the *peak* value (single slider input). The chart evaluates velocity at this peak; real engines see lower VE outside peak-power RPM.
 

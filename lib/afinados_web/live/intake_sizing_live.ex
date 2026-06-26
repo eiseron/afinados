@@ -557,10 +557,13 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
   defp gradient_stops(diameter, {rpm_lo, rpm_hi}, engine) when rpm_hi > rpm_lo do
     {anemic, restriction} = engine.thresholds
+    induction = engine.config.induction
+    green_floor = VelocityPalette.green_floor(engine.thresholds, induction)
 
     transitions =
       [
         IntakeSizing.rpm_for_velocity(diameter, anemic, engine),
+        IntakeSizing.rpm_for_velocity(diameter, green_floor, engine),
         IntakeSizing.rpm_for_velocity(diameter, restriction, engine),
         elem(RpmBand.range(engine.vehicle, engine.purpose), 0),
         elem(RpmBand.range(engine.vehicle, engine.purpose), 1)
@@ -578,7 +581,8 @@ defmodule AfinadosWeb.IntakeSizingLive do
         VelocityPalette.color_for(%{
           velocity: velocity,
           in_band: in_band,
-          thresholds: engine.thresholds
+          thresholds: engine.thresholds,
+          induction: induction
         })
 
       offset = Float.round((rpm - rpm_lo) / (rpm_hi - rpm_lo) * 100, 2)
@@ -748,6 +752,13 @@ defmodule AfinadosWeb.IntakeSizingLive do
           VelocityPalette.sufficient_color(false)
         ],
         label: gettext("Ideal")
+      },
+      %{
+        colors: [
+          VelocityPalette.fragile_color(true),
+          VelocityPalette.fragile_color(false)
+        ],
+        label: gettext("Acceptable")
       },
       %{
         colors: [

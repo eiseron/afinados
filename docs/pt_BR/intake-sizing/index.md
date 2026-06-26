@@ -28,9 +28,10 @@ A demanda de ar escala com **cilindrada × RPM × eficiência volumétrica** e d
 
 Cada linha horizontal no gráfico é um tamanho de venturi comercial (em mm). A cor da linha ao longo do eixo X (RPM) diz como aquele venturi se comporta naquela rotação:
 
-- **verde**: ideal — velocidade dos gases na faixa saudável (60–130 m/s);
-- **azul claro**: velocidade baixa (carb grande demais pra essa rotação, combustível não atomiza bem);
-- **amarelo**: restringe (carb pequeno demais pra essa rotação, vira gargalo).
+- **verde**: ideal — velocidade fica confortavelmente dentro da faixa saudável, com margem antes de virar anêmica ou restritiva;
+- **ciano** (só carburador): *aceitável* — velocidade está logo acima do piso anêmico e abaixo de ~60 m/s, a fronteira clássica pra sinal de carburador firme. O motor roda bem ali; resposta de acelerador e atomização ficam um pouco mais moles que no verde. Injeção não tem ciano: o bico cuida da atomização, então baixa velocidade na garganta não é problema de combustível ali;
+- **azul claro**: velocidade baixa (carburador grande demais pra essa rotação, combustível não atomiza bem);
+- **amarelo**: restringe (carburador pequeno demais pra essa rotação, vira gargalo).
 
 A linha fica **mais grossa** nas rotações onde o venturi é ideal e **mais fina** no resto.
 
@@ -63,7 +64,7 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
 6. Abra **Avançado** pra ajustar:
    - **Perfil de aplicação**: K original, esportivo ou competição pra esse tipo de motor.
    - **Corpos por carburador**: 1 para motos típicas, 2 para Weber DCOE/IDF, 4 para Quadrajet/Holley 4-corpos.
-   - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carb alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4cyl, Quadrajet, Holley single) — todos os carbs descarregam num coletor comum; mais carbs reduzem a velocidade de pico por carb linearmente.
+   - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carburador alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4 cilindros, Quadrajet, Holley single) — todos os carburadores descarregam num coletor comum; mais carburadores reduzem a velocidade de pico por carburador linearmente.
    - **Defasagem do virabrequim**: graus entre explosões de cilindros consecutivos. Ativo só quando cilindros compartilham carburador. Considera a sobreposição de pulsos quando vários cilindros alimentam o mesmo venturi.
    - **Pressão de turbo (bar)**: para setups blow-through.
    - **Eficiência volumétrica máxima**: vai de 50% (motor cansado, restritivo) a 115% (competição com admissão/escape ressonantes).
