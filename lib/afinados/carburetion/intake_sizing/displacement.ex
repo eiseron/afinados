@@ -1,5 +1,5 @@
 defmodule Afinados.Carburetion.IntakeSizing.Displacement do
-  @moduledoc "Per-cylinder displacement (cm³); integer step, must be positive."
+  @moduledoc "Total engine displacement (cm³); integer step, must be positive."
 
   @enforce_keys [:cc]
   defstruct @enforce_keys

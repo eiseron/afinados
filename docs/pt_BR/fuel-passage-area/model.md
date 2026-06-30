@@ -30,7 +30,7 @@ O catálogo cobre Mikuni e Keihin (FCR 28-41mm, PWK/PJ 34-39mm). Cópias drop-in
 - A área do **gicle de baixa** Keihin é derivada do diâmetro nominal (numeração em centésimos de mm). A do Mikuni é tomada proporcional à numeração como placeholder; a constante de calibração depende de dados de bancada.
 - O **gicle de alta** é aproximado pelo diâmetro nominal (idem para Mikuni round-head e Keihin).
 - O **venturi** é aproximado pelo curso da agulha.
-- Outras marcas de carburador (ex.: Keihin) são modeladas a partir do catálogo próprio; a equivalência entre marcas é aproximada.
+- Cada fabricante é modelado a partir do seu próprio catálogo; a equivalência de numeração entre marcas é aproximada.
 
 ## Fontes
 

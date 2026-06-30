@@ -73,7 +73,7 @@ For typical 1-carburetor-per-cylinder setups, `N = venturis = carburetors × bar
 
 - **Intake duration** is assumed to be ~240° of crank rotation. Real cams vary from 200° to 280°.
 - **Pulse overlap** is modeled with a simple linear scaling — overlapping pulses share the carburetor proportionally to their duration overlap. Real engines have more complex pressure waves.
-- **Firing pattern** defaults to even firing (`720° ÷ cylinders`). Uneven-firing engines (270° twins, V8 with cross-plane crank) can be approximated by setting the firing interval manually.
+- **Firing interval** is a manual field defaulting to **180°** (even firing for a 4-cylinder). It does not derive from the cylinder count: for other cylinder counts or uneven-firing engines (270° twins, cross-plane V8), set the interval manually.
 - **VE** is taken as the *peak* value (single slider input). The chart evaluates velocity at this peak; real engines see lower VE outside peak-power RPM.
 
 ## Sources

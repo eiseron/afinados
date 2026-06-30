@@ -30,7 +30,7 @@ The catalog covers Mikuni and Keihin (FCR 28-41mm, PWK/PJ 34-39mm). Drop-in clon
 - **Pilot jet** Keihin area is derived from its nominal diameter (jets numbered in 1/100 mm). Mikuni's is taken proportional to the jet number as a placeholder; the calibration constant is pending bench data.
 - **Main jet** is approximated by its nominal diameter (modern round-head Mikuni and Keihin alike).
 - **Venturi** is approximated by the needle stroke.
-- Other carburetor brands (e.g. Keihin) are modeled from their own catalog data; cross-brand equivalence is approximate.
+- Each manufacturer is modeled from its own catalog data; cross-brand numbering equivalence is approximate.
 
 ## Sources
 

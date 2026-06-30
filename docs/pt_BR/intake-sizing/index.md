@@ -63,7 +63,7 @@ Um slider de **eficiência volumétrica máxima** fica na seção avançada. É 
 5. Leia o gráfico: procure os tamanhos cujas linhas estão **verde vivo e grossas** dentro do seu RPM típico. Esses são os venturis que respiram bem na faixa de trabalho do motor.
 6. Abra **Avançado** pra ajustar:
    - **Perfil de aplicação**: K original, esportivo ou competição pra esse tipo de motor.
-   - **Corpos por carburador**: 1 para motos típicas, 2 para Weber DCOE/IDF, 4 para Quadrajet/Holley 4-corpos.
+   - **Corpos por carburador**: 1 para motos típicas, 2 para Weber DCOE/IDF e similares.
    - **Coletor de admissão**: *Dedicado* (par DCOE, CB400 four, IDA em V8) — cada carburador alimenta um subgrupo dedicado de cilindros. *Compartilhado* (Weber single num 4 cilindros, Quadrajet, Holley single) — todos os carburadores descarregam num coletor comum; mais carburadores reduzem a velocidade de pico por carburador linearmente.
    - **Defasagem do virabrequim**: graus entre explosões de cilindros consecutivos. Ativo só quando cilindros compartilham carburador. Considera a sobreposição de pulsos quando vários cilindros alimentam o mesmo venturi.
    - **Pressão de turbo (bar)**: para setups blow-through.

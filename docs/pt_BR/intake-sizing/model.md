@@ -73,7 +73,7 @@ Para setups típicos de 1 carburador por cilindro, `N = venturis = carburadores 
 
 - **Duração da admissão** assumida em ~240° de virabrequim. Comandos reais variam de 200° a 280°.
 - **Sobreposição de pulsos** modelada com escala linear simples — pulsos sobrepostos dividem o carburador proporcionalmente à sobreposição. Motores reais têm ondas de pressão mais complexas.
-- **Padrão de explosão** padrão é uniforme (`720° ÷ cilindros`). Motores de explosão desigual (twins 270°, V8 cross-plane) podem ser aproximados ajustando o intervalo manualmente.
+- **Intervalo entre explosões** é um campo manual, com padrão de **180°** (explosão uniforme de um 4 cilindros). Ele não deriva do número de cilindros: para outras contagens de cilindros ou motores de explosão desigual (twins 270°, V8 cross-plane), ajuste o intervalo manualmente.
 - **VE** é o valor de *pico* (slider único). O gráfico avalia velocidade neste pico; motores reais veem VE menor fora da rotação de pico.
 
 ## Fontes

@@ -28,7 +28,7 @@ The form sits next to the chart (left sidebar on a wide screen, below on a phone
 
 ### Basic
 
-- **Engine type**: motorcycle, car, chainsaw, stationary or moped. Sets the broad RPM context the chart uses to color-code lines.
+- **Engine type**: motorcycle, car, kart, jetski, outboard, chainsaw, stationary or moped. Sets the broad RPM context the chart uses to color-code lines.
 - **Application**: how the engine will actually be used, not its body style. A Honda CG is *urban*, not "naked"; a Harley is *cruiser* (highway, torque-optimized); an R1 is *sporty* on the road and *track* on a circuit. Most options are shared across motorcycle and car; a few are vehicle-specific (cruiser, hard enduro and motocross are moto-only; highway is car-only — same concept as cruiser, different label by convention). Disabled (not hidden) when the type has a single canonical application (e.g. stationary → synchronous).
 - **Induction**: carburetor or electronic injection. Adapts the velocity tolerance and the labels of related fields.
 - **Displacement (cm³)**: engine total displacement.
