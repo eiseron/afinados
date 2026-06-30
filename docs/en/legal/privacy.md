@@ -11,7 +11,7 @@ Afinados is an Eiseron product. This policy describes what data Afinados process
 
 ## Who the controller is
 
-Eiseron (CNPJ 41.516.538/0001-30) is the controller of the data processed by Afinados. Contact: contato@eiseron.com.
+Eiseron LTDA (CNPJ 41.516.538/0001-30) is the controller of the data processed by Afinados. Contact: contact@eiseron.com. The channel for the data protection officer (DPO) is contact@eiseron.com.
 
 ## Data we process
 
@@ -49,7 +49,7 @@ Under Brazil's LGPD (article 18), you may request at any time, through the conta
 - information about who the data is shared with;
 - deletion of the processed data.
 
-The channel for privacy matters is contato@eiseron.com. You may also file a complaint with the **Brazilian Data Protection Authority (ANPD)**.
+The channel for privacy matters is contact@eiseron.com. You may also file a complaint with the **Brazilian Data Protection Authority (ANPD)**.
 
 ## Children and adolescents
 

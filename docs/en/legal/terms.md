@@ -7,7 +7,7 @@ description: The conditions for using Afinados.
 
 Last updated: June 2026.
 
-Afinados is an Eiseron product. By using Afinados, you agree to these terms.
+Afinados is a product of Eiseron LTDA (CNPJ 41.516.538/0001-30). By using Afinados, you agree to these terms.
 
 ## What Afinados is
 
@@ -39,4 +39,4 @@ We may update these terms. The "last updated" date at the top marks the current 
 
 ## Contact
 
-Questions about these terms: contato@eiseron.com.
+Questions about these terms: contact@eiseron.com.

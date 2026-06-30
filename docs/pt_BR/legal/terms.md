@@ -7,7 +7,7 @@ description: As condições para usar o Afinados.
 
 Última atualização: junho de 2026.
 
-O Afinados é um produto da Eiseron. Ao usar o Afinados, você concorda com estes termos.
+O Afinados é um produto da Eiseron LTDA (CNPJ 41.516.538/0001-30). Ao usar o Afinados, você concorda com estes termos.
 
 ## O que o Afinados é
 
@@ -39,4 +39,4 @@ Podemos atualizar estes termos. A data de "última atualização" no topo indica
 
 ## Contato
 
-Dúvidas sobre estes termos: contato@eiseron.com.
+Dúvidas sobre estes termos: contact@eiseron.com.

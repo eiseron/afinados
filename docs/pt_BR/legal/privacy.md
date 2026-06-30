@@ -11,7 +11,7 @@ O Afinados é um produto da Eiseron. Esta política descreve quais dados o Afina
 
 ## Quem é o controlador
 
-A Eiseron (CNPJ 41.516.538/0001-30) é a controladora dos dados tratados pelo Afinados. Contato: contato@eiseron.com.
+A Eiseron LTDA (CNPJ 41.516.538/0001-30) é a controladora dos dados tratados pelo Afinados. Contato: contact@eiseron.com. O canal do encarregado pelo tratamento de dados pessoais (DPO) é contact@eiseron.com.
 
 ## Dados que tratamos
 
@@ -49,7 +49,7 @@ Conforme a LGPD (art. 18), você pode solicitar a qualquer tempo, pelo contato a
 - informação sobre com quem os dados são compartilhados;
 - eliminação dos dados tratados.
 
-O canal para questões de privacidade é contato@eiseron.com. Você também pode apresentar reclamação à **Autoridade Nacional de Proteção de Dados (ANPD)**.
+O canal para questões de privacidade é contact@eiseron.com. Você também pode apresentar reclamação à **Autoridade Nacional de Proteção de Dados (ANPD)**.
 
 ## Crianças e adolescentes
 
