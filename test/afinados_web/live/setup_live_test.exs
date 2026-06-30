@@ -323,8 +323,11 @@ defmodule AfinadosWeb.SetupLiveTest do
   end
 
   test "the page points its Open Graph image at the shared static asset", %{conn: conn} do
-    assert html_response(get(conn, "/"), 200) =~
-             ~s(property="og:image" content="https://afinados.io/og-image.svg")
+    html = html_response(get(conn, "/"), 200)
+
+    assert html =~ ~s(property="og:image" content="https://afinados.io/og-image.png")
+    assert html =~ ~s(property="og:image:type" content="image/png")
+    assert html =~ ~s(name="twitter:image" content="https://afinados.io/og-image.png")
   end
 
   test "the chart paints its grid lines through a themeable CSS class", %{conn: conn} do
