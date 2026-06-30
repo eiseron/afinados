@@ -330,6 +330,13 @@ defmodule AfinadosWeb.SetupLiveTest do
     assert html =~ ~s(name="twitter:image" content="https://afinados.io/og-image.png")
   end
 
+  test "the page describes itself as engine tooling, not motorcycle-only", %{conn: conn} do
+    html = html_response(get(conn, "/"), 200)
+
+    assert html =~ ~r/name="description" content="[^"]*motores[^"]*"/
+    refute html =~ "preparação de motocicletas"
+  end
+
   test "the chart paints its grid lines through a themeable CSS class", %{conn: conn} do
     {:ok, _view, html} = live(conn, "/carburetion/setups")
 

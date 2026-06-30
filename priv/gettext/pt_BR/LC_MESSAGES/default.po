@@ -219,14 +219,14 @@ msgstr "Dimensionamento de admissão"
 #: lib/afinados_web/components/layouts/root.html.heex:19
 #: lib/afinados_web/components/layouts/root.html.heex:34
 #, elixir-autogen, elixir-format
-msgid "Afinados gathers calculation tools for motorcycle tuning."
-msgstr "O Afinados reúne ferramentas de cálculo para preparação de motocicletas."
+msgid "Afinados gathers calculation tools for engine tuning and preparation."
+msgstr "O Afinados reúne ferramentas de cálculo para acerto e preparação de motores."
 
 #: lib/afinados_web/components/layouts/root.html.heex:15
 #: lib/afinados_web/components/layouts/root.html.heex:30
 #, elixir-autogen, elixir-format
-msgid "Afinados, calculation tools for motorcycle tuning"
-msgstr "Afinados, ferramentas de cálculo para preparação de motocicletas"
+msgid "Afinados, calculation tools for engine tuning and preparation"
+msgstr "Afinados, ferramentas de cálculo para acerto e preparação de motores"
 
 #: lib/afinados_web/live/setup_live.ex:269
 #, elixir-autogen, elixir-format
