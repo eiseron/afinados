@@ -4,4 +4,4 @@ WORKDIR /usr/src/app
 
 COPY --chown=eiseron:eiseron . .
 
-CMD ["sh", "-c", "mix ecto.migrate && mix run priv/repo/seeds.exs && mix phx.server"]
+CMD ["mix", "phx.server"]
