@@ -210,7 +210,7 @@ defmodule AfinadosWeb.SetupLive do
 
         <ul class="legend">
           <li :for={s <- @chart.series}>
-            <svg width="12" height="12" aria-hidden="true">
+            <svg class="swatch" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
               <rect width="12" height="12" fill={s.color} />
             </svg>
             {s.label}

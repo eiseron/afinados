@@ -179,7 +179,7 @@ defmodule AfinadosWeb.IntakeSizingLive do
 
         <ul class="legend" aria-label={gettext("Color legend")}>
           <li :for={item <- legend_items()}>
-            <svg class="swatch" width="20" height="14" aria-hidden="true">
+            <svg class="swatch" width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
               <rect
                 :for={{color, i} <- Enum.with_index(item.colors)}
                 :if={length(item.colors) == 2}

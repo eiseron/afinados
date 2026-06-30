@@ -14,21 +14,25 @@ const liveSocket = new LiveSocket("/live", Socket, {
 liveSocket.connect()
 window.liveSocket = liveSocket
 
-// Theme toggle: flip between light and dark, persisting the choice.
-// Until toggled, the theme follows the OS via color-scheme (see tokens.css).
 const themeRoot = document.documentElement
 const activeTheme = () =>
   themeRoot.getAttribute("data-theme") ||
-  (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+  (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+
+const THEME_COLORS = { light: "#f9fafb", dark: "#171a21" }
+const syncThemeColor = () => {
+  const meta = document.querySelector('meta[name="theme-color"]')
+  if (meta) meta.setAttribute("content", THEME_COLORS[activeTheme()])
+}
+syncThemeColor()
 
 document.getElementById("theme-toggle")?.addEventListener("click", () => {
   const next = activeTheme() === "dark" ? "light" : "dark"
   themeRoot.setAttribute("data-theme", next)
+  syncThemeColor()
   try {
     localStorage.setItem("theme", next)
-  } catch (_) {
-    // ignore storage being unavailable (private mode, etc.)
-  }
+  } catch (_) {}
 })
 
 if (process.env.NODE_ENV === "development") {

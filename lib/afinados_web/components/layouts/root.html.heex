@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#171a21" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <meta
       name="description"
@@ -38,8 +39,15 @@
     <.live_title default="Afinados">{assigns[:page_title]}</.live_title>
     <script nonce={@csp_nonce}>
       var savedTheme = window.localStorage && localStorage.getItem("theme");
-      if (savedTheme === "dark" || savedTheme === "light")
-        document.documentElement.setAttribute("data-theme", savedTheme);
+      var prefersLight =
+        window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+      var hasSavedTheme = savedTheme === "dark" || savedTheme === "light";
+      var fallbackTheme = prefersLight ? "light" : "dark";
+      var effectiveTheme = hasSavedTheme ? savedTheme : fallbackTheme;
+      document.documentElement.setAttribute("data-theme", effectiveTheme);
+      var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeColorMeta)
+        themeColorMeta.setAttribute("content", effectiveTheme === "dark" ? "#171a21" : "#f9fafb");
     </script>
     <link phx-track-static rel="stylesheet" href={asset_url(~p"/assets/css/app.css")} />
     <script defer phx-track-static type="text/javascript" src={asset_url(~p"/assets/js/app.js")}>

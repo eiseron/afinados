@@ -102,8 +102,8 @@
   margin: var(--space-3) 0 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  font-size: var(--text-sm);
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
   color: var(--color-text-muted);
 }
 
@@ -115,6 +115,8 @@
 
 .intake-sizing .legend .swatch {
   flex-shrink: 0;
+  width: 16px;
+  height: 11px;
 }
 
 .intake-sizing .ve-slider {
@@ -144,6 +146,16 @@
     grid-template-columns: var(--sidebar-width) 1fr;
     grid-template-rows: minmax(0, 1fr);
     grid-template-areas: "controls chart";
+  }
+
+  .intake-sizing .legend {
+    gap: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .intake-sizing .legend .swatch {
+    width: 20px;
+    height: 14px;
   }
 
   .intake-sizing .chart-panel,

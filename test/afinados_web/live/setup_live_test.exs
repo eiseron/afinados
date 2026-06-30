@@ -337,6 +337,11 @@ defmodule AfinadosWeb.SetupLiveTest do
     assert html_response(get(conn, "/"), 200) =~ ~s(id="theme-toggle")
   end
 
+  test "the page declares a dark theme-color by default so the browser chrome follows the theme",
+       %{conn: conn} do
+    assert html_response(get(conn, "/"), 200) =~ ~s(name="theme-color" content="#171a21")
+  end
+
   test "the top bar shows the running app version", %{conn: conn} do
     version = :afinados |> Application.spec(:vsn) |> to_string()
 
