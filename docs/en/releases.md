@@ -7,6 +7,15 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.3.2
+
+- **Easier to find and share:** Afinados is now indexed by search engines (sitemap and robots.txt) and declares each page's canonical URL and language, helping the tools show up correctly on Google.
+- **Under the hood:** error monitoring and stability improvements.
+
+## 0.3.1
+
+- **Updated description:** the text shown in search results and link previews now refers to "engines" in general, not just motorcycles, reflecting support for cars, mopeds, power tools and stationary engines.
+
 ## 0.3.0
 
 - **New tool — Intake sizing:** estimates the ideal venturi for an engine and plots how commercial sizes fit your RPM band. Color-coded per RPM (green ideal, blue for low velocity, yellow for restriction), with a thicker segment over the engine's working regime. Supports motorcycles, cars, mopeds, power tools and stationary engines, with per-vehicle K presets and an advanced section for boost, barrels, firing interval and Ve_max.

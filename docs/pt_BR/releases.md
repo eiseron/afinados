@@ -7,6 +7,15 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.3.2
+
+- **Mais fácil de encontrar e compartilhar:** o Afinados passou a ser indexado pelos buscadores (sitemap e robots.txt) e a declarar a URL canônica e o idioma de cada página, ajudando as ferramentas a aparecerem corretamente no Google.
+- **Melhorias internas:** monitoramento de erros e ajustes de estabilidade nos bastidores.
+
+## 0.3.1
+
+- **Descrição atualizada:** os textos exibidos em buscadores e ao compartilhar links passaram a falar de "motores" em geral, não só de motos, refletindo o suporte a carros, ciclomotores, ferramentas motorizadas e motores estacionários.
+
 ## 0.3.0
 
 - **Ferramenta nova — Dimensionamento de admissão:** estima o venturi ideal para um motor e mostra como os tamanhos comerciais se encaixam na faixa de RPM. Cor por RPM (verde ideal, azul para velocidade baixa, amarelo para restrição), com trecho mais grosso sobre o regime de trabalho do motor. Suporta motos, carros, ciclomotores, ferramentas motorizadas e motores estacionários, com presets de K por veículo e seção avançada para turbo, corpos, intervalo entre explosões e VE máxima.
