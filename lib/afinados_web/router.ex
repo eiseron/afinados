@@ -41,6 +41,8 @@ defmodule AfinadosWeb.Router do
 
   scope "/", AfinadosWeb do
     get("/up", HealthController, :index)
+    get("/sitemap.xml", SitemapController, :index)
+    get("/robots.txt", RobotsController, :index)
   end
 
   scope "/", AfinadosWeb do
