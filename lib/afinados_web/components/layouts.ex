@@ -6,6 +6,8 @@ defmodule AfinadosWeb.Layouts do
 
   def app_version, do: :afinados |> Application.spec(:vsn) |> to_string()
 
+  def html_lang, do: AfinadosWeb.Gettext |> Gettext.get_locale() |> String.replace("_", "-")
+
   def asset_url(path), do: AfinadosWeb.Endpoint.static_url() <> path
 
   attr(:flash, :map, required: true, doc: "the map of flash messages")

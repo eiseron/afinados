@@ -9,6 +9,7 @@ defmodule AfinadosWeb.Router do
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers, %{"content-security-policy" => "default-src 'self'"})
     plug(:put_csp_nonce)
+    plug(:put_canonical_url)
     plug(AfinadosWeb.GuestToken)
   end
 
@@ -22,6 +23,10 @@ defmodule AfinadosWeb.Router do
     conn
     |> Plug.Conn.assign(:csp_nonce, nonce)
     |> Plug.Conn.put_resp_header("content-security-policy", content_security_policy(nonce))
+  end
+
+  defp put_canonical_url(conn, _opts) do
+    Plug.Conn.assign(conn, :canonical_url, AfinadosWeb.Endpoint.url() <> conn.request_path)
   end
 
   defp content_security_policy(nonce) do

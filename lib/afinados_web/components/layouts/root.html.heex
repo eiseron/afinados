@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={html_lang()}>
   <head>
     <meta charset="utf-8" />
+    <link :if={assigns[:canonical_url]} rel="canonical" href={@canonical_url} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#171a21" />
     <meta name="csrf-token" content={get_csrf_token()} />
