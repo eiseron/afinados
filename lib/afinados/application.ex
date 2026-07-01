@@ -5,6 +5,8 @@ defmodule Afinados.Application do
 
   @impl true
   def start(_type, _args) do
+    Eiseron.ErrorMonitoring.attach()
+
     children = [
       AfinadosWeb.Telemetry,
       Afinados.Repo,

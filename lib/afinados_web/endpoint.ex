@@ -1,5 +1,6 @@
 defmodule AfinadosWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :afinados
+  use Eiseron.ErrorMonitoring.PlugCapture
 
   @session_options [
     store: :cookie,
@@ -47,5 +48,6 @@ defmodule AfinadosWeb.Endpoint do
   plug(Plug.MethodOverride)
   plug(Plug.Head)
   plug(Plug.Session, @session_options)
+  plug(Eiseron.ErrorMonitoring.PlugContext)
   plug(AfinadosWeb.Router)
 end

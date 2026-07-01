@@ -1,5 +1,7 @@
 import Config
 
+config :sentry, Eiseron.ErrorMonitoring.config()
+
 if System.get_env("PHX_SERVER") do
   config :afinados, AfinadosWeb.Endpoint, server: true
 end
@@ -39,4 +41,11 @@ if config_env() in [:prod, :preview] do
       ip: {0, 0, 0, 0, 0, 0, 0, 0}
     ],
     secret_key_base: secret_key_base
+
+  config :sentry,
+         Eiseron.ErrorMonitoring.runtime_config(
+           dsn: System.get_env("ERROR_MONITORING_DSN"),
+           environment: config_env(),
+           release: to_string(Application.spec(:afinados, :vsn))
+         )
 end

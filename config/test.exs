@@ -16,6 +16,7 @@ config :afinados, AfinadosWeb.Endpoint,
 
 config :afinados, Afinados.Mailer, adapter: Swoosh.Adapters.Test
 config :swoosh, :api_client, false
+config :sentry, dsn: nil
 config :logger, level: :warning
 config :phoenix, :plug_init_mode, :runtime
 
