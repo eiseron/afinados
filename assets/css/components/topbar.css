@@ -24,6 +24,40 @@
   color: var(--color-text-muted);
 }
 
+.topbar-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.lang-switch form {
+  display: inline;
+  margin: 0;
+}
+
+.lang-option {
+  min-height: 0;
+  padding: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.lang-option:hover,
+.lang-option.active {
+  color: var(--color-text);
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;

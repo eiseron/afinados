@@ -547,3 +547,8 @@ msgstr "Urbano"
 #, elixir-autogen, elixir-format
 msgid "Synchronous"
 msgstr "Síncrono"
+
+#: lib/afinados_web/components/layouts/root.html.heex:61
+#, elixir-autogen, elixir-format
+msgid "Language"
+msgstr "Idioma"

@@ -47,4 +47,4 @@ Abra **Avançado** pra ajuste fino:
 
 ## Barra superior
 
-O nome ("Afinados") leva de volta ao hub de ferramentas. O alternador de tema troca entre claro e escuro; a escolha fica salva.
+O nome ("Afinados") leva de volta ao hub de ferramentas. O alternador de tema troca entre claro e escuro; a escolha fica salva. O seletor de idioma (PT/EN), ao lado do tema, troca o idioma da interface; a escolha fica salva.

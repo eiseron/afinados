@@ -222,3 +222,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Manufacturer"
 msgstr ""
+
+#: lib/afinados_web/components/layouts/root.html.heex:61
+#, elixir-autogen, elixir-format
+msgid "Language"
+msgstr ""

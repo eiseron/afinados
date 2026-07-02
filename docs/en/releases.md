@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.3.3
+
+- **Portuguese or English:** you can now switch the app between PT and EN from the toggle at the top, next to the theme switch. Your choice is remembered on future visits.
+
 ## 0.3.2
 
 - **Easier to find and share:** Afinados is now indexed by search engines (sitemap and robots.txt) and declares each page's canonical URL and language, helping the tools show up correctly on Google.

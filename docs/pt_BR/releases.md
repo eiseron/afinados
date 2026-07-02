@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.3.3
+
+- **Português ou inglês:** agora dá pra alternar o app entre PT e EN pelo seletor no topo, ao lado do tema. A escolha é lembrada nas próximas visitas.
+
 ## 0.3.2
 
 - **Mais fácil de encontrar e compartilhar:** o Afinados passou a ser indexado pelos buscadores (sitemap e robots.txt) e a declarar a URL canônica e o idioma de cada página, ajudando as ferramentas a aparecerem corretamente no Google.

@@ -47,4 +47,4 @@ Open the **Advanced** section to fine-tune:
 
 ## Top bar
 
-The brand ("Afinados") links back to the tools hub. The theme toggle switches between light and dark; the choice is saved.
+The brand ("Afinados") links back to the tools hub. The theme toggle switches between light and dark; the choice is saved. The language switch (PT/EN), next to the theme toggle, changes the interface language; the choice is saved.

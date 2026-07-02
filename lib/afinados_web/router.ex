@@ -4,6 +4,7 @@ defmodule AfinadosWeb.Router do
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
+    plug(AfinadosWeb.Locale)
     plug(:fetch_live_flash)
     plug(:put_root_layout, html: {AfinadosWeb.Layouts, :root})
     plug(:protect_from_forgery)
@@ -53,10 +54,14 @@ defmodule AfinadosWeb.Router do
   scope "/", AfinadosWeb do
     pipe_through(:browser)
 
-    live("/", HubLive)
-    live("/carburetion/setups", SetupLive)
-    live("/carburetion/setups/:id", SetupLive)
-    live("/carburetion/intake-sizing", IntakeSizingLive)
+    post("/locale/:locale", LocaleController, :update)
+
+    live_session :default, on_mount: [AfinadosWeb.RestoreLocale] do
+      live("/", HubLive)
+      live("/carburetion/setups", SetupLive)
+      live("/carburetion/setups/:id", SetupLive)
+      live("/carburetion/intake-sizing", IntakeSizingLive)
+    end
   end
 
   if Application.compile_env(:afinados, :dev_routes) do

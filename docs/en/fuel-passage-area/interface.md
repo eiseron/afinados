@@ -7,7 +7,7 @@ description: A guided tour of the fuel-passage area tool's interface.
 
 ## Top bar
 
-The brand ("Afinados") links back to the tools hub. The theme toggle switches between light and dark, and the choice is saved. Without a choice, the theme follows your operating system.
+The brand ("Afinados") links back to the tools hub. The theme toggle switches between light and dark, and the choice is saved. Without a choice, the theme follows your operating system. The language switch (PT/EN), next to the theme toggle, changes the interface language; the choice is saved.
 
 ## The chart
 

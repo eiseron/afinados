@@ -8,6 +8,8 @@ defmodule AfinadosWeb.Layouts do
 
   def html_lang, do: AfinadosWeb.Gettext |> Gettext.get_locale() |> String.replace("_", "-")
 
+  def current_locale, do: Gettext.get_locale(AfinadosWeb.Gettext)
+
   def asset_url(path), do: AfinadosWeb.Endpoint.static_url() <> path
 
   attr(:flash, :map, required: true, doc: "the map of flash messages")
