@@ -1,5 +1,6 @@
 ---
 title: Documentação do Afinados
+nav_section: Início
 description: Documentação de usuário do Afinados, ferramentas para acerto e preparação de motores a combustão interna.
 ---
 

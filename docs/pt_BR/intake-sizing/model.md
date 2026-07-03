@@ -1,5 +1,6 @@
 ---
 title: Modelo do dimensionamento de admissão
+nav_title: O modelo
 description: O que a ferramenta calcula, a fórmula, as aproximações conhecidas e as fontes.
 ---
 

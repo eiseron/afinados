@@ -1,5 +1,6 @@
 ---
 title: Afinados Documentation
+nav_section: Start
 description: User documentation for Afinados, tools for tuning and preparing internal combustion engines.
 ---
 

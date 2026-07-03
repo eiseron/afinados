@@ -1,5 +1,6 @@
 ---
 title: Termos de Uso
+nav_title: Termos de uso
 description: As condições para usar o Afinados.
 ---
 

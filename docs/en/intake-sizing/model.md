@@ -1,5 +1,6 @@
 ---
 title: Intake sizing model
+nav_title: The model
 description: What the intake-sizing tool calculates, the formula, the known approximations, and the sources.
 ---
 

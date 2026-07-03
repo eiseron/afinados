@@ -1,5 +1,6 @@
 ---
 title: Modelo da área de passagem
+nav_title: O modelo
 description: O que a ferramenta de área de passagem calcula, o que não calcula, as aproximações conhecidas e as fontes.
 ---
 

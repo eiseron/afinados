@@ -1,5 +1,6 @@
 ---
 title: Política de Privacidade
+nav_title: Política de privacidade
 description: Como o Afinados trata seus dados.
 ---
 

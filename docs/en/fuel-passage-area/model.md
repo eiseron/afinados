@@ -1,5 +1,6 @@
 ---
 title: Fuel-passage area model
+nav_title: The model
 description: What the fuel-passage area tool calculates, what it does not, the known approximations, and the sources.
 ---
 
