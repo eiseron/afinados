@@ -9,6 +9,8 @@ end
 config :afinados, AfinadosWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+config :afinados, :docs, host: System.get_env("DOCS_URL") || "https://afinados.io"
+
 if config_env() in [:prod, :preview] do
   database_url =
     System.get_env("DATABASE_URL") ||

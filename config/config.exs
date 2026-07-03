@@ -6,6 +6,8 @@ config :afinados,
 
 config :gettext, :default_locale, "pt_BR"
 
+config :afinados, :docs, host: "https://afinados.io"
+
 config :afinados, AfinadosWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,

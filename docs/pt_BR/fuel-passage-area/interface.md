@@ -5,6 +5,8 @@ description: Um tour guiado pela interface da ferramenta de área de passagem.
 
 # Usando a interface
 
+> [Abrir a ferramenta ↗](https://app.afinados.io/carburetion/setups)
+
 ## Barra superior
 
 A marca ("Afinados") leva de volta ao hub de ferramentas. O botão de tema alterna entre claro e escuro, e a escolha fica salva. Sem escolha, o tema segue o seu sistema operacional. O seletor de idioma (PT/EN), ao lado do tema, troca o idioma da interface; a escolha fica salva.

@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.3.4
+
+- **Documentação onde você precisa:** cada ferramenta agora tem um link direto para a página da documentação que a explica, e cada página da documentação leva de volta à ferramenta — dá pra ir e voltar entre usar o Afinados e entender como funciona sem procurar a página.
+
 ## 0.3.3
 
 - **Português ou inglês:** agora dá pra alternar o app entre PT e EN pelo seletor no topo, ao lado do tema. A escolha é lembrada nas próximas visitas.

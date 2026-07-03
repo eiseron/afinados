@@ -12,6 +12,34 @@ defmodule AfinadosWeb.Layouts do
 
   def asset_url(path), do: AfinadosWeb.Endpoint.static_url() <> path
 
+  attr(:page, :string, default: "", doc: "documentation page path, mirroring the docs/ tree")
+
+  attr(:label, :string,
+    required: true,
+    doc: "accessible label, and visible text for the inline variant"
+  )
+
+  attr(:variant, :string,
+    default: "icon",
+    values: ~w(icon inline),
+    doc: "icon: a compact ? mark (top bar); inline: ? mark followed by the label"
+  )
+
+  def doc_link(assigns) do
+    ~H"""
+    <a
+      class={["doc-link", "doc-link-#{@variant}"]}
+      href={AfinadosWeb.Docs.url(@page)}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={@label}
+    >
+      <span class="doc-link-mark" aria-hidden="true">?</span>
+      <span :if={@variant == "inline"} class="doc-link-text">{@label}</span>
+    </a>
+    """
+  end
+
   attr(:flash, :map, required: true, doc: "the map of flash messages")
   slot(:inner_block, required: true)
 

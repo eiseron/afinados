@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.3.4
+
+- **Docs right where you need them:** each tool now links straight to the documentation page that explains it, and every doc page links back to the tool — so you can move between using Afinados and reading how it works without hunting for the page.
+
 ## 0.3.3
 
 - **Portuguese or English:** you can now switch the app between PT and EN from the toggle at the top, next to the theme switch. Your choice is remembered on future visits.

@@ -582,4 +582,27 @@ defmodule AfinadosWeb.IntakeSizingLiveTest do
       refute html =~ ~r/name="intake_sizing\[manifold\]"[^>]*disabled/
     end
   end
+
+  test "the tool offers a contextual help link opening the interface docs in a new tab",
+       %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+    assert has_element?(
+             view,
+             ~s(a.doc-link-inline[target="_blank"][rel="noopener noreferrer"][href$="intake-sizing/interface"])
+           )
+  end
+
+  test "expanding advanced reveals a help link to the advanced options docs", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/carburetion/intake-sizing")
+
+    refute has_element?(view, ~s(a.doc-link-inline[href$="intake-sizing/interface#advanced"]))
+
+    view |> element("button[phx-click='toggle-advanced']") |> render_click()
+
+    assert has_element?(
+             view,
+             ~s(a.doc-link-inline[target="_blank"][href$="intake-sizing/interface#advanced"])
+           )
+  end
 end

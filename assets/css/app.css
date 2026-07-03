@@ -7,6 +7,7 @@
 @import "./tokens.css";
 @import "./global.css";
 @import "./components/topbar.css";
+@import "./components/doc-link.css";
 @import "./components/forms.css";
 @import "./components/flash.css";
 @import "./pages/hub.css";

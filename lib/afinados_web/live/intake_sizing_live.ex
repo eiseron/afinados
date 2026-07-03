@@ -213,6 +213,11 @@ defmodule AfinadosWeb.IntakeSizingLive do
       <h1 class="sr-only">{gettext("Intake sizing")}</h1>
 
       <aside class="controls" aria-label={gettext("Sizing controls")}>
+        <Layouts.doc_link
+          page="intake-sizing/interface"
+          label={gettext("How to use this tool")}
+          variant="inline"
+        />
         <.form for={@form} phx-change="change">
           <fieldset class="basic">
             <legend>{gettext("Parameters")}</legend>
@@ -275,6 +280,11 @@ defmodule AfinadosWeb.IntakeSizingLive do
             <p :if={!@advanced_open} class="advanced-collapsed" aria-hidden="true">…</p>
 
             <div :if={@advanced_open} class="advanced-fields">
+              <Layouts.doc_link
+                page="intake-sizing/interface#advanced"
+                label={gettext("How to use the advanced options")}
+                variant="inline"
+              />
               <.input
                 field={@form[:k]}
                 type="select"

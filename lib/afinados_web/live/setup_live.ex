@@ -229,6 +229,11 @@ defmodule AfinadosWeb.SetupLive do
       <h1 class="sr-only">{gettext("Fuel-passage area")}</h1>
 
       <aside class="controls" aria-label={gettext("Setup controls")}>
+        <Layouts.doc_link
+          page="fuel-passage-area/interface"
+          label={gettext("How to use this tool")}
+          variant="inline"
+        />
         <details class="saved" open={@saved_open}>
           <summary class="saved-toggle" phx-click="toggle_saved">
             {gettext("Saved setups")} <span class="count">{length(@saved)}</span>

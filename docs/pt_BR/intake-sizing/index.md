@@ -5,6 +5,8 @@ description: O que a ferramenta faz, os conceitos principais e como usar.
 
 # Dimensionamento de admissão
 
+> [Abrir a ferramenta ↗](https://app.afinados.io/carburetion/intake-sizing)
+
 Esta ferramenta estima o **tamanho ideal do venturi do carburador ou da borboleta de injeção** para um motor e mostra como os tamanhos comerciais se encaixam na faixa de RPM em que o motor trabalha. Ela traça o diâmetro da garganta em função da rotação e colore cada diâmetro comercial conforme a velocidade dos gases que ele entregaria no RPM típico do motor. Funciona pra carburação e injeção — o campo **Sistema de admissão** no avançado diz ao modelo qual dos dois você está dimensionando.
 
 Veja [Usando a interface](interface.md) para um tour pelos controles, e [O modelo](model.md) para a fórmula e as aproximações conhecidas.

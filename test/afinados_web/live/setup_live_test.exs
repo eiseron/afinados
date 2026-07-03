@@ -440,4 +440,21 @@ defmodule AfinadosWeb.SetupLiveTest do
 
     assert hd(get_resp_header(conn, "content-security-policy")) =~ "style-src 'self' #{static}"
   end
+
+  test "the tool offers a contextual help link opening the interface docs in a new tab",
+       %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
+
+    assert has_element?(
+             view,
+             ~s(a.doc-link-inline[target="_blank"][rel="noopener noreferrer"][href$="fuel-passage-area/interface"])
+           )
+  end
+
+  test "the help link resolves to the English docs when the locale is English", %{conn: conn} do
+    conn = Plug.Test.init_test_session(conn, %{"locale" => "en"})
+    {:ok, view, _html} = live(conn, "/carburetion/setups")
+
+    assert has_element?(view, ~s(a.doc-link-inline[href*="/en/docs/"]))
+  end
 end

@@ -5,6 +5,8 @@ description: What the fuel-passage area tool does, the key concepts, and how to 
 
 # Fuel-passage area
 
+> [Open the tool ↗](https://app.afinados.io/carburetion/setups)
+
 This tool estimates the **fuel-passage area** of a carburetor, the cross-section available for fuel to pass, across throttle position. A larger area means more fuel can pass; comparing setups shows how a change (needle, clip, jets, venturi) reshapes the curve.
 
 See [Using the interface](interface.md) for a full tour of the controls, and [The model](model.md) for what is calculated and the known approximations.

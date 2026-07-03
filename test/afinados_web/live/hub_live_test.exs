@@ -21,4 +21,11 @@ defmodule AfinadosWeb.HubLiveTest do
     assert html =~ ~s(class="tool-card tool-card-soon")
     assert html =~ "Dimensionamento de escape 2 tempos"
   end
+
+  test "the top bar offers a documentation link that opens the docs in a new tab", %{conn: conn} do
+    {:ok, _view, html} = live(conn, "/")
+
+    assert html =~
+             ~r{<a class="doc-link doc-link-icon" href="[^"]*docs[^"]*" target="_blank" rel="noopener noreferrer"}
+  end
 end

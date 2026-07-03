@@ -5,6 +5,8 @@ description: O que a ferramenta de área de passagem faz, os conceitos principai
 
 # Área de passagem de combustível
 
+> [Abrir a ferramenta ↗](https://app.afinados.io/carburetion/setups)
+
 Esta ferramenta estima a **área de passagem de combustível** de um carburador, a seção disponível para o combustível passar, ao longo da posição do acelerador. Mais área significa que mais combustível pode passar; comparar acertos mostra como uma mudança (agulha, clip, gicles, venturi) remodela a curva.
 
 Veja [Usando a interface](interface.md) para um tour completo dos controles, e [O modelo](model.md) para o que é calculado e as aproximações conhecidas.

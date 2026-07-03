@@ -227,3 +227,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Language"
 msgstr ""
+
+#: lib/afinados_web/components/layouts/root.html.heex:85
+#, elixir-autogen, elixir-format
+msgid "Documentation"
+msgstr ""
+
+#: lib/afinados_web/live/setup_live.ex:234
+#: lib/afinados_web/live/intake_sizing_live.ex:218
+#, elixir-autogen, elixir-format
+msgid "How to use this tool"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:283
+#, elixir-autogen, elixir-format
+msgid "How to use the advanced options"
+msgstr ""

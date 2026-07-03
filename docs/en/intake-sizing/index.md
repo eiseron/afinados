@@ -5,6 +5,8 @@ description: What the intake-sizing tool does, the key concepts, and how to use 
 
 # Intake sizing
 
+> [Open the tool ↗](https://app.afinados.io/carburetion/intake-sizing)
+
 This tool estimates the **ideal carburetor venturi or throttle body size** for an engine and shows how the commercial sizes fit your specific RPM band. It plots throat diameter against engine speed and color-codes each commercial diameter according to the gas velocity it would deliver at the engine's typical operating RPM. Works for carbureted and EFI setups — the **Induction** field in advanced tells the model which one you're sizing.
 
 See [Using the interface](interface.md) for a tour of the controls, and [The model](model.md) for the formula and known approximations.

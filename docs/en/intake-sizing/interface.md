@@ -5,6 +5,8 @@ description: A guided tour of the intake-sizing tool's interface.
 
 # Using the interface
 
+> [Open the tool ↗](https://app.afinados.io/carburetion/intake-sizing)
+
 ## The chart
 
 The chart fills the main area. The horizontal axis is engine speed (RPM); the vertical axis is venturi diameter (mm). Each horizontal line is a commercial size: 10 mm, 12 mm, 14 mm, …, 60 mm.
@@ -35,7 +37,7 @@ The form sits next to the chart (left sidebar on a wide screen, below on a phone
 - **Number of cylinders**.
 - **Number of carburetors / throttle bodies**: total carburetor (or TBI) bodies. For a 4-cylinder with a single Weber, this is 1.
 
-### Advanced (collapsed by default)
+### Advanced (collapsed by default) {#advanced}
 
 Open the **Advanced** section to fine-tune:
 

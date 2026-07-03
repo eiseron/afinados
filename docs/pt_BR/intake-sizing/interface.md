@@ -5,6 +5,8 @@ description: Um tour guiado pelos controles da ferramenta de dimensionamento de 
 
 # Usando a interface
 
+> [Abrir a ferramenta ↗](https://app.afinados.io/carburetion/intake-sizing)
+
 ## O gráfico
 
 O gráfico ocupa a área principal. O eixo horizontal é a rotação do motor (RPM); o vertical é o diâmetro do venturi (mm). Cada linha horizontal é um tamanho comercial: 10 mm, 12 mm, 14 mm, …, 60 mm.
@@ -35,7 +37,7 @@ O formulário fica do lado do gráfico (barra lateral à esquerda no desktop, ab
 - **Número de cilindros**.
 - **Número de carburadores / corpos de borboleta**: total de corpos. Num 4-cilindros com um único Weber, é 1.
 
-### Avançado (recolhido por padrão)
+### Avançado (recolhido por padrão) {#advanced}
 
 Abra **Avançado** pra ajuste fino:
 
