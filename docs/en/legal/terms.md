@@ -5,7 +5,7 @@ description: The conditions for using Afinados.
 
 # Terms of Use
 
-Last updated: June 2026.
+Last updated: July 2026.
 
 Afinados is a product of Eiseron LTDA (CNPJ 41.516.538/0001-30). By using Afinados, you agree to these terms.
 
@@ -20,6 +20,12 @@ Afinados **does not measure flow** and **does not replace** bench, dyno, or trac
 ## Acceptable use
 
 Use Afinados lawfully. Do not try to overload, compromise, or bypass the security of the service, or extract other users' data.
+
+## Third-party recommendations
+
+Afinados may show recommendations for third-party products (for example, courses and parts) that we selected because we believe they are useful for you. These products are **not Afinados products** and are not provided by us. Any purchase is made directly with the third party, under its own terms; Afinados is not a party to the transaction and is not responsible for delivery, quality, or support.
+
+Some of these links are compensated: **we may earn a commission if you buy through them**, at no additional cost to you. A recommendation reflects our curation and is not a guaranteed endorsement or purchase advice.
 
 ## License
 

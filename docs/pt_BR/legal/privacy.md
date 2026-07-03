@@ -6,7 +6,7 @@ description: Como o Afinados trata seus dados.
 
 # Política de Privacidade
 
-Última atualização: junho de 2026.
+Última atualização: julho de 2026.
 
 O Afinados é um produto da Eiseron. Esta política descreve quais dados o Afinados trata e por quê. O produto é guest-first: você usa as ferramentas sem cadastro.
 
@@ -35,6 +35,10 @@ O aplicativo, o banco de dados e os logs de erro rodam em servidor no **Brasil**
 ## Compartilhamento e transferência internacional
 
 Não vendemos seus dados nem os compartilhamos para marketing. Para entregar e proteger o site, usamos a Cloudflare como operadora; por usar a rede global dela, seu IP pode ser processado em servidores **fora do Brasil**, sujeito às salvaguardas contratuais da Cloudflare. As demais operações ficam em infraestrutura própria no Brasil.
+
+## Links de recomendação e afiliação
+
+O Afinados pode exibir recomendações de produtos de terceiros. Ao clicar em uma delas, você é levado ao site do terceiro, que pode registrar o acesso e usar cookies próprios, inclusive um identificador que atribui a ele a origem da visita (afiliação) para fins de comissão. Esse tratamento ocorre fora do Afinados e é regido pela política de privacidade do terceiro. **Não compartilhamos seus dados pessoais com esses terceiros**; é o seu clique que leva você até eles.
 
 ## Retenção e exclusão
 

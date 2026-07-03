@@ -568,3 +568,29 @@ msgstr "Como usar esta ferramenta"
 #, elixir-autogen, elixir-format
 msgid "How to use the advanced options"
 msgstr "Como usar as opções avançadas"
+
+#: lib/afinados_web/components/offer_shelf.ex:15
+#, elixir-autogen, elixir-format
+msgid "Recommended for you"
+msgstr "Recomendados para você"
+
+#: lib/afinados_web/components/offer_shelf.ex:17
+#, elixir-autogen, elixir-format
+msgid "Third-party products we selected for you. They are not Afinados products, and we may earn a commission if you buy through these links."
+msgstr "Produtos de terceiros que selecionamos para você. Não são produtos Afinados, e podemos receber uma comissão se você comprar por estes links."
+
+#: lib/afinados_web/components/offer_shelf.ex:59
+#, elixir-autogen, elixir-format
+msgid "Learn more"
+msgstr "Saiba mais"
+
+#: lib/afinados_web/components/offer_shelf.ex:60
+#, elixir-autogen, elixir-format
+msgid "View product"
+msgstr "Ver produto"
+
+
+#: lib/afinados_web/components/offer_shelf.ex:31
+#, elixir-autogen, elixir-format
+msgid "opens an external site"
+msgstr "abre um site externo"

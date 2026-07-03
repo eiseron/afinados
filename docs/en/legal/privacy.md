@@ -5,7 +5,7 @@ description: How Afinados handles your data.
 
 # Privacy Policy
 
-Last updated: June 2026.
+Last updated: July 2026.
 
 Afinados is an Eiseron product. This policy describes what data Afinados processes and why. The product is guest-first: you use the tools without signing up.
 
@@ -34,6 +34,10 @@ The application, the database, and the error logs run on a server in **Brazil**.
 ## Sharing and international transfer
 
 We do not sell your data or share it for marketing. To deliver and protect the site, we use Cloudflare as a processor; because it uses Cloudflare's global network, your IP may be processed on servers **outside Brazil**, subject to Cloudflare's contractual safeguards. The remaining operations stay on our own infrastructure in Brazil.
+
+## Recommendation links and affiliation
+
+Afinados may show recommendations for third-party products. When you click one, you are taken to the third party's site, which may log the visit and use its own cookies, including an identifier that attributes the visit to it (affiliation) for commission purposes. This processing happens outside Afinados and is governed by the third party's privacy policy. **We do not share your personal data with these third parties**; it is your click that takes you to them.
 
 ## Retention and deletion
 

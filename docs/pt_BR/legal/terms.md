@@ -6,7 +6,7 @@ description: As condições para usar o Afinados.
 
 # Termos de Uso
 
-Última atualização: junho de 2026.
+Última atualização: julho de 2026.
 
 O Afinados é um produto da Eiseron LTDA (CNPJ 41.516.538/0001-30). Ao usar o Afinados, você concorda com estes termos.
 
@@ -21,6 +21,12 @@ O Afinados **não mede vazão** e **não substitui** teste em bancada, dinamôme
 ## Uso aceitável
 
 Use o Afinados de forma lícita. Não tente sobrecarregar, comprometer ou contornar a segurança do serviço, nem extrair dados de outros usuários.
+
+## Recomendações de terceiros
+
+O Afinados pode exibir recomendações de produtos de terceiros (por exemplo, cursos e peças) que selecionamos por acreditar serem úteis para o seu uso. Esses produtos **não são do Afinados** e não são fornecidos por nós. Qualquer compra é feita diretamente com o terceiro, sob os termos dele; o Afinados não é parte da transação e não responde por entrega, qualidade ou suporte.
+
+Alguns desses links são remunerados: **podemos receber uma comissão se você comprar por eles**, sem custo adicional para você. A recomendação reflete nossa curadoria e não constitui endosso garantido nem aconselhamento de compra.
 
 ## Licença
 

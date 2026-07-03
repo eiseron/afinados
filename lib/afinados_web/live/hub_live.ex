@@ -3,8 +3,17 @@ defmodule AfinadosWeb.HubLive do
 
   use AfinadosWeb, :live_view
 
+  import AfinadosWeb.Components.OfferShelf, only: [offer_shelf: 1]
+
+  alias Afinados.Offers
+
   @impl true
-  def mount(_params, _session, socket), do: {:ok, socket}
+  def mount(_params, _session, socket) do
+    locale = Gettext.get_locale(AfinadosWeb.Gettext)
+    offers = Offers.build_offer_shelf(Offers.list_offers(), "hub_shelf", locale)
+
+    {:ok, assign(socket, offers: offers)}
+  end
 
   @impl true
   def render(assigns) do
@@ -41,6 +50,8 @@ defmodule AfinadosWeb.HubLive do
             </div>
           </li>
         </ul>
+
+        <.offer_shelf offers={@offers} />
       </div>
     </main>
     """

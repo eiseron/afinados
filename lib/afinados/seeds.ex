@@ -4,6 +4,7 @@ defmodule Afinados.Seeds do
   alias Afinados.Seeds.Carburetion.KeihinNeedleJet
   alias Afinados.Seeds.Carburetion.Needle
   alias Afinados.Seeds.Carburetion.NeedleJet
+  alias Afinados.Seeds.Offers.Offer, as: OfferSeed
 
   @spec run(String.t()) :: :ok
   def run(profile) do
@@ -20,6 +21,6 @@ defmodule Afinados.Seeds do
   end
 
   defp seed_environment_fixtures("prod"), do: :ok
-  defp seed_environment_fixtures("preview"), do: :ok
-  defp seed_environment_fixtures("dev"), do: :ok
+  defp seed_environment_fixtures("preview"), do: OfferSeed.seed()
+  defp seed_environment_fixtures("dev"), do: OfferSeed.seed()
 end

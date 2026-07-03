@@ -243,3 +243,29 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "How to use the advanced options"
 msgstr ""
+
+#: lib/afinados_web/components/offer_shelf.ex:15
+#, elixir-autogen, elixir-format
+msgid "Recommended for you"
+msgstr ""
+
+#: lib/afinados_web/components/offer_shelf.ex:17
+#, elixir-autogen, elixir-format
+msgid "Third-party products we selected for you. They are not Afinados products, and we may earn a commission if you buy through these links."
+msgstr ""
+
+#: lib/afinados_web/components/offer_shelf.ex:59
+#, elixir-autogen, elixir-format
+msgid "Learn more"
+msgstr ""
+
+#: lib/afinados_web/components/offer_shelf.ex:60
+#, elixir-autogen, elixir-format
+msgid "View product"
+msgstr ""
+
+
+#: lib/afinados_web/components/offer_shelf.ex:31
+#, elixir-autogen, elixir-format
+msgid "opens an external site"
+msgstr ""
