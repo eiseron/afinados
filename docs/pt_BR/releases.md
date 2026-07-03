@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.4.0
+
+- **Recomendações:** o Afinados passou a exibir uma seção de recomendações de produtos de terceiros (cursos e peças) selecionados pela nossa curadoria, quando houver alguma disponível. Cada card avisa que não é um produto Afinados e que podemos receber uma comissão se você comprar pelo link.
+
 ## 0.3.4
 
 - **Documentação onde você precisa:** cada ferramenta agora tem um link direto para a página da documentação que a explica, e cada página da documentação leva de volta à ferramenta — dá pra ir e voltar entre usar o Afinados e entender como funciona sem procurar a página.

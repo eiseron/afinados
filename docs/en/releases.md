@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.4.0
+
+- **Recommendations:** Afinados now shows a section of curated third-party recommendations (courses and parts) whenever any are available. Each card makes clear it is not an Afinados product and that we may earn a commission if you buy through the link.
+
 ## 0.3.4
 
 - **Docs right where you need them:** each tool now links straight to the documentation page that explains it, and every doc page links back to the tool — so you can move between using Afinados and reading how it works without hunting for the page.
