@@ -594,3 +594,12 @@ msgstr "Ver produto"
 #, elixir-autogen, elixir-format
 msgid "opens an external site"
 msgstr "abre um site externo"
+#: lib/afinados_web/live/admin/home_live.ex:13
+#, elixir-autogen, elixir-format
+msgid "Admin"
+msgstr "Admin"
+
+#: lib/afinados_web/live/admin/home_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "Offer management will live here."
+msgstr "A gestão de ofertas ficará aqui."

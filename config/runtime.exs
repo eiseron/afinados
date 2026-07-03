@@ -50,4 +50,13 @@ if config_env() in [:prod, :preview] do
            environment: config_env(),
            release: to_string(Application.spec(:afinados, :vsn))
          )
+
+  admin_audiences =
+    "ADMIN_ACCESS_AUDIENCES" |> System.get_env("") |> String.split(",", trim: true)
+
+  config :afinados, AfinadosWeb.AdminAccessPlug,
+    enabled: config_env() == :prod,
+    audiences: admin_audiences,
+    issuer: System.get_env("ADMIN_ACCESS_ISSUER"),
+    certs_url: System.get_env("ADMIN_ACCESS_CERTS_URL")
 end

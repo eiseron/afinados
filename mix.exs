@@ -88,6 +88,7 @@ defmodule Afinados.MixProject do
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.16"},
       {:req, "~> 0.5"},
+      {:jose, "~> 1.11"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 1.0"},

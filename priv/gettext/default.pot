@@ -269,3 +269,12 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "opens an external site"
 msgstr ""
+#: lib/afinados_web/live/admin/home_live.ex:13
+#, elixir-autogen, elixir-format
+msgid "Admin"
+msgstr ""
+
+#: lib/afinados_web/live/admin/home_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "Offer management will live here."
+msgstr ""

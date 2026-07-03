@@ -18,6 +18,10 @@ defmodule AfinadosWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :admin do
+    plug(AfinadosWeb.AdminAccessPlug)
+  end
+
   defp put_csp_nonce(conn, _opts) do
     nonce = 16 |> :crypto.strong_rand_bytes() |> Base.url_encode64(padding: false)
 
@@ -61,6 +65,14 @@ defmodule AfinadosWeb.Router do
       live("/carburetion/setups", SetupLive)
       live("/carburetion/setups/:id", SetupLive)
       live("/carburetion/intake-sizing", IntakeSizingLive)
+    end
+  end
+
+  scope "/admin", AfinadosWeb.Admin do
+    pipe_through([:browser, :admin])
+
+    live_session :admin, on_mount: [AfinadosWeb.RestoreLocale, AfinadosWeb.Admin.RequireAdmin] do
+      live("/", HomeLive)
     end
   end
 
