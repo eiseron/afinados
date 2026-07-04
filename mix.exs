@@ -13,7 +13,7 @@ defmodule Afinados.MixProject do
       aliases: aliases(),
       deps: deps(),
       test_coverage: [
-        summary: [threshold: 90],
+        tool: ExCoveralls,
         ignore_modules: [
           Afinados.Application,
           Afinados.Mailer,
@@ -94,7 +94,8 @@ defmodule Afinados.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 
