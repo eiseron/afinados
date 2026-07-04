@@ -43,4 +43,8 @@ defmodule Afinados.Carburetion.IntakeSizing do
     n = EngineConfig.pulse_divisor(config)
     velocity * 10 * n * :math.pi() * diameter * diameter / (cc * ev)
   end
+
+  def rpm_for_velocity(diameter, velocity, _engine)
+      when is_number(diameter) and diameter > 0 and is_number(velocity) and velocity <= 0,
+      do: 0.0
 end

@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.5.1
+
+- **Stability:** fixed a crash in the intake sizing tool that occurred with high-K injection configs (K above 0.90), where the computed anemic velocity threshold dropped below zero.
+
 ## 0.5.0
 
 - **Admin panel:** new panel at `/admin` for managing the product recommendations shown in the app. Lets the team create, edit and delete offers, choose which screen each one appears on, and toggle them individually. Available to the Eiseron team only.

@@ -282,6 +282,22 @@ defmodule Afinados.Carburetion.IntakeSizingTest do
 
       assert_in_delta v_at_rpm, target, 1.0e-6
     end
+
+    test "returns 0.0 when velocity is zero (engine-stopped boundary)" do
+      {:ok, displacement} = Displacement.new(125)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+      engine = %{displacement: displacement, ve: ve, config: @config}
+
+      assert IntakeSizing.rpm_for_velocity(22, 0.0, engine) === 0.0
+    end
+
+    test "returns 0.0 when velocity is negative (high-K injection threshold underflow)" do
+      {:ok, displacement} = Displacement.new(125)
+      {:ok, ve} = VolumetricEfficiency.new(0.85)
+      engine = %{displacement: displacement, ve: ve, config: @config}
+
+      assert IntakeSizing.rpm_for_velocity(22, -5.0, engine) === 0.0
+    end
   end
 
   defp with_k(k, boost \\ 0.0) do

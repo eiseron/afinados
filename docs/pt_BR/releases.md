@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.5.1
+
+- **Estabilidade:** corrigido erro que derrubava a ferramenta de dimensionamento de admissão em configurações de injeção com K muito alto (acima de 0,90), onde o limiar anêmico de velocidade calculado ficava abaixo de zero.
+
 ## 0.5.0
 
 - **Painel admin:** novo painel em `/admin` para gerenciar as recomendações de produtos exibidas no app. Permite criar, editar e excluir ofertas, definir em qual tela cada uma aparece e ativá-las ou desativá-las individualmente. Disponível apenas para a equipe Eiseron.
