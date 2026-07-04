@@ -61,12 +61,9 @@ defmodule AfinadosWeb.Components.OfferShelf do
         <span :if={!@offer.image_url} class="offer-image offer-image-placeholder" aria-hidden="true" />
         <h3 class="offer-title">{@offer.title}</h3>
         <p :if={@offer.description} class="offer-description">{@offer.description}</p>
-        <span class="offer-cta">{cta_label(@offer.provider)}</span>
+        <span class="offer-cta">{gettext("View product")}</span>
       </a>
     </article>
     """
   end
-
-  defp cta_label("hotmart"), do: gettext("Learn more")
-  defp cta_label("aliexpress"), do: gettext("View product")
 end

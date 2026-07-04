@@ -9,6 +9,24 @@ defmodule Afinados.Offers do
   @spec list_offers() :: [Offer.t()]
   def list_offers, do: Repo.all(from o in Offer, order_by: [asc: o.position, asc: o.id])
 
+  @spec get_offer!(term()) :: Offer.t()
+  def get_offer!(id), do: Repo.get!(Offer, id)
+
+  @spec get_offer(term()) :: Offer.t() | nil
+  def get_offer(id), do: Repo.get(Offer, id)
+
+  @spec create_offer(map()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
+  def create_offer(attrs), do: %Offer{} |> Offer.changeset(attrs) |> Repo.insert()
+
+  @spec update_offer(Offer.t(), map()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
+  def update_offer(%Offer{} = offer, attrs), do: offer |> Offer.changeset(attrs) |> Repo.update()
+
+  @spec delete_offer(Offer.t()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
+  def delete_offer(%Offer{} = offer), do: Repo.delete(offer)
+
+  @spec change_offer(Offer.t(), map()) :: Ecto.Changeset.t()
+  def change_offer(%Offer{} = offer, attrs \\ %{}), do: Offer.changeset(offer, attrs)
+
   @spec build_offer_shelf([Offer.t()], String.t(), String.t()) :: [Offer.t()]
   def build_offer_shelf(offers, surface, locale) do
     offers

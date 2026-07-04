@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.5.0
+
+- **Admin panel:** new panel at `/admin` for managing the product recommendations shown in the app. Lets the team create, edit and delete offers, choose which screen each one appears on, and toggle them individually. Available to the Eiseron team only.
+
 ## 0.4.0
 
 - **Recommendations:** Afinados now shows a section of curated third-party recommendations (courses and parts) whenever any are available. Each card makes clear it is not an Afinados product and that we may earn a commission if you buy through the link.

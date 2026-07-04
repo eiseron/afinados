@@ -256,11 +256,6 @@ msgstr ""
 
 #: lib/afinados_web/components/offer_shelf.ex:59
 #, elixir-autogen, elixir-format
-msgid "Learn more"
-msgstr ""
-
-#: lib/afinados_web/components/offer_shelf.ex:60
-#, elixir-autogen, elixir-format
 msgid "View product"
 msgstr ""
 
@@ -274,7 +269,127 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: lib/afinados_web/live/admin/home_live.ex:14
+#: lib/afinados_web/live/admin/offer_live/index.ex:18
 #, elixir-autogen, elixir-format
-msgid "Offer management will live here."
+msgid "Offers"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:20
+#, elixir-autogen, elixir-format
+msgid "New offer"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:25
+#, elixir-autogen, elixir-format
+msgid "Position"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:26
+#, elixir-autogen, elixir-format
+msgid "Title"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:28
+#, elixir-autogen, elixir-format
+msgid "Locale"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid "Active"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid "yes"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid "no"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:41
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:45
+#, elixir-autogen, elixir-format
+msgid "Delete this offer?"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:47
+#, elixir-autogen, elixir-format
+msgid "Delete"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:24
+#, elixir-autogen, elixir-format
+msgid "Edit offer"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:41
+#, elixir-autogen, elixir-format
+msgid "Description"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:42
+#, elixir-autogen, elixir-format
+msgid "Target URL"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:43
+#, elixir-autogen, elixir-format
+msgid "Image URL"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:54
+#, elixir-autogen, elixir-format
+msgid "Save"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:57
+#, elixir-autogen, elixir-format
+msgid "Back to offers"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:77
+#, elixir-autogen, elixir-format
+msgid "Offer created"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:87
+#, elixir-autogen, elixir-format
+msgid "Offer updated"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:60
+#, elixir-autogen, elixir-format
+msgid "Could not delete offer"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:62
+#, elixir-autogen, elixir-format
+msgid "Offer deleted"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:81
+#, elixir-autogen, elixir-format
+msgid "Offer not found"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:31
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:44
+#, elixir-autogen, elixir-format
+msgid "Where it shows"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:96
+#, elixir-autogen, elixir-format
+msgid "Hub shelf"
 msgstr ""

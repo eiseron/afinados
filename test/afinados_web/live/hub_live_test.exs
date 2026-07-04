@@ -8,8 +8,6 @@ defmodule AfinadosWeb.HubLiveTest do
 
   defp create_offer(attrs) do
     base = %{
-      provider: "hotmart",
-      kind: "course",
       locale: "pt_BR",
       title: "Curso de exemplo",
       target_url: "https://go.hotmart.com/example",
@@ -65,20 +63,11 @@ defmodule AfinadosWeb.HubLiveTest do
     assert html =~ ~s(aria-label="abre um site externo")
   end
 
-  test "the hub differentiates offers by their call to action", %{conn: conn} do
-    create_offer(provider: "hotmart", kind: "course", title: "Curso avançado", position: 0)
-
-    create_offer(
-      provider: "aliexpress",
-      kind: "part",
-      title: "Carburador Nibbi PE28",
-      target_url: "https://s.click.aliexpress.com/nibbi",
-      position: 1
-    )
+  test "the hub renders an affiliate offer with a call to action", %{conn: conn} do
+    create_offer(title: "Curso avançado")
 
     {:ok, _view, html} = live(conn, "/")
 
-    assert html =~ "Saiba mais"
     assert html =~ "Ver produto"
   end
 
@@ -99,7 +88,7 @@ defmodule AfinadosWeb.HubLiveTest do
   end
 
   test "the hub omits the offer shelf when no offer targets the surface", %{conn: conn} do
-    create_offer(title: "Simulator-only offer", surfaces: ["simulator_shelf"])
+    create_offer(title: "Untagged offer", surfaces: [])
 
     {:ok, _view, html} = live(conn, "/")
 

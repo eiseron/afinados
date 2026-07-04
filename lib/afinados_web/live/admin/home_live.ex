@@ -11,7 +11,9 @@ defmodule AfinadosWeb.Admin.HomeLive do
     ~H"""
     <main class="admin">
       <h1>{gettext("Admin")}</h1>
-      <p>{gettext("Offer management will live here.")}</p>
+      <nav>
+        <.link navigate={~p"/admin/offers"}>{gettext("Offers")}</.link>
+      </nav>
     </main>
     """
   end

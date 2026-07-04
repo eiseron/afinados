@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.5.0
+
+- **Painel admin:** novo painel em `/admin` para gerenciar as recomendações de produtos exibidas no app. Permite criar, editar e excluir ofertas, definir em qual tela cada uma aparece e ativá-las ou desativá-las individualmente. Disponível apenas para a equipe Eiseron.
+
 ## 0.4.0
 
 - **Recomendações:** o Afinados passou a exibir uma seção de recomendações de produtos de terceiros (cursos e peças) selecionados pela nossa curadoria, quando houver alguma disponível. Cada card avisa que não é um produto Afinados e que podemos receber uma comissão se você comprar pelo link.

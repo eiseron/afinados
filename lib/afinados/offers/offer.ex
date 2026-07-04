@@ -1,17 +1,13 @@
 defmodule Afinados.Offers.Offer do
-  @moduledoc "A curated affiliate offer (Hotmart course or AliExpress part) shown as a third-party card."
+  @moduledoc false
 
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  @providers ~w(hotmart aliexpress)
-  @kinds ~w(course part)
-  @surfaces ~w(hub_shelf simulator_shelf jet_suggestion)
+  @surfaces ~w(hub_shelf)
 
   schema "offers" do
-    field :provider, :string
-    field :kind, :string
     field :locale, :string
     field :title, :string
     field :description, :string
@@ -25,18 +21,19 @@ defmodule Afinados.Offers.Offer do
     timestamps()
   end
 
-  @required ~w(provider kind locale title target_url)a
+  @required ~w(locale title target_url)a
   @optional ~w(description image_url context_tags surfaces position active)a
 
   @type t :: %__MODULE__{}
+
+  @spec surfaces() :: [String.t()]
+  def surfaces, do: @surfaces
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(offer, attrs) do
     offer
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
-    |> validate_inclusion(:provider, @providers)
-    |> validate_inclusion(:kind, @kinds)
     |> validate_subset(:surfaces, @surfaces)
     |> validate_number(:position, greater_than_or_equal_to: 0)
     |> validate_format(:target_url, ~r{^https://})

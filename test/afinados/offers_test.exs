@@ -6,8 +6,6 @@ defmodule Afinados.OffersTest do
 
   defp offer(attrs) do
     defaults = %{
-      provider: "hotmart",
-      kind: "course",
       locale: "pt_BR",
       title: "Offer",
       target_url: "https://example.com/x",
@@ -19,11 +17,25 @@ defmodule Afinados.OffersTest do
     struct(Offer, Map.merge(defaults, Map.new(attrs)))
   end
 
+  defp persisted_attrs(attrs \\ %{}) do
+    Map.merge(
+      %{
+        locale: "pt_BR",
+        title: "Offer",
+        target_url: "https://example.com/x",
+        surfaces: ["hub_shelf"],
+        position: 0,
+        active: true
+      },
+      Map.new(attrs)
+    )
+  end
+
   describe "build_offer_shelf/3" do
     test "keeps only offers assigned to the requested surface" do
       offers = [
         offer(title: "Hub", surfaces: ["hub_shelf"]),
-        offer(title: "Simulator", surfaces: ["simulator_shelf"])
+        offer(title: "Other", surfaces: [])
       ]
 
       shelf = Offers.build_offer_shelf(offers, "hub_shelf", "pt_BR")
@@ -66,10 +78,62 @@ defmodule Afinados.OffersTest do
     end
   end
 
+  describe "list_offers/0" do
+    test "returns offers ordered by position then id" do
+      {:ok, third} = Offers.create_offer(persisted_attrs(title: "Third", position: 5))
+      {:ok, first} = Offers.create_offer(persisted_attrs(title: "First", position: 1))
+      {:ok, second} = Offers.create_offer(persisted_attrs(title: "Second", position: 1))
+
+      assert Enum.map(Offers.list_offers(), & &1.id) == [first.id, second.id, third.id]
+    end
+  end
+
+  describe "create_offer/1" do
+    test "persists a valid offer" do
+      {:ok, offer} = Offers.create_offer(persisted_attrs(title: "Nibbi PE28"))
+
+      assert offer.title == "Nibbi PE28"
+    end
+
+    test "returns an invalid changeset for missing required fields" do
+      {:error, changeset} = Offers.create_offer(%{title: "No URL"})
+
+      assert "can't be blank" in errors_on(changeset).target_url
+    end
+  end
+
+  describe "update_offer/2" do
+    test "changes stored attributes" do
+      {:ok, offer} = Offers.create_offer(persisted_attrs(title: "Old"))
+      {:ok, updated} = Offers.update_offer(offer, %{title: "New"})
+
+      assert updated.title == "New"
+    end
+  end
+
+  describe "delete_offer/1" do
+    test "removes the offer" do
+      {:ok, offer} = Offers.create_offer(persisted_attrs())
+      {:ok, _} = Offers.delete_offer(offer)
+
+      assert Offers.list_offers() == []
+    end
+  end
+
+  describe "change_offer/2" do
+    test "returns a changeset for the given offer" do
+      assert %Ecto.Changeset{} = Offers.change_offer(%Offer{})
+    end
+
+    test "marks the changeset invalid for a missing title" do
+      changeset = Offers.change_offer(%Offer{}, %{title: ""})
+
+      refute changeset.valid?
+    end
+  end
+
   describe "changeset/2" do
     @valid_attrs %{
-      provider: "aliexpress",
-      kind: "part",
       locale: "pt_BR",
       title: "Carburador Nibbi PE28",
       target_url: "https://s.click.aliexpress.com/example",
@@ -78,12 +142,6 @@ defmodule Afinados.OffersTest do
 
     test "accepts a well-formed affiliate offer" do
       assert Offer.changeset(%Offer{}, @valid_attrs).valid?
-    end
-
-    test "rejects an unknown provider" do
-      changeset = Offer.changeset(%Offer{}, %{@valid_attrs | provider: "amazon"})
-
-      assert "is invalid" in errors_on(changeset).provider
     end
 
     test "rejects a surface outside the known set" do

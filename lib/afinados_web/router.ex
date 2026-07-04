@@ -73,6 +73,9 @@ defmodule AfinadosWeb.Router do
 
     live_session :admin, on_mount: [AfinadosWeb.RestoreLocale, AfinadosWeb.Admin.RequireAdmin] do
       live("/", HomeLive)
+      live("/offers", OfferLive.Index)
+      live("/offers/new", OfferLive.Form, :new)
+      live("/offers/:id/edit", OfferLive.Form, :edit)
     end
   end
 

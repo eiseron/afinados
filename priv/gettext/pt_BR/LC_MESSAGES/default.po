@@ -581,11 +581,6 @@ msgstr "Produtos de terceiros que selecionamos para você. Não são produtos Af
 
 #: lib/afinados_web/components/offer_shelf.ex:59
 #, elixir-autogen, elixir-format
-msgid "Learn more"
-msgstr "Saiba mais"
-
-#: lib/afinados_web/components/offer_shelf.ex:60
-#, elixir-autogen, elixir-format
 msgid "View product"
 msgstr "Ver produto"
 
@@ -599,7 +594,127 @@ msgstr "abre um site externo"
 msgid "Admin"
 msgstr "Admin"
 
-#: lib/afinados_web/live/admin/home_live.ex:14
+#: lib/afinados_web/live/admin/offer_live/index.ex:18
 #, elixir-autogen, elixir-format
-msgid "Offer management will live here."
-msgstr "A gestão de ofertas ficará aqui."
+msgid "Offers"
+msgstr "Ofertas"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:20
+#, elixir-autogen, elixir-format
+msgid "New offer"
+msgstr "Nova oferta"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:25
+#, elixir-autogen, elixir-format
+msgid "Position"
+msgstr "Posição"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:26
+#, elixir-autogen, elixir-format
+msgid "Title"
+msgstr "Título"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:28
+#, elixir-autogen, elixir-format
+msgid "Locale"
+msgstr "Idioma"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid "Active"
+msgstr "Ativa"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid "yes"
+msgstr "sim"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid "no"
+msgstr "não"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:41
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr "Editar"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:45
+#, elixir-autogen, elixir-format
+msgid "Delete this offer?"
+msgstr "Excluir esta oferta?"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:47
+#, elixir-autogen, elixir-format
+msgid "Delete"
+msgstr "Excluir"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:24
+#, elixir-autogen, elixir-format
+msgid "Edit offer"
+msgstr "Editar oferta"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:41
+#, elixir-autogen, elixir-format
+msgid "Description"
+msgstr "Descrição"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:42
+#, elixir-autogen, elixir-format
+msgid "Target URL"
+msgstr "URL de destino"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:43
+#, elixir-autogen, elixir-format
+msgid "Image URL"
+msgstr "URL da imagem"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:54
+#, elixir-autogen, elixir-format
+msgid "Save"
+msgstr "Salvar"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:57
+#, elixir-autogen, elixir-format
+msgid "Back to offers"
+msgstr "Voltar para ofertas"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:77
+#, elixir-autogen, elixir-format
+msgid "Offer created"
+msgstr "Oferta criada"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:87
+#, elixir-autogen, elixir-format
+msgid "Offer updated"
+msgstr "Oferta atualizada"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:60
+#, elixir-autogen, elixir-format
+msgid "Could not delete offer"
+msgstr "Não foi possível excluir a oferta"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:62
+#, elixir-autogen, elixir-format
+msgid "Offer deleted"
+msgstr "Oferta excluída"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:81
+#, elixir-autogen, elixir-format
+msgid "Offer not found"
+msgstr "Oferta não encontrada"
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:31
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Ações"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:44
+#, elixir-autogen, elixir-format
+msgid "Where it shows"
+msgstr "Onde aparece"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:96
+#, elixir-autogen, elixir-format
+msgid "Hub shelf"
+msgstr "Vitrine do hub"
