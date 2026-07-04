@@ -18,7 +18,7 @@ A Eiseron LTDA (CNPJ 41.516.538/0001-30) é a controladora dos dados tratados pe
 
 - **Cookie de sessão.** Um único cookie assinado de primeira parte, estritamente necessário. Ele guarda dois valores distintos: o segredo usado na proteção contra CSRF (segurança) e um token aleatório de convidado, que liga seus acertos salvos a este navegador sem cadastro. Os dois não são o mesmo valor. Não identificam você pessoalmente e não são usados para rastreio nem publicidade.
 - **Acertos salvos.** Dados técnicos de carburador (agulha, gicles, clip, calço, venturi). Não são dados pessoais.
-- **Logs de erro.** Quando algo falha, registramos o erro (que pode incluir IP e identificação do navegador) para diagnóstico e segurança. A coleta é feita em infraestrutura própria (GlitchTip self-hosted), não por terceiros.
+- **Logs de erro.** Quando algo falha, registramos o erro para diagnóstico e segurança. **Antes de armazenar, removemos identificadores diretos como o IP e a identificação do navegador**, de modo que o registro guardado é de-identificado. A coleta e o processamento usam ferramenta própria auto-hospedada (OpenObserve); o armazenamento se apoia no Cloudflare R2 como operador.
 - **Métricas de uso.** Usamos o Cloudflare Web Analytics, uma analytics **agregada e sem cookies**, que conta visitas e páginas sem rastrear indivíduos e sem criar perfil.
 - **Entrega e proteção (Cloudflare).** Para servir e proteger o site, a Cloudflare processa o IP de quem acessa.
 
@@ -30,11 +30,11 @@ O cookie de sessão é tratado como **estritamente necessário** ao serviço. Lo
 
 ## Onde os dados ficam e segurança
 
-O aplicativo, o banco de dados e os logs de erro rodam em servidor no **Brasil**. Adotamos medidas de segurança razoáveis para proteger o serviço, e os backups são cifrados e guardados fora do servidor.
+O aplicativo, o banco de dados e o monitoramento de erros rodam em **servidores fora do Brasil** (infraestrutura própria auto-hospedada), e os logs de erro **de-identificados** são armazenados no **Cloudflare R2**, também fora do Brasil. Adotamos medidas de segurança razoáveis para proteger o serviço, e os backups são cifrados e guardados fora do servidor.
 
 ## Compartilhamento e transferência internacional
 
-Não vendemos seus dados nem os compartilhamos para marketing. Para entregar e proteger o site, usamos a Cloudflare como operadora; por usar a rede global dela, seu IP pode ser processado em servidores **fora do Brasil**, sujeito às salvaguardas contratuais da Cloudflare. As demais operações ficam em infraestrutura própria no Brasil.
+Não vendemos seus dados nem os compartilhamos para marketing. O serviço roda em **infraestrutura própria hospedada fora do Brasil**, e usamos a Cloudflare como operadora para entrega, proteção e armazenamento (Cloudflare R2). Por isso, seu IP e os logs de erro **de-identificados** podem ser processados em servidores **fora do Brasil**. Essas transferências internacionais se apoiam em salvaguardas contratuais e técnicas compatíveis com a LGPD.
 
 ## Links de recomendação e afiliação
 
@@ -42,7 +42,7 @@ O Afinados pode exibir recomendações de produtos de terceiros. Ao clicar em um
 
 ## Retenção e exclusão
 
-Seus acertos persistem enquanto o cookie e o registro existirem. Você pode **apagar acertos** a qualquer momento dentro da ferramenta, e limpar os cookies do navegador remove o vínculo com este dispositivo.
+Seus acertos persistem enquanto o cookie e o registro existirem. Você pode **apagar acertos** a qualquer momento dentro da ferramenta, e limpar os cookies do navegador remove o vínculo com este dispositivo. Os logs de erro de-identificados são retidos por até **90 dias** e depois descartados.
 
 ## Seus direitos
 

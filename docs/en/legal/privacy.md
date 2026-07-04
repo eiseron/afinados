@@ -17,7 +17,7 @@ Eiseron LTDA (CNPJ 41.516.538/0001-30) is the controller of the data processed b
 
 - **Session cookie.** A single signed first-party cookie, strictly necessary. It holds two distinct values: the secret used for CSRF protection (security) and a random guest token that links your saved setups to this browser without an account. The two are not the same value. Neither identifies you personally, and neither is used for tracking or advertising.
 - **Saved setups.** Technical carburetor data (needle, jets, clip, shim, venturi). This is not personal data.
-- **Error logs.** When something fails, we record the error (which may include IP and browser identification) for diagnostics and security. Collection runs on our own infrastructure (self-hosted GlitchTip), not a third party.
+- **Error logs.** When something fails, we record the error for diagnostics and security. **Before storing, we strip direct identifiers such as the IP and browser identification**, so the stored record is de-identified. Collection and processing use our own self-hosted tool (OpenObserve); storage relies on Cloudflare R2 as a processor.
 - **Usage metrics.** We use Cloudflare Web Analytics, an **aggregate, cookieless** analytics that counts visits and pages without tracking individuals and without building a profile.
 - **Delivery and protection (Cloudflare).** To serve and protect the site, Cloudflare processes the visitor's IP.
 
@@ -29,11 +29,11 @@ The session cookie is treated as **strictly necessary** to the service. Error lo
 
 ## Where data lives and security
 
-The application, the database, and the error logs run on a server in **Brazil**. We apply reasonable security measures to protect the service, and backups are encrypted and stored off the server.
+The application, the database, and error monitoring run on **servers outside Brazil** (our own self-hosted infrastructure), and the **de-identified** error logs are stored on **Cloudflare R2**, also outside Brazil. We apply reasonable security measures to protect the service, and backups are encrypted and stored off the server.
 
 ## Sharing and international transfer
 
-We do not sell your data or share it for marketing. To deliver and protect the site, we use Cloudflare as a processor; because it uses Cloudflare's global network, your IP may be processed on servers **outside Brazil**, subject to Cloudflare's contractual safeguards. The remaining operations stay on our own infrastructure in Brazil.
+We do not sell your data or share it for marketing. The service runs on **our own infrastructure hosted outside Brazil**, and we use Cloudflare as a processor for delivery, protection, and storage (Cloudflare R2). As a result, your IP and the **de-identified** error logs may be processed on servers **outside Brazil**. These international transfers rely on contractual and technical safeguards compatible with the LGPD.
 
 ## Recommendation links and affiliation
 
@@ -41,7 +41,7 @@ Afinados may show recommendations for third-party products. When you click one, 
 
 ## Retention and deletion
 
-Your setups persist while the cookie and the record exist. You can **delete setups** at any time inside the tool, and clearing your browser cookies removes the link to this device.
+Your setups persist while the cookie and the record exist. You can **delete setups** at any time inside the tool, and clearing your browser cookies removes the link to this device. De-identified error logs are retained for up to **90 days** and then discarded.
 
 ## Your rights
 
