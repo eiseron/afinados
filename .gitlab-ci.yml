@@ -1,15 +1,15 @@
 include:
   - project: eiseron/stack/ci
     file: /lock.yml
-    ref: v0.9.26
+    ref: v0.9.33
   - project: eiseron/stack/ci
     file: /templates/phoenix.yml
-    ref: v0.9.26
+    ref: v0.9.33
     inputs:
       app_name: afinados
   - project: eiseron/stack/ci
     file: /templates/preview-app.yml
-    ref: v0.9.26
+    ref: v0.9.33
     inputs:
       app_name: afinados
       mix_env: preview
@@ -33,7 +33,7 @@ include:
       sourcemaps_bucket: afinados-sourcemaps
   - project: eiseron/stack/ci
     file: /templates/coverage-gate.yml
-    ref: v0.9.26
+    ref: v0.9.33
 
 workflow:
   rules:
