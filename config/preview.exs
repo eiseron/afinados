@@ -21,3 +21,5 @@ config :logger, :default_formatter, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 config :afinados, dev_routes: true
+
+config :afinados, Afinados.Media, adapter: Afinados.Media.Local

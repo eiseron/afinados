@@ -403,3 +403,43 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Preview"
 msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:52
+#, elixir-autogen, elixir-format
+msgid "Or upload an image"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:66
+#, elixir-autogen, elixir-format
+msgid "Remove image"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:68
+#, elixir-autogen, elixir-format
+msgid "Remove"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:109
+#, elixir-autogen, elixir-format
+msgid "Could not upload the image"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:180
+#, elixir-autogen, elixir-format
+msgid "The image is too large (max 5 MB)"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:183
+#, elixir-autogen, elixir-format
+msgid "Only JPG, PNG or WebP images are allowed"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:185
+#, elixir-autogen, elixir-format
+msgid "Only one image is allowed"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:186
+#, elixir-autogen, elixir-format
+msgid "Invalid image"
+msgstr ""

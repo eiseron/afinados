@@ -728,3 +728,43 @@ msgstr "Prévia do card"
 #, elixir-autogen, elixir-format
 msgid "Preview"
 msgstr "Prévia"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:52
+#, elixir-autogen, elixir-format
+msgid "Or upload an image"
+msgstr "Ou envie uma imagem"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:66
+#, elixir-autogen, elixir-format
+msgid "Remove image"
+msgstr "Remover imagem"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:68
+#, elixir-autogen, elixir-format
+msgid "Remove"
+msgstr "Remover"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:109
+#, elixir-autogen, elixir-format
+msgid "Could not upload the image"
+msgstr "Não foi possível enviar a imagem"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:180
+#, elixir-autogen, elixir-format
+msgid "The image is too large (max 5 MB)"
+msgstr "A imagem é muito grande (máx 5 MB)"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:183
+#, elixir-autogen, elixir-format
+msgid "Only JPG, PNG or WebP images are allowed"
+msgstr "Apenas imagens JPG, PNG ou WebP são permitidas"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:185
+#, elixir-autogen, elixir-format
+msgid "Only one image is allowed"
+msgstr "Apenas uma imagem é permitida"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:186
+#, elixir-autogen, elixir-format
+msgid "Invalid image"
+msgstr "Imagem inválida"

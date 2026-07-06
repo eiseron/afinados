@@ -41,3 +41,5 @@ config :phoenix_live_view,
   enable_expensive_runtime_checks: true
 
 config :swoosh, :api_client, false
+
+config :afinados, Afinados.Media, adapter: Afinados.Media.Local

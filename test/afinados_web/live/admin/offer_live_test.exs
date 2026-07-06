@@ -149,6 +149,92 @@ defmodule AfinadosWeb.Admin.OfferLiveTest do
     end
   end
 
+  describe "Form image upload" do
+    test "uploads an image and stores its public url as the offer image_url", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      image =
+        file_input(view, "#offer-form", :image, [
+          %{name: "nibbi.png", content: "fake-png-bytes", type: "image/png"}
+        ])
+
+      assert render_upload(image, "nibbi.png")
+
+      view
+      |> form("#offer-form",
+        offer: %{
+          "locale" => "pt_BR",
+          "title" => "Carburador Nibbi PE28",
+          "target_url" => "https://s.click.aliexpress.com/example",
+          "surfaces" => ["hub_shelf"],
+          "position" => "0",
+          "active" => "true"
+        }
+      )
+      |> render_submit()
+
+      offer = List.last(Offers.list_offers())
+      assert offer.title == "Carburador Nibbi PE28"
+      assert offer.image_url =~ ~r{^https://img\.test\.local/offers/[0-9a-f-]+\.png$}
+    end
+
+    test "cancels an uploaded entry before saving", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      image =
+        file_input(view, "#offer-form", :image, [
+          %{name: "nibbi.png", content: "fake-png-bytes", type: "image/png"}
+        ])
+
+      render_upload(image, "nibbi.png")
+      assert has_element?(view, ".offer-upload-entry")
+
+      view
+      |> element("button[phx-click='cancel-upload']")
+      |> render_click()
+
+      refute has_element?(view, ".offer-upload-entry")
+    end
+
+    test "rejects a file whose type is not an accepted image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      image =
+        file_input(view, "#offer-form", :image, [
+          %{name: "notes.txt", content: "not an image", type: "text/plain"}
+        ])
+
+      assert {:error, [[_ref, :not_accepted]]} = render_upload(image, "notes.txt")
+    end
+
+    test "shows a friendly error message for an oversized image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      image =
+        file_input(view, "#offer-form", :image, [
+          %{name: "big.png", content: :binary.copy("x", 6_000_000), type: "image/png"}
+        ])
+
+      render_upload(image, "big.png")
+
+      assert has_element?(view, ".offer-upload-error", "A imagem é muito grande")
+    end
+
+    test "shows a friendly error message when more than one image is added", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      image =
+        file_input(view, "#offer-form", :image, [
+          %{name: "a.png", content: "a", type: "image/png"},
+          %{name: "b.png", content: "b", type: "image/png"}
+        ])
+
+      render_upload(image, "a.png")
+
+      assert has_element?(view, ".offer-upload-error", "Apenas uma imagem é permitida")
+    end
+  end
+
   describe "Form edit" do
     test "updates an existing offer", %{conn: conn} do
       offer = create_offer(title: "Titulo antigo")

@@ -16,3 +16,5 @@ config :afinados, AfinadosWeb.Endpoint,
 config :swoosh, api_client: Swoosh.ApiClient.Req
 config :swoosh, local: false
 config :logger, level: :info
+
+config :afinados, Afinados.Media, adapter: Afinados.Media.R2

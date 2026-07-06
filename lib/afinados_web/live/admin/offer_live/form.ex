@@ -5,11 +5,19 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
 
   import AfinadosWeb.Components.OfferShelf, only: [offer_card: 1]
 
+  alias Afinados.Media
   alias Afinados.Offers
   alias Afinados.Offers.Offer
 
   @impl true
   def mount(params, _session, socket) do
+    socket =
+      allow_upload(socket, :image,
+        accept: ~w(.jpg .jpeg .png .webp),
+        max_entries: 1,
+        max_file_size: 5_000_000
+      )
+
     {:ok, apply_action(socket, socket.assigns.live_action, params)}
   end
 
@@ -39,6 +47,32 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
           <.input field={@form[:description]} type="textarea" label={gettext("Description")} />
           <.input field={@form[:target_url]} label={gettext("Target URL")} />
           <.input field={@form[:image_url]} label={gettext("Image URL")} />
+
+          <div class="offer-upload" phx-drop-target={@uploads.image.ref}>
+            <label>{gettext("Or upload an image")}</label>
+            <.live_file_input upload={@uploads.image} />
+
+            <p :for={err <- upload_errors(@uploads.image)} class="offer-upload-error">
+              {upload_error_message(err)}
+            </p>
+
+            <div :for={entry <- @uploads.image.entries} class="offer-upload-entry">
+              <.live_img_preview entry={entry} class="offer-upload-preview" />
+              <button
+                type="button"
+                class="link-button"
+                phx-click="cancel-upload"
+                phx-value-ref={entry.ref}
+                aria-label={gettext("Remove image")}
+              >
+                {gettext("Remove")}
+              </button>
+              <p :for={err <- upload_errors(@uploads.image, entry)} class="offer-upload-error">
+                {upload_error_message(err)}
+              </p>
+            </div>
+          </div>
+
           <.input
             field={@form[:surfaces]}
             type="select"
@@ -67,7 +101,18 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
 
   @impl true
   def handle_event("save", %{"offer" => params}, socket) do
-    save_offer(socket, socket.assigns.live_action, params)
+    case put_uploaded_image(socket, params) do
+      {:ok, params} ->
+        save_offer(socket, socket.assigns.live_action, params)
+
+      {:error, _reason} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not upload the image"))}
+    end
+  end
+
+  @impl true
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :image, ref)}
   end
 
   defp apply_action(socket, :new, _params) do
@@ -117,6 +162,29 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
         {:noreply, assign_form(socket, changeset)}
     end
   end
+
+  defp put_uploaded_image(socket, params) do
+    uploaded =
+      consume_uploaded_entries(socket, :image, fn %{path: path}, entry ->
+        {:ok, binary} = :file.read_file(path)
+        key = Media.key(entry.client_name)
+        {:ok, Media.put(key, binary, entry.client_type)}
+      end)
+
+    case uploaded do
+      [{:ok, url} | _] -> {:ok, Map.put(params, "image_url", url)}
+      [{:error, reason} | _] -> {:error, reason}
+      [] -> {:ok, params}
+    end
+  end
+
+  defp upload_error_message(:too_large), do: gettext("The image is too large (max 5 MB)")
+
+  defp upload_error_message(:not_accepted),
+    do: gettext("Only JPG, PNG or WebP images are allowed")
+
+  defp upload_error_message(:too_many_files), do: gettext("Only one image is allowed")
+  defp upload_error_message(_), do: gettext("Invalid image")
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     socket

@@ -17,7 +17,7 @@ defmodule AfinadosWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico)
+  def static_paths, do: ~w(assets fonts images favicon.ico uploads)
 
   def router do
     quote do

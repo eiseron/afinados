@@ -35,3 +35,7 @@ afinados-*.tar
 npm-debug.log
 /assets/node_modules/
 
+
+# Ephemeral local media uploads (preview); keep the dir, ignore contents
+/priv/static/uploads/*
+!/priv/static/uploads/.gitkeep

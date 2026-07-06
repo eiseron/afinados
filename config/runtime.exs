@@ -59,4 +59,11 @@ if config_env() in [:prod, :preview] do
     audiences: admin_audiences,
     issuer: System.get_env("ADMIN_ACCESS_ISSUER"),
     certs_url: System.get_env("ADMIN_ACCESS_CERTS_URL")
+
+  config :afinados, Afinados.Media.R2,
+    bucket: System.get_env("MEDIA_R2_BUCKET"),
+    endpoint: System.get_env("MEDIA_R2_ENDPOINT"),
+    access_key_id: System.get_env("MEDIA_R2_ACCESS_KEY_ID"),
+    secret_access_key: System.get_env("MEDIA_R2_SECRET_ACCESS_KEY"),
+    public_base_url: System.get_env("MEDIA_PUBLIC_BASE_URL")
 end
