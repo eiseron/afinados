@@ -42,7 +42,7 @@ defmodule AfinadosWeb.Router do
         "default-src 'self'",
         "script-src 'self' 'nonce-#{nonce}' #{static}",
         "style-src 'self' #{static}",
-        "img-src 'self' #{static}",
+        "img-src 'self' blob: #{static}",
         "font-src 'self' #{static}"
       ],
       "; "

@@ -28,6 +28,7 @@ defmodule AfinadosWeb.Components.OfferShelf do
   end
 
   attr :offer, Offer, required: true
+  slot :image
 
   @spec offer_card(map()) :: Phoenix.LiveView.Rendered.t()
   def offer_card(assigns) do
@@ -51,14 +52,19 @@ defmodule AfinadosWeb.Components.OfferShelf do
             />
           </svg>
         </span>
+        {render_slot(@image)}
         <img
-          :if={@offer.image_url}
+          :if={@image == [] && @offer.image_url}
           src={@offer.image_url}
           alt=""
           class="offer-image"
           loading="lazy"
         />
-        <span :if={!@offer.image_url} class="offer-image offer-image-placeholder" aria-hidden="true" />
+        <span
+          :if={@image == [] && !@offer.image_url}
+          class="offer-image offer-image-placeholder"
+          aria-hidden="true"
+        />
         <h3 class="offer-title">{@offer.title}</h3>
         <p :if={@offer.description} class="offer-description">{@offer.description}</p>
         <span class="offer-cta">{gettext("View product")}</span>

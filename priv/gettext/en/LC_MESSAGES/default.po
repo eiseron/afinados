@@ -11,134 +11,134 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/afinados_web/components/layouts.ex:41
-#: lib/afinados_web/components/layouts.ex:52
+#: lib/afinados_web/components/layouts.ex:73
+#: lib/afinados_web/components/layouts.ex:84
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:301
+#: lib/afinados_web/live/setup_live.ex:317
 #, elixir-autogen, elixir-format
 msgid "Clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:117
+#: lib/afinados_web/live/setup_live.ex:128
 #, elixir-autogen, elixir-format
 msgid "Free-area curve"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:275
+#: lib/afinados_web/live/setup_live.ex:291
 #, elixir-autogen, elixir-format
 msgid "Needle"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:281
+#: lib/afinados_web/live/setup_live.ex:297
 #, elixir-autogen, elixir-format
 msgid "Needle jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:264
+#: lib/afinados_web/live/setup_live.ex:280
 #, elixir-autogen, elixir-format
 msgid "Setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:307
+#: lib/afinados_web/live/setup_live.ex:323
 #, elixir-autogen, elixir-format
 msgid "Shim (hundredths of mm)"
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:47
+#: lib/afinados_web/components/layouts.ex:79
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:310
+#: lib/afinados_web/live/setup_live.ex:326
 #, elixir-autogen, elixir-format
 msgid "Venturi (mm)"
 msgstr ""
 
-#: lib/afinados_web/components/layouts.ex:36
+#: lib/afinados_web/components/layouts.ex:68
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:319
+#: lib/afinados_web/live/setup_live.ex:335
 #, elixir-autogen, elixir-format
 msgid "Save setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:223
+#: lib/afinados_web/live/setup_live.ex:239
 #, elixir-autogen, elixir-format
 msgid "Saved setups"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:452
+#: lib/afinados_web/live/setup_live.ex:486
 #, elixir-autogen, elixir-format
 msgid "clip"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:287
+#: lib/afinados_web/live/setup_live.ex:303
 #, elixir-autogen, elixir-format
 msgid "Main jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:294
+#: lib/afinados_web/live/setup_live.ex:310
 #, elixir-autogen, elixir-format
 msgid "Pilot jet"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:234
-#: lib/afinados_web/live/setup_live.ex:243
+#: lib/afinados_web/live/setup_live.ex:250
+#: lib/afinados_web/live/setup_live.ex:259
 #, elixir-autogen, elixir-format
 msgid "Compare"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:423
+#: lib/afinados_web/live/setup_live.ex:457
 #, elixir-autogen, elixir-format
 msgid "Current"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:432
+#: lib/afinados_web/live/setup_live.ex:466
 #, elixir-autogen, elixir-format
 msgid "Throttle (%)"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:433
+#: lib/afinados_web/live/setup_live.ex:467
 #, elixir-autogen, elixir-format
 msgid "Needle travel (mm)"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:220
+#: lib/afinados_web/live/setup_live.ex:231
 #, elixir-autogen, elixir-format
 msgid "Setup controls"
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:55
+#: lib/afinados_web/components/layouts/root.html.heex:90
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:62
+#: lib/afinados_web/live/setup_live.ex:73
 #, elixir-autogen, elixir-format
 msgid "Could not save the setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:254
+#: lib/afinados_web/live/setup_live.ex:270
 #, elixir-autogen, elixir-format
 msgid "Delete setup"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:253
+#: lib/afinados_web/live/setup_live.ex:269
 #, elixir-autogen, elixir-format
 msgid "Delete this setup?"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:79
+#: lib/afinados_web/live/setup_live.ex:90
 #, elixir-autogen, elixir-format
 msgid "Setup deleted"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:59
+#: lib/afinados_web/live/setup_live.ex:70
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Setup saved"
 msgstr ""
@@ -148,77 +148,77 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:226
+#: lib/afinados_web/live/setup_live.ex:242
 #, elixir-autogen, elixir-format
 msgid "No saved setups yet."
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:17
-#: lib/afinados_web/live/setup_live.ex:210
+#: lib/afinados_web/live/setup_live.ex:221
 #, elixir-autogen, elixir-format
 msgid "Comparative estimate only, not jetting advice."
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:215
+#: lib/afinados_web/live/setup_live.ex:226
 #, elixir-autogen, elixir-format
 msgid "Enter a valid setup to see the curve."
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:315
+#: lib/afinados_web/live/setup_live.ex:331
 #, elixir-autogen, elixir-format
 msgid "View by"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:387
+#: lib/afinados_web/live/setup_live.ex:403
 #, elixir-autogen, elixir-format
 msgid "Setup not found, redirecting."
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:16
+#: lib/afinados_web/live/hub_live.ex:26
 #, elixir-autogen, elixir-format
 msgid "Tools for tuning and preparing internal combustion engines."
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:23
-#: lib/afinados_web/live/setup_live.ex:218
+#: lib/afinados_web/live/hub_live.ex:33
+#: lib/afinados_web/live/setup_live.ex:229
 #, elixir-autogen, elixir-format
 msgid "Fuel-passage area"
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:25
+#: lib/afinados_web/live/hub_live.ex:35
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Estimate and compare the fuel-passage area across throttle position."
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:31
+#: lib/afinados_web/live/hub_live.ex:47
 #, elixir-autogen, elixir-format
 msgid "Coming soon"
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:33
+#: lib/afinados_web/live/hub_live.ex:42
 #, elixir-autogen, elixir-format
 msgid "Estimate the ideal carburetor or throttle body size for an engine."
 msgstr ""
 
-#: lib/afinados_web/live/hub_live.ex:32
+#: lib/afinados_web/live/hub_live.ex:41
+#: lib/afinados_web/live/intake_sizing_live.ex:213
 #, elixir-autogen, elixir-format
 msgid "Intake sizing"
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:9
-#: lib/afinados_web/components/layouts/root.html.heex:19
-#: lib/afinados_web/components/layouts/root.html.heex:34
+#: lib/afinados_web/components/layouts/root.html.heex:11
+#: lib/afinados_web/components/layouts/root.html.heex:21
+#: lib/afinados_web/components/layouts/root.html.heex:36
 #, elixir-autogen, elixir-format
 msgid "Afinados gathers calculation tools for engine tuning and preparation."
 msgstr ""
 
-#: lib/afinados_web/components/layouts/root.html.heex:15
-#: lib/afinados_web/components/layouts/root.html.heex:30
+#: lib/afinados_web/components/layouts/root.html.heex:17
+#: lib/afinados_web/components/layouts/root.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Afinados, calculation tools for engine tuning and preparation"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:269
+#: lib/afinados_web/live/setup_live.ex:285
 #, elixir-autogen, elixir-format
 msgid "Manufacturer"
 msgstr ""
@@ -233,13 +233,13 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: lib/afinados_web/live/setup_live.ex:234
 #: lib/afinados_web/live/intake_sizing_live.ex:218
+#: lib/afinados_web/live/setup_live.ex:234
 #, elixir-autogen, elixir-format
 msgid "How to use this tool"
 msgstr ""
 
-#: lib/afinados_web/live/intake_sizing_live.ex:283
+#: lib/afinados_web/live/intake_sizing_live.ex:285
 #, elixir-autogen, elixir-format
 msgid "How to use the advanced options"
 msgstr ""
@@ -254,62 +254,68 @@ msgstr ""
 msgid "Third-party products we selected for you. They are not Afinados products, and we may earn a commission if you buy through these links."
 msgstr ""
 
-#: lib/afinados_web/components/offer_shelf.ex:59
+#: lib/afinados_web/components/offer_shelf.ex:70
 #, elixir-autogen, elixir-format
 msgid "View product"
 msgstr ""
 
-
-#: lib/afinados_web/components/offer_shelf.ex:31
+#: lib/afinados_web/components/offer_shelf.ex:43
 #, elixir-autogen, elixir-format
 msgid "opens an external site"
 msgstr ""
+
 #: lib/afinados_web/live/admin/home_live.ex:13
 #, elixir-autogen, elixir-format
 msgid "Admin"
 msgstr ""
 
+#: lib/afinados_web/live/admin/home_live.ex:15
 #: lib/afinados_web/live/admin/offer_live/index.ex:18
 #, elixir-autogen, elixir-format
 msgid "Offers"
 msgstr ""
 
+#: lib/afinados_web/live/admin/offer_live/form.ex:136
 #: lib/afinados_web/live/admin/offer_live/index.ex:20
 #, elixir-autogen, elixir-format
 msgid "New offer"
 msgstr ""
 
+#: lib/afinados_web/live/admin/offer_live/form.ex:97
 #: lib/afinados_web/live/admin/offer_live/index.ex:25
 #, elixir-autogen, elixir-format
 msgid "Position"
 msgstr ""
 
+#: lib/afinados_web/live/admin/offer_live/form.ex:49
 #: lib/afinados_web/live/admin/offer_live/index.ex:26
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:28
+#: lib/afinados_web/live/admin/offer_live/form.ex:53
+#: lib/afinados_web/live/admin/offer_live/index.ex:27
 #, elixir-autogen, elixir-format
 msgid "Locale"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:29
+#: lib/afinados_web/live/admin/offer_live/form.ex:98
+#: lib/afinados_web/live/admin/offer_live/index.ex:28
 #, elixir-autogen, elixir-format
 msgid "Active"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:38
+#: lib/afinados_web/live/admin/offer_live/index.ex:37
 #, elixir-autogen, elixir-format
 msgid "yes"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:38
+#: lib/afinados_web/live/admin/offer_live/index.ex:37
 #, elixir-autogen, elixir-format
 msgid "no"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:41
+#: lib/afinados_web/live/admin/offer_live/index.ex:39
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""
@@ -324,122 +330,467 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:24
+#: lib/afinados_web/live/admin/offer_live/form.ex:144
 #, elixir-autogen, elixir-format
 msgid "Edit offer"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:41
+#: lib/afinados_web/live/admin/offer_live/form.ex:56
 #, elixir-autogen, elixir-format
 msgid "Description"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:42
+#: lib/afinados_web/live/admin/offer_live/form.ex:57
 #, elixir-autogen, elixir-format
 msgid "Target URL"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:43
+#: lib/afinados_web/live/admin/offer_live/form.ex:58
 #, elixir-autogen, elixir-format
 msgid "Image URL"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:54
+#: lib/afinados_web/live/admin/offer_live/form.ex:100
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:57
+#: lib/afinados_web/live/admin/offer_live/form.ex:104
 #, elixir-autogen, elixir-format
 msgid "Back to offers"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:77
+#: lib/afinados_web/live/admin/offer_live/form.ex:159
 #, elixir-autogen, elixir-format
 msgid "Offer created"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:87
+#: lib/afinados_web/live/admin/offer_live/form.ex:172
 #, elixir-autogen, elixir-format
 msgid "Offer updated"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:60
+#: lib/afinados_web/live/admin/offer_live/index.ex:67
 #, elixir-autogen, elixir-format
 msgid "Could not delete offer"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:62
+#: lib/afinados_web/live/admin/offer_live/index.ex:64
 #, elixir-autogen, elixir-format
 msgid "Offer deleted"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:81
+#: lib/afinados_web/live/admin/offer_live/form.ex:149
 #, elixir-autogen, elixir-format
 msgid "Offer not found"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:31
+#: lib/afinados_web/live/admin/offer_live/index.ex:29
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:44
+#: lib/afinados_web/live/admin/offer_live/form.ex:94
 #, elixir-autogen, elixir-format
 msgid "Where it shows"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:96
+#: lib/afinados_web/live/admin/offer_live/form.ex:210
 #, elixir-autogen, elixir-format
 msgid "Hub shelf"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:24
+#: lib/afinados_web/live/admin/offer_live/form.ex:32
 #, elixir-autogen, elixir-format
 msgid "Card preview"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:25
+#: lib/afinados_web/live/admin/offer_live/form.ex:33
 #, elixir-autogen, elixir-format
 msgid "Preview"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:52
+#: lib/afinados_web/live/admin/offer_live/form.ex:62
 #, elixir-autogen, elixir-format
 msgid "Or upload an image"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:66
+#: lib/afinados_web/live/admin/offer_live/form.ex:80
 #, elixir-autogen, elixir-format
 msgid "Remove image"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:68
+#: lib/afinados_web/live/admin/offer_live/form.ex:82
 #, elixir-autogen, elixir-format
 msgid "Remove"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:109
+#: lib/afinados_web/live/admin/offer_live/form.ex:123
 #, elixir-autogen, elixir-format
 msgid "Could not upload the image"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:180
+#: lib/afinados_web/live/admin/offer_live/form.ex:195
 #, elixir-autogen, elixir-format
 msgid "The image is too large (max 5 MB)"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:183
+#: lib/afinados_web/live/admin/offer_live/form.ex:198
 #, elixir-autogen, elixir-format
 msgid "Only JPG, PNG or WebP images are allowed"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:185
+#: lib/afinados_web/live/admin/offer_live/form.ex:200
 #, elixir-autogen, elixir-format
 msgid "Only one image is allowed"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/form.ex:186
+#: lib/afinados_web/live/admin/offer_live/form.ex:201
 #, elixir-autogen, elixir-format
 msgid "Invalid image"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:771
+#, elixir-autogen, elixir-format
+msgid "Acceptable"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:276
+#, elixir-autogen, elixir-format
+msgid "Advanced"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:234
+#, elixir-autogen, elixir-format
+msgid "Application"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:291
+#, elixir-autogen, elixir-format
+msgid "Application profile"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:810
+#, elixir-autogen, elixir-format
+msgid "Barrels per carburetor"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:319
+#, elixir-autogen, elixir-format
+msgid "Boost pressure (bar)"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:662
+#, elixir-autogen, elixir-format
+msgid "Car"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:838
+#, elixir-autogen, elixir-format
+msgid "Carburetor"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:666
+#, elixir-autogen, elixir-format
+msgid "Chainsaw"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:180
+#, elixir-autogen, elixir-format
+msgid "Color legend"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:693
+#, elixir-autogen, elixir-format
+msgid "Commute"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:701
+#: lib/afinados_web/live/intake_sizing_live.ex:709
+#: lib/afinados_web/live/intake_sizing_live.ex:717
+#: lib/afinados_web/live/intake_sizing_live.ex:725
+#: lib/afinados_web/live/intake_sizing_live.ex:733
+#: lib/afinados_web/live/intake_sizing_live.ex:741
+#: lib/afinados_web/live/intake_sizing_live.ex:753
+#, elixir-autogen, elixir-format
+msgid "Competition"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:679
+#, elixir-autogen, elixir-format
+msgid "Cruiser"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:828
+#, elixir-autogen, elixir-format
+msgid "Dedicated"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:247
+#, elixir-autogen, elixir-format
+msgid "Displacement (cm³)"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:685
+#, elixir-autogen, elixir-format
+msgid "Drag"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:815
+#, elixir-autogen, elixir-format
+msgid "Dual"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:822
+#, elixir-autogen, elixir-format
+msgid "Dual (DCOE, IDF, 2E)"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:78
+#, elixir-autogen, elixir-format
+msgid "Efficiency zone"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:228
+#, elixir-autogen, elixir-format
+msgid "Engine type"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:793
+#, elixir-autogen, elixir-format
+msgid "Engine's working regime"
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:49
+#, elixir-autogen, elixir-format
+msgid "Estimate the tuned exhaust geometry for a two-stroke engine."
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:210
+#, elixir-autogen, elixir-format
+msgid "Fill in the parameters to see the efficiency zone."
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:310
+#, elixir-autogen, elixir-format
+msgid "Firing interval (°)"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:691
+#, elixir-autogen, elixir-format
+msgid "Fishing"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:683
+#, elixir-autogen, elixir-format
+msgid "Hard enduro"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:686
+#, elixir-autogen, elixir-format
+msgid "Highway"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:764
+#, elixir-autogen, elixir-format
+msgid "Ideal"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:241
+#, elixir-autogen, elixir-format
+msgid "Induction"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:839
+#, elixir-autogen, elixir-format
+msgid "Injection"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:303
+#, elixir-autogen, elixir-format
+msgid "Intake manifold"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:664
+#, elixir-autogen, elixir-format
+msgid "Jetski"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:663
+#, elixir-autogen, elixir-format
+msgid "Kart"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:690
+#, elixir-autogen, elixir-format
+msgid "Leisure"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:692
+#, elixir-autogen, elixir-format
+msgid "Light"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:778
+#, elixir-autogen, elixir-format
+msgid "Low velocity"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:325
+#, elixir-autogen, elixir-format
+msgid "Maximum volumetric efficiency"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:668
+#, elixir-autogen, elixir-format
+msgid "Moped"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:684
+#, elixir-autogen, elixir-format
+msgid "Motocross"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:661
+#, elixir-autogen, elixir-format
+msgid "Motorcycle"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:807
+#, elixir-autogen, elixir-format
+msgid "Number of carburetors"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:254
+#, elixir-autogen, elixir-format
+msgid "Number of cylinders"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:806
+#, elixir-autogen, elixir-format
+msgid "Number of throttle bodies"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:682
+#, elixir-autogen, elixir-format
+msgid "Off-road"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:665
+#, elixir-autogen, elixir-format
+msgid "Outboard"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:801
+#, elixir-autogen, elixir-format
+msgid "Outside the working regime"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:223
+#, elixir-autogen, elixir-format
+msgid "Parameters"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:689
+#, elixir-autogen, elixir-format
+msgid "Race"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:687
+#, elixir-autogen, elixir-format
+msgid "Rally"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:785
+#, elixir-autogen, elixir-format
+msgid "Restrictive"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:829
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:814
+#: lib/afinados_web/live/intake_sizing_live.ex:821
+#, elixir-autogen, elixir-format
+msgid "Single"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:215
+#, elixir-autogen, elixir-format
+msgid "Sizing controls"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:700
+#: lib/afinados_web/live/intake_sizing_live.ex:708
+#: lib/afinados_web/live/intake_sizing_live.ex:716
+#: lib/afinados_web/live/intake_sizing_live.ex:724
+#: lib/afinados_web/live/intake_sizing_live.ex:732
+#: lib/afinados_web/live/intake_sizing_live.ex:740
+#: lib/afinados_web/live/intake_sizing_live.ex:752
+#, elixir-autogen, elixir-format
+msgid "Sport"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:680
+#, elixir-autogen, elixir-format
+msgid "Sporty"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:667
+#, elixir-autogen, elixir-format
+msgid "Stationary"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:746
+#, elixir-autogen, elixir-format
+msgid "Steady state"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:699
+#: lib/afinados_web/live/intake_sizing_live.ex:707
+#: lib/afinados_web/live/intake_sizing_live.ex:715
+#: lib/afinados_web/live/intake_sizing_live.ex:723
+#: lib/afinados_web/live/intake_sizing_live.ex:731
+#: lib/afinados_web/live/intake_sizing_live.ex:739
+#: lib/afinados_web/live/intake_sizing_live.ex:751
+#, elixir-autogen, elixir-format
+msgid "Stock"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:694
+#, elixir-autogen, elixir-format
+msgid "Synchronous"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:809
+#, elixir-autogen, elixir-format
+msgid "Throttle plates per body"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:681
+#, elixir-autogen, elixir-format
+msgid "Track"
+msgstr ""
+
+#: lib/afinados_web/live/hub_live.ex:48
+#, elixir-autogen, elixir-format
+msgid "Two-stroke exhaust sizing"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:678
+#: lib/afinados_web/live/intake_sizing_live.ex:695
+#, elixir-autogen, elixir-format
+msgid "Urban"
+msgstr ""
+
+#: lib/afinados_web/live/intake_sizing_live.ex:688
+#, elixir-autogen, elixir-format
+msgid "Work"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:64
+#, elixir-autogen, elixir-format
+msgid "Ideal ratio 16:9, recommended 640x360px"
 msgstr ""

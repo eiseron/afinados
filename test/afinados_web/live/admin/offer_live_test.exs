@@ -150,6 +150,26 @@ defmodule AfinadosWeb.Admin.OfferLiveTest do
   end
 
   describe "Form image upload" do
+    test "shows the ideal image ratio and dimensions as an upload hint", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      assert has_element?(view, ".offer-upload-hint", "16:9")
+      assert has_element?(view, ".offer-upload-hint", "640x360px")
+    end
+
+    test "shows the pending upload in the card preview before saving", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      image =
+        file_input(view, "#offer-form", :image, [
+          %{name: "nibbi.png", content: "fake-png-bytes", type: "image/png"}
+        ])
+
+      render_upload(image, "nibbi.png")
+
+      assert has_element?(view, ".offer-preview .offer-card img.offer-image")
+    end
+
     test "uploads an image and stores its public url as the offer image_url", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
 

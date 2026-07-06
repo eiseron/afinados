@@ -441,6 +441,12 @@ defmodule AfinadosWeb.SetupLiveTest do
     assert hd(get_resp_header(conn, "content-security-policy")) =~ "style-src 'self' #{static}"
   end
 
+  test "the response CSP allows blob images so live upload previews render", %{conn: conn} do
+    conn = get(conn, "/")
+
+    assert hd(get_resp_header(conn, "content-security-policy")) =~ "img-src 'self' blob:"
+  end
+
   test "the tool offers a contextual help link opening the interface docs in a new tab",
        %{conn: conn} do
     {:ok, view, _html} = live(conn, "/carburetion/setups")

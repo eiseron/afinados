@@ -32,7 +32,16 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
         <section class="offer-preview" aria-label={gettext("Card preview")}>
           <h2 class="offer-preview-title">{gettext("Preview")}</h2>
           <div class="offer-preview-card">
-            <.offer_card offer={@preview} />
+            <.offer_card offer={@preview}>
+              <:image :if={@uploads.image.entries != []}>
+                <.live_img_preview
+                  :for={entry <- @uploads.image.entries}
+                  entry={entry}
+                  id={"card-preview-#{entry.ref}"}
+                  class="offer-image"
+                />
+              </:image>
+            </.offer_card>
           </div>
         </section>
 
@@ -49,7 +58,12 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
           <.input field={@form[:image_url]} label={gettext("Image URL")} />
 
           <div class="offer-upload" phx-drop-target={@uploads.image.ref}>
-            <label>{gettext("Or upload an image")}</label>
+            <label>
+              {gettext("Or upload an image")}
+              <small class="offer-upload-hint">
+                {gettext("Ideal ratio 16:9, recommended 640x360px")}
+              </small>
+            </label>
             <.live_file_input upload={@uploads.image} />
 
             <p :for={err <- upload_errors(@uploads.image)} class="offer-upload-error">

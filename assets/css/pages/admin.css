@@ -127,6 +127,13 @@
   border-radius: var(--radius-sm);
 }
 
+.offer-upload-hint {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: normal;
+}
+
 .offer-upload-entry {
   display: grid;
   gap: var(--space-2);
