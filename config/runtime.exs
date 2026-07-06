@@ -2,6 +2,21 @@ import Config
 
 config :sentry, Eiseron.ErrorMonitoring.config()
 
+observability = [
+  service: :afinados,
+  env: config_env(),
+  version: to_string(Application.spec(:afinados, :vsn) || "0.0.0"),
+  otlp_endpoint: System.get_env("OBSERVABILITY_OTLP_ENDPOINT"),
+  phoenix: [adapter: :bandit],
+  ecto: [[:afinados, :repo]]
+]
+
+config :afinados, :observability, observability
+
+for {otel_app, otel_config} <- Eiseron.Observability.config(observability) do
+  config otel_app, otel_config
+end
+
 if System.get_env("PHX_SERVER") do
   config :afinados, AfinadosWeb.Endpoint, server: true
 end
