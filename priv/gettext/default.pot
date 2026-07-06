@@ -393,3 +393,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Hub shelf"
 msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:24
+#, elixir-autogen, elixir-format
+msgid "Card preview"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:25
+#, elixir-autogen, elixir-format
+msgid "Preview"
+msgstr ""

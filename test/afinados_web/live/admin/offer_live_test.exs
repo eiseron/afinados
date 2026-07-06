@@ -110,6 +110,45 @@ defmodule AfinadosWeb.Admin.OfferLiveTest do
     end
   end
 
+  describe "Form preview" do
+    test "renders a live card preview reflecting the form input", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      assert has_element?(view, "section.offer-preview .offer-card")
+
+      view
+      |> form("#offer-form",
+        offer: %{
+          "locale" => "pt_BR",
+          "title" => "Carburador Nibbi PE28",
+          "description" => "Reposição para preparação",
+          "image_url" => "https://cdn.example/nibbi.jpg",
+          "target_url" => "https://s.click.aliexpress.com/example"
+        }
+      )
+      |> render_change()
+
+      assert has_element?(view, ".offer-preview .offer-title", "Carburador Nibbi PE28")
+      assert has_element?(view, ".offer-preview .offer-description", "Reposição para preparação")
+
+      assert has_element?(
+               view,
+               ".offer-preview img.offer-image[src=\"https://cdn.example/nibbi.jpg\"]"
+             )
+    end
+
+    test "shows the image placeholder in the preview when no image_url is set", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers/new")
+
+      view
+      |> form("#offer-form", offer: %{"locale" => "pt_BR", "title" => "Sem imagem"})
+      |> render_change()
+
+      assert has_element?(view, ".offer-preview .offer-image-placeholder")
+      assert has_element?(view, ".offer-preview .offer-title", "Sem imagem")
+    end
+  end
+
   describe "Form edit" do
     test "updates an existing offer", %{conn: conn} do
       offer = create_offer(title: "Titulo antigo")

@@ -718,3 +718,13 @@ msgstr "Onde aparece"
 #, elixir-autogen, elixir-format
 msgid "Hub shelf"
 msgstr "Vitrine do hub"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:24
+#, elixir-autogen, elixir-format
+msgid "Card preview"
+msgstr "Prévia do card"
+
+#: lib/afinados_web/live/admin/offer_live/form.ex:25
+#, elixir-autogen, elixir-format
+msgid "Preview"
+msgstr "Prévia"

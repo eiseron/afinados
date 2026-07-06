@@ -82,3 +82,39 @@
   background: none;
   text-decoration: underline;
 }
+
+.offer-editor {
+  display: grid;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .offer-editor {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+
+  .offer-editor .offer-preview {
+    order: 2;
+    align-self: start;
+    position: sticky;
+    top: var(--space-4);
+    max-height: calc(100dvh - var(--space-8));
+    overflow: auto;
+  }
+
+  .offer-editor #offer-form {
+    order: 1;
+    min-width: 0;
+  }
+}
+
+.offer-preview-title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+}
+
+.offer-preview-card {
+  max-width: 20rem;
+}

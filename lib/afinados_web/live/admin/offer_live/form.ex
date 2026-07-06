@@ -3,6 +3,8 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
 
   use AfinadosWeb, :live_view
 
+  import AfinadosWeb.Components.OfferShelf, only: [offer_card: 1]
+
   alias Afinados.Offers
   alias Afinados.Offers.Offer
 
@@ -18,29 +20,38 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
       <Layouts.flash_group flash={@flash} />
       <h1>{@page_title}</h1>
 
-      <.form for={@form} id="offer-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:title]} label={gettext("Title")} />
-        <.input
-          field={@form[:locale]}
-          type="select"
-          label={gettext("Locale")}
-          options={AfinadosWeb.Locale.locales()}
-        />
-        <.input field={@form[:description]} type="textarea" label={gettext("Description")} />
-        <.input field={@form[:target_url]} label={gettext("Target URL")} />
-        <.input field={@form[:image_url]} label={gettext("Image URL")} />
-        <.input
-          field={@form[:surfaces]}
-          type="select"
-          multiple
-          label={gettext("Where it shows")}
-          options={surface_options()}
-        />
-        <.input field={@form[:position]} type="number" label={gettext("Position")} />
-        <.input field={@form[:active]} type="checkbox" label={gettext("Active")} />
+      <div class="offer-editor">
+        <section class="offer-preview" aria-label={gettext("Card preview")}>
+          <h2 class="offer-preview-title">{gettext("Preview")}</h2>
+          <div class="offer-preview-card">
+            <.offer_card offer={@preview} />
+          </div>
+        </section>
 
-        <button type="submit">{gettext("Save")}</button>
-      </.form>
+        <.form for={@form} id="offer-form" phx-change="validate" phx-submit="save">
+          <.input field={@form[:title]} label={gettext("Title")} />
+          <.input
+            field={@form[:locale]}
+            type="select"
+            label={gettext("Locale")}
+            options={AfinadosWeb.Locale.locales()}
+          />
+          <.input field={@form[:description]} type="textarea" label={gettext("Description")} />
+          <.input field={@form[:target_url]} label={gettext("Target URL")} />
+          <.input field={@form[:image_url]} label={gettext("Image URL")} />
+          <.input
+            field={@form[:surfaces]}
+            type="select"
+            multiple
+            label={gettext("Where it shows")}
+            options={surface_options()}
+          />
+          <.input field={@form[:position]} type="number" label={gettext("Position")} />
+          <.input field={@form[:active]} type="checkbox" label={gettext("Active")} />
+
+          <button type="submit">{gettext("Save")}</button>
+        </.form>
+      </div>
 
       <.link navigate={~p"/admin/offers"}>{gettext("Back to offers")}</.link>
     </main>
@@ -108,7 +119,9 @@ defmodule AfinadosWeb.Admin.OfferLive.Form do
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
-    assign(socket, form: to_form(changeset, as: :offer))
+    socket
+    |> assign(form: to_form(changeset, as: :offer))
+    |> assign(preview: Ecto.Changeset.apply_changes(changeset))
   end
 
   defp surface_labels do
