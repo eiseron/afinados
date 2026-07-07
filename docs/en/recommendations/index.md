@@ -14,11 +14,9 @@ Recommendations are **not generic ads** and not space sold to the highest bidder
 
 ## What they are
 
-Each card is a suggestion for a product sold by a third party. When you tap it, you are taken to the seller's site, which opens in a new tab. The card always makes clear that it:
+Each card is a suggestion for a product sold by a third party and works as an **external link**: when you tap it, you are taken to the seller's site, which opens in a new tab (the card carries an icon showing it opens an external site).
 
-- **is not an Afinados product** and is not supplied by us;
-- is a link to an external site;
-- may involve affiliation (see below).
+The notice that these recommendations are not Afinados products and may involve affiliation appears **once, right above the section**, not on each card.
 
 ## Not Afinados products
 
@@ -26,7 +24,7 @@ Afinados does not sell these products and is not part of the transaction. Any pu
 
 ## Affiliate links
 
-Some links are affiliate links: if you buy through them, **we may earn a commission**. This **does not raise the price** for you and does not change what we recommend, it is a way to support keeping Afinados running. Each card tells you when it may earn a commission.
+Some links are affiliate links: if you buy through them, **we may earn a commission**. This **does not raise the price** for you and does not change what we recommend, it is a way to support keeping Afinados running. This affiliate notice appears in the text right above the recommendations section.
 
 ## Where they appear
 

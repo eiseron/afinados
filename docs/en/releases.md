@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.5.4
+
+- **Documentation:** the recommendations page now describes accurately what each card shows (the affiliation notice appears once, above the section, not on each card).
+
 ## 0.5.3
 
 - **Fix:** images uploaded from the offers panel now display correctly in the app (a security header was blocking the image domain).

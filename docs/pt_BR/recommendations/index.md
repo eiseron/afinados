@@ -14,11 +14,9 @@ As recomendações **não são anúncios genéricos** nem espaço vendido a quem
 
 ## O que são
 
-Cada card é uma sugestão de um produto vendido por terceiros. Ao tocar nele, você é levado ao site do vendedor, que abre em uma nova aba. O card sempre deixa claro que:
+Cada card é uma sugestão de um produto vendido por terceiros e funciona como um **link externo**: ao tocar nele, você é levado ao site do vendedor, que abre em uma nova aba (o card traz um ícone indicando que abre um site externo).
 
-- **não é um produto Afinados** e não é fornecido por nós;
-- é um link para um site externo;
-- pode envolver afiliação (veja abaixo).
+O aviso de que essas recomendações não são produtos Afinados e podem envolver afiliação aparece **uma vez, logo acima da seção** de recomendações, e não em cada card.
 
 ## Não são produtos Afinados
 
@@ -26,7 +24,7 @@ O Afinados não vende esses produtos e não participa da transação. A compra �
 
 ## Links de afiliação
 
-Alguns links são de afiliação: se você comprar através deles, **podemos receber uma comissão**. Isso **não aumenta o preço** para você e não muda o que recomendamos, é uma forma de apoiar a manutenção do Afinados. Cada card avisa quando pode gerar comissão.
+Alguns links são de afiliação: se você comprar através deles, **podemos receber uma comissão**. Isso **não aumenta o preço** para você e não muda o que recomendamos, é uma forma de apoiar a manutenção do Afinados. Esse aviso de afiliação aparece no texto logo acima da seção de recomendações.
 
 ## Onde aparecem
 

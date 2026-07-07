@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.5.4
+
+- **Documentação:** a página de recomendações passou a descrever com precisão o que cada card mostra (o aviso de afiliação aparece uma vez, acima da seção, e não em cada card).
+
 ## 0.5.3
 
 - **Correção:** as imagens enviadas pelo painel de ofertas agora aparecem corretamente no app (o cabeçalho de segurança estava bloqueando o domínio de imagens).
