@@ -70,7 +70,7 @@ defmodule Afinados.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:eiseron_core, git: "https://github.com/eiseron/core.git", tag: "v0.4.0"},
+      {:eiseron_core, git: "https://github.com/eiseron/core.git", tag: "v0.5.0"},
       {:eiseron_devtools,
        git: "https://github.com/eiseron/devtools.git",
        tag: "v0.1.0",
