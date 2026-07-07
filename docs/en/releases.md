@@ -7,6 +7,12 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.5.2
+
+- **Admin panel:** the offers panel can now upload the image straight from the form, with a live card preview as you edit, and activate or deactivate several offers at once (with "select all") to sync the launch of a batch of recommendations. Available to the Eiseron team only.
+- **Clearer recommendations:** a new documentation page explains that the recommendations are hand-picked by our curation, not generic ads, and how the affiliate links work. The home-screen notice now reinforces that, with a "Learn more" link to the docs.
+- **Internal improvements:** unified logs and traces telemetry behind the scenes.
+
 ## 0.5.1
 
 - **Stability:** fixed a crash in the intake sizing tool that occurred with high-K injection configs (K above 0.90), where the computed anemic velocity threshold dropped below zero.

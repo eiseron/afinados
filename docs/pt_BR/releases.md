@@ -7,6 +7,12 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.5.2
+
+- **Painel admin:** o painel de ofertas passou a permitir enviar a imagem direto pelo formulário, com preview do card ao vivo enquanto você edita, e ativar ou desativar várias ofertas de uma vez (com "selecionar todas") para sincronizar o lançamento de um lote de recomendações. Disponível apenas para a equipe Eiseron.
+- **Recomendações mais claras:** nova página de documentação explica que as indicações são escolhidas a dedo pela nossa curadoria, não são anúncios genéricos, e como funcionam os links de afiliação. O aviso na tela inicial passou a reforçar isso, com um link "Saiba mais" para a documentação.
+- **Melhorias internas:** unificação da telemetria de logs e traces nos bastidores.
+
 ## 0.5.1
 
 - **Estabilidade:** corrigido erro que derrubava a ferramenta de dimensionamento de admissão em configurações de injeção com K muito alto (acima de 0,90), onde o limiar anêmico de velocidade calculado ficava abaixo de zero.
