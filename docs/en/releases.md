@@ -7,6 +7,10 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.5.3
+
+- **Fix:** images uploaded from the offers panel now display correctly in the app (a security header was blocking the image domain).
+
 ## 0.5.2
 
 - **Admin panel:** the offers panel can now upload the image straight from the form, with a live card preview as you edit, and activate or deactivate several offers at once (with "select all") to sync the launch of a batch of recommendations. Available to the Eiseron team only.

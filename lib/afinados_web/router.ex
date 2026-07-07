@@ -42,11 +42,18 @@ defmodule AfinadosWeb.Router do
         "default-src 'self'",
         "script-src 'self' 'nonce-#{nonce}' #{static}",
         "style-src 'self' #{static}",
-        "img-src 'self' blob: #{static}",
+        "img-src 'self' blob: #{static}#{media_img_src()}",
         "font-src 'self' #{static}"
       ],
       "; "
     )
+  end
+
+  defp media_img_src do
+    case Application.get_env(:afinados, Afinados.Media.R2, [])[:public_base_url] do
+      url when is_binary(url) and url != "" -> " " <> url
+      _ -> ""
+    end
   end
 
   scope "/", AfinadosWeb do

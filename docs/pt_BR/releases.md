@@ -7,6 +7,10 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.5.3
+
+- **Correção:** as imagens enviadas pelo painel de ofertas agora aparecem corretamente no app (o cabeçalho de segurança estava bloqueando o domínio de imagens).
+
 ## 0.5.2
 
 - **Painel admin:** o painel de ofertas passou a permitir enviar a imagem direto pelo formulário, com preview do card ao vivo enquanto você edita, e ativar ou desativar várias ofertas de uma vez (com "selecionar todas") para sincronizar o lançamento de um lote de recomendações. Disponível apenas para a equipe Eiseron.
