@@ -63,6 +63,14 @@ defmodule AfinadosWeb.HubLiveTest do
     assert html =~ ~s(aria-label="abre um site externo")
   end
 
+  test "the offers disclosure links to the recommendations documentation", %{conn: conn} do
+    create_offer(title: "Curso de preparação")
+
+    {:ok, view, _html} = live(conn, "/")
+
+    assert has_element?(view, "a.offers-disclosure-more[href*='/docs/'][href$='recommendations']")
+  end
+
   test "the hub renders an affiliate offer with a call to action", %{conn: conn} do
     create_offer(title: "Curso avançado")
 

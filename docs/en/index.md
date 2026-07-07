@@ -17,6 +17,10 @@ Afinados is a set of tools for tuning and preparing internal combustion engines,
 
 More tools are on the way.
 
+## Recommendations
+
+- [Product recommendations](recommendations/index.md): what the third-party product suggestions shown in the app are and how the affiliate links work.
+
 ## What's new
 
 - [What's new](releases.md): user-facing changes across releases.

@@ -17,6 +17,10 @@ O Afinados é um conjunto de ferramentas para acerto e preparação de motores a
 
 Mais ferramentas a caminho.
 
+## Recomendações
+
+- [Recomendações de produtos](recommendations/index.md): o que são as sugestões de produtos de terceiros exibidas no app e como funcionam os links de afiliação.
+
 ## Novidades
 
 - [Novidades](releases.md): mudanças visíveis ao usuário ao longo das versões.

@@ -244,22 +244,17 @@ msgstr ""
 msgid "How to use the advanced options"
 msgstr ""
 
-#: lib/afinados_web/components/offer_shelf.ex:15
+#: lib/afinados_web/components/offer_shelf.ex:16
 #, elixir-autogen, elixir-format
 msgid "Recommended for you"
 msgstr ""
 
-#: lib/afinados_web/components/offer_shelf.ex:17
-#, elixir-autogen, elixir-format
-msgid "Third-party products we selected for you. They are not Afinados products, and we may earn a commission if you buy through these links."
-msgstr ""
-
-#: lib/afinados_web/components/offer_shelf.ex:70
+#: lib/afinados_web/components/offer_shelf.ex:79
 #, elixir-autogen, elixir-format
 msgid "View product"
 msgstr ""
 
-#: lib/afinados_web/components/offer_shelf.ex:43
+#: lib/afinados_web/components/offer_shelf.ex:52
 #, elixir-autogen, elixir-format
 msgid "opens an external site"
 msgstr ""
@@ -370,12 +365,12 @@ msgstr ""
 msgid "Offer updated"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:107
+#: lib/afinados_web/live/admin/offer_live/index.ex:110
 #, elixir-autogen, elixir-format
 msgid "Could not delete offer"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:104
+#: lib/afinados_web/live/admin/offer_live/index.ex:107
 #, elixir-autogen, elixir-format
 msgid "Offer deleted"
 msgstr ""
@@ -795,7 +790,7 @@ msgstr ""
 msgid "Ideal ratio 16:9, recommended 640x360px"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:152
+#: lib/afinados_web/live/admin/offer_live/index.ex:153
 #, elixir-autogen, elixir-format
 msgid "%{count} offer activated"
 msgid_plural "%{count} offers activated"
@@ -812,7 +807,7 @@ msgstr ""
 msgid "Select %{title}"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:156
+#: lib/afinados_web/live/admin/offer_live/index.ex:157
 #, elixir-autogen, elixir-format
 msgid "%{count} offer deactivated"
 msgid_plural "%{count} offers deactivated"
@@ -829,7 +824,7 @@ msgstr ""
 msgid "Apply to selected"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:146
+#: lib/afinados_web/live/admin/offer_live/index.ex:147
 #, elixir-autogen, elixir-format
 msgid "Clear selection"
 msgstr ""
@@ -844,12 +839,22 @@ msgstr ""
 msgid "New state"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:147
+#: lib/afinados_web/live/admin/offer_live/index.ex:148
 #, elixir-autogen, elixir-format
 msgid "Select all"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:112
+#: lib/afinados_web/live/admin/offer_live/index.ex:115
 #, elixir-autogen, elixir-format
 msgid "Select at least one offer"
+msgstr ""
+
+#: lib/afinados_web/components/offer_shelf.ex:18
+#, elixir-autogen, elixir-format
+msgid "Third-party products hand-picked by our curation. Not Afinados products, and we may earn a commission if you buy through these links."
+msgstr ""
+
+#: lib/afinados_web/components/offer_shelf.ex:27
+#, elixir-autogen, elixir-format
+msgid "Learn more"
 msgstr ""

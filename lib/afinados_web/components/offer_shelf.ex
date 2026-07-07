@@ -5,6 +5,7 @@ defmodule AfinadosWeb.Components.OfferShelf do
   use Gettext, backend: AfinadosWeb.Gettext
 
   alias Afinados.Offers.Offer
+  alias AfinadosWeb.Docs
 
   attr :offers, :list, required: true
 
@@ -15,8 +16,16 @@ defmodule AfinadosWeb.Components.OfferShelf do
       <h2 id="offers-heading">{gettext("Recommended for you")}</h2>
       <p class="offers-disclosure">
         {gettext(
-          "Third-party products we selected for you. They are not Afinados products, and we may earn a commission if you buy through these links."
+          "Third-party products hand-picked by our curation. Not Afinados products, and we may earn a commission if you buy through these links."
         )}
+        <.link
+          class="offers-disclosure-more"
+          href={Docs.url("recommendations")}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {gettext("Learn more")}
+        </.link>
       </p>
       <ul class="offer-list">
         <li :for={offer <- @offers}>
