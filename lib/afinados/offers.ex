@@ -21,6 +21,17 @@ defmodule Afinados.Offers do
   @spec update_offer(Offer.t(), map()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
   def update_offer(%Offer{} = offer, attrs), do: offer |> Offer.changeset(attrs) |> Repo.update()
 
+  @spec set_offers_active([integer()], boolean()) :: non_neg_integer()
+  def set_offers_active(ids, active) when is_list(ids) and is_boolean(active) do
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
+
+    {count, _} =
+      from(o in Offer, where: o.id in ^ids)
+      |> Repo.update_all(set: [active: active, updated_at: now])
+
+    count
+  end
+
   @spec delete_offer(Offer.t()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
   def delete_offer(%Offer{} = offer), do: Repo.delete(offer)
 

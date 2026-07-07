@@ -72,6 +72,71 @@ defmodule AfinadosWeb.Admin.OfferLiveTest do
                html =~ "Could not delete offer" or
                html =~ "Não foi possível excluir a oferta"
     end
+
+    test "activates the offers selected via the checkboxes", %{conn: conn} do
+      a = create_offer(title: "Inativa A", active: false)
+      b = create_offer(title: "Inativa B", active: false)
+
+      {:ok, view, _html} = live(conn, ~p"/admin/offers")
+
+      render_click(view, "toggle-row", %{"id" => to_string(a.id)})
+      render_click(view, "toggle-row", %{"id" => to_string(b.id)})
+
+      view
+      |> element("form[phx-submit='apply-bulk']")
+      |> render_submit(%{"active" => "true"})
+
+      assert Offers.get_offer(a.id).active
+      assert Offers.get_offer(b.id).active
+    end
+
+    test "deactivates the selected offers when the state is set to deactivate", %{conn: conn} do
+      offer = create_offer(title: "Ativa", active: true)
+
+      {:ok, view, _html} = live(conn, ~p"/admin/offers")
+
+      render_click(view, "toggle-row", %{"id" => to_string(offer.id)})
+
+      view
+      |> element("form[phx-submit='apply-bulk']")
+      |> render_submit(%{"active" => "false"})
+
+      refute Offers.get_offer(offer.id).active
+    end
+
+    test "selects every offer with the select-all action", %{conn: conn} do
+      a = create_offer(title: "A", active: false)
+      b = create_offer(title: "B", active: false)
+
+      {:ok, view, _html} = live(conn, ~p"/admin/offers")
+
+      render_click(view, "toggle-all")
+
+      view
+      |> element("form[phx-submit='apply-bulk']")
+      |> render_submit(%{"active" => "true"})
+
+      assert Offers.get_offer(a.id).active
+      assert Offers.get_offer(b.id).active
+    end
+
+    test "flashes an error when applying with no offer selected", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers")
+
+      view
+      |> element("form[phx-submit='apply-bulk']")
+      |> render_submit(%{"active" => "true"})
+
+      assert has_element?(view, "[role='alert']")
+    end
+
+    test "ignores a toggle-row event carrying a non-integer id", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/offers")
+
+      render_click(view, "toggle-row", %{"id" => "abc"})
+
+      assert has_element?(view, "table.admin-table")
+    end
   end
 
   describe "Form new" do

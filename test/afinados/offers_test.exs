@@ -120,6 +120,40 @@ defmodule Afinados.OffersTest do
     end
   end
 
+  describe "set_offers_active/2" do
+    test "returns the number of offers changed" do
+      {:ok, a} = Offers.create_offer(persisted_attrs(active: false))
+      {:ok, b} = Offers.create_offer(persisted_attrs(active: false))
+
+      assert Offers.set_offers_active([a.id, b.id], true) == 2
+    end
+
+    test "activates the selected offers when active is true" do
+      {:ok, offer} = Offers.create_offer(persisted_attrs(active: false))
+
+      Offers.set_offers_active([offer.id], true)
+
+      assert Offers.get_offer(offer.id).active
+    end
+
+    test "deactivates the selected offers when active is false" do
+      {:ok, offer} = Offers.create_offer(persisted_attrs(active: true))
+
+      Offers.set_offers_active([offer.id], false)
+
+      refute Offers.get_offer(offer.id).active
+    end
+
+    test "leaves offers outside the id list untouched" do
+      {:ok, selected} = Offers.create_offer(persisted_attrs(active: false))
+      {:ok, other} = Offers.create_offer(persisted_attrs(active: false))
+
+      Offers.set_offers_active([selected.id], true)
+
+      refute Offers.get_offer(other.id).active
+    end
+  end
+
   describe "change_offer/2" do
     test "returns a changeset for the given offer" do
       assert %Ecto.Changeset{} = Offers.change_offer(%Offer{})

@@ -282,50 +282,50 @@ msgid "New offer"
 msgstr ""
 
 #: lib/afinados_web/live/admin/offer_live/form.ex:97
-#: lib/afinados_web/live/admin/offer_live/index.ex:25
+#: lib/afinados_web/live/admin/offer_live/index.ex:41
 #, elixir-autogen, elixir-format
 msgid "Position"
 msgstr ""
 
 #: lib/afinados_web/live/admin/offer_live/form.ex:49
-#: lib/afinados_web/live/admin/offer_live/index.ex:26
+#: lib/afinados_web/live/admin/offer_live/index.ex:42
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
 
 #: lib/afinados_web/live/admin/offer_live/form.ex:53
-#: lib/afinados_web/live/admin/offer_live/index.ex:27
+#: lib/afinados_web/live/admin/offer_live/index.ex:43
 #, elixir-autogen, elixir-format
 msgid "Locale"
 msgstr ""
 
 #: lib/afinados_web/live/admin/offer_live/form.ex:98
-#: lib/afinados_web/live/admin/offer_live/index.ex:28
+#: lib/afinados_web/live/admin/offer_live/index.ex:44
 #, elixir-autogen, elixir-format
 msgid "Active"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:37
+#: lib/afinados_web/live/admin/offer_live/index.ex:62
 #, elixir-autogen, elixir-format
 msgid "yes"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:37
+#: lib/afinados_web/live/admin/offer_live/index.ex:62
 #, elixir-autogen, elixir-format
 msgid "no"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:39
+#: lib/afinados_web/live/admin/offer_live/index.ex:64
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:45
+#: lib/afinados_web/live/admin/offer_live/index.ex:70
 #, elixir-autogen, elixir-format
 msgid "Delete this offer?"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:47
+#: lib/afinados_web/live/admin/offer_live/index.ex:72
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
@@ -370,12 +370,12 @@ msgstr ""
 msgid "Offer updated"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:67
+#: lib/afinados_web/live/admin/offer_live/index.ex:107
 #, elixir-autogen, elixir-format
 msgid "Could not delete offer"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:64
+#: lib/afinados_web/live/admin/offer_live/index.ex:104
 #, elixir-autogen, elixir-format
 msgid "Offer deleted"
 msgstr ""
@@ -385,7 +385,7 @@ msgstr ""
 msgid "Offer not found"
 msgstr ""
 
-#: lib/afinados_web/live/admin/offer_live/index.ex:29
+#: lib/afinados_web/live/admin/offer_live/index.ex:45
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -793,4 +793,63 @@ msgstr ""
 #: lib/afinados_web/live/admin/offer_live/form.ex:64
 #, elixir-autogen, elixir-format
 msgid "Ideal ratio 16:9, recommended 640x360px"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:152
+#, elixir-autogen, elixir-format
+msgid "%{count} offer activated"
+msgid_plural "%{count} offers activated"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:40
+#, elixir-autogen, elixir-format
+msgid "Select"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:56
+#, elixir-autogen, elixir-format
+msgid "Select %{title}"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:156
+#, elixir-autogen, elixir-format
+msgid "%{count} offer deactivated"
+msgid_plural "%{count} offers deactivated"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:30
+#, elixir-autogen, elixir-format
+msgid "Activate"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:33
+#, elixir-autogen, elixir-format
+msgid "Apply to selected"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:146
+#, elixir-autogen, elixir-format
+msgid "Clear selection"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:31
+#, elixir-autogen, elixir-format
+msgid "Deactivate"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:28
+#, elixir-autogen, elixir-format
+msgid "New state"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:147
+#, elixir-autogen, elixir-format
+msgid "Select all"
+msgstr ""
+
+#: lib/afinados_web/live/admin/offer_live/index.ex:112
+#, elixir-autogen, elixir-format
+msgid "Select at least one offer"
 msgstr ""
