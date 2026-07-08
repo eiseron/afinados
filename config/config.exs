@@ -4,6 +4,8 @@ config :afinados,
   ecto_repos: [Afinados.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :eiseron_core, error_backend: :otel
+
 config :gettext, :default_locale, "pt_BR"
 
 config :afinados, :docs, host: "https://afinados.io"
