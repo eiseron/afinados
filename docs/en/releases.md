@@ -7,6 +7,11 @@ description: User-facing changes across Afinados releases.
 
 A log of user-facing changes.
 
+## 0.5.5
+
+- **Privacy:** operational diagnostics now automatically redact personal data (email, CPF, phone number) before anything is stored, so logs and error reports never carry identifiable information.
+- **Internal improvements:** error monitoring moved to the unified observability backend.
+
 ## 0.5.4
 
 - **Documentation:** the recommendations page now describes accurately what each card shows (the affiliation notice appears once, above the section, not on each card).

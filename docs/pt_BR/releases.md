@@ -7,6 +7,11 @@ description: Mudanças visíveis ao usuário ao longo das versões do Afinados.
 
 Registro das mudanças visíveis ao usuário.
 
+## 0.5.5
+
+- **Privacidade:** os diagnósticos operacionais agora removem automaticamente dados pessoais (e-mail, CPF, telefone) antes de qualquer registro, para que logs e relatórios de erro nunca carreguem informação identificável.
+- **Melhorias internas:** o monitoramento de erros passou a usar o backend unificado de observabilidade.
+
 ## 0.5.4
 
 - **Documentação:** a página de recomendações passou a descrever com precisão o que cada card mostra (o aviso de afiliação aparece uma vez, acima da seção, e não em cada card).
