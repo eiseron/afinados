@@ -39,3 +39,5 @@ npm-debug.log
 # Ephemeral local media uploads (preview); keep the dir, ignore contents
 /priv/static/uploads/*
 !/priv/static/uploads/.gitkeep
+
+.claude/
