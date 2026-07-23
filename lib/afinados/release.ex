@@ -11,6 +11,20 @@ defmodule Afinados.Release do
     end
   end
 
+  def setup do
+    migrate()
+    seed_for_current_profile()
+  end
+
+  def seed_for_current_profile do
+    profile = current_profile()
+    if profile in ~w(preview dev), do: seed(profile)
+  end
+
+  def current_profile do
+    @app |> Application.get_env(:observability, []) |> Keyword.get(:env, :prod) |> to_string()
+  end
+
   def seed(profile \\ "prod") when is_binary(profile) do
     unless profile in @seed_profiles do
       raise ArgumentError, "unknown seed profile: #{profile}"
